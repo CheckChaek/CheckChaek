@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/mainPage';
 import ProfilePage from './pages/profilePage';
@@ -6,6 +5,7 @@ import ResultPage from './pages/imageResultPage';
 import SearchPage from './pages/imageSearchPage';
 import UserDropdown from './components/userdropdown';
 import CheckChaek from './assets/images/logo/CheckChaek.png';
+import GuidePage from './pages/guidePage';
 
 function App() {
   return (
@@ -14,6 +14,7 @@ function App() {
         <img src={CheckChaek} alt="CheckChaek" />
         <div className="flex items-center space-x-4">
           {[
+            ['가이드', '/guide'],
             ['검색', '/search'],
             ['내 서재', '/history'],
           ].map(([title, url]) => (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/result" element={<ResultPage />} />
           <Route path="/history" element={<ProfilePage />} />
+          <Route path="/guide" element={<GuidePage />} />
         </Routes>
       </Router>
     </div>
