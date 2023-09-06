@@ -38,6 +38,7 @@ function App() {
           <Route path="/guide" element={<GuidePage />} />
         </Routes>
       </Router>
+      <div className="snap-center BottomSheet m-screen h-[132px] bg-BUTTON2-200" />
     </div>
   );
 }
