@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import UserIcon from '../assets/icons/user';
 
@@ -29,7 +29,7 @@ export default function userDropdown() {
             <Menu.Item>
               {({ active }: { active: boolean }) => (
                 <a
-                  href="#"
+                  href="''"
                   className={classNames(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'block px-4 py-2 text-sm',

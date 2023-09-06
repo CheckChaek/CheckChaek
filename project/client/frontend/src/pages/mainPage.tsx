@@ -40,7 +40,6 @@ function MainPage() {
           </div>
         </div>
       </div>
-      <div className="snap-center BottomSheet m-screen h-[132px] bg-BUTTON2-200 "></div>
     </div>
   );
 }
