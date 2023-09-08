@@ -1,4 +1,4 @@
-package com.cc.auth.auth;
+package com.cc.auth;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
