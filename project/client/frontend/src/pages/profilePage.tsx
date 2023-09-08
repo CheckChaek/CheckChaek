@@ -1,8 +1,16 @@
+import Card from '../components/card';
+import SearchBar from '../components/profile_page/searchBar';
+import Library from '../components/profile_page/library';
+
 function ProfilePage() {
   return (
     <>
-      <span>내 서재 페이지</span>
-      <span>...</span>
+      <Card width="w-3/5" height="min-h-[30vh]">
+        <p className="text-4xl font-bold text-center ">허재 님 안녕하세요!</p>
+        <SearchBar />
+      </Card>
+      <hr className="mt-8 w-3/5 mx-auto text-FONT-200" />
+      <Library />
     </>
   );
 }

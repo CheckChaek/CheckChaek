@@ -1,13 +1,18 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// 로그인
+import UserLogin from './components/userlogin';
+import UserDropdown from './components/userdropdown';
+// 페이지
 import MainPage from './pages/mainPage';
 import ProfilePage from './pages/profilePage';
 import ResultPage from './pages/imageResultPage';
 import SearchPage from './pages/imageSearchPage';
-import UserDropdown from './components/userdropdown';
-import CheckChaek from './assets/images/logo/CheckChaek.png';
 import GuidePage from './pages/guidePage';
+// 로고
+import CheckChaek from './assets/images/logo/CheckChaek.png';
 
 function App() {
+  const isLogin = false;
   return (
     <div className="App">
       <nav className="flex justify-around items-center py-4 px-6 text-xl">
@@ -26,7 +31,7 @@ function App() {
             </a>
           ))}
         </div>
-        <UserDropdown />
+        {isLogin ? <UserDropdown /> : <UserLogin />}
       </nav>
 
       <Router>

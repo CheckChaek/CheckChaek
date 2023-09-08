@@ -8,14 +8,16 @@ import Badside from '../assets/images/guide/badside.jpg';
 
 function guidePage() {
   return (
-    <Card>
+    <Card width="w-3/4" height="min-h-[80vh]">
       <p className="text-4xl font-bold text-center ">사진 입력 가이드라인</p>
-      <div className="bg-orange-100 min-h-[15vh] max-w-[80vh] mx-auto rounded-md text-2xl mt-10 flex flex-col justify-center items-center">
-        아래의 예시처럼 촬영해야 인공지능이
-        <br /> 좀 더 정확한 금액을 알려 줄 수 있어요
+      <div className="bg-MAIN-100 min-h-[15vh] max-w-[90vh] mx-auto rounded-md text-2xl text-center mt-10 flex flex-col justify-center items-center p-8">
+        <p>
+          아래의 예시처럼 촬영해야 인공지능이 좀 더 정확한 금액을 알려 줄 수
+          있어요
+        </p>
       </div>
       <p className="text-3xl font-bold mt-10 text-center ">예시</p>
-      <div className="grid  grid-cols-9 gap-4 bg-orange-100 min-h-[60vh] max-w-[80vh] mx-auto rounded-md mt-10">
+      <div className="bg-MAIN-100 grid  grid-cols-9 gap-4 min-h-[60vh] max-w-[90vh] mx-auto rounded-md mt-10 p-8">
         <div className="col-start-5 col-span-2 mt-4 ml-4 text-center ">
           옳은 예
         </div>
