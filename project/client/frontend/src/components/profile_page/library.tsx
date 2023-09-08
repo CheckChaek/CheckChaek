@@ -1,0 +1,124 @@
+import { useState } from 'react';
+import Card from '../card';
+import TrashCan from '../../assets/icons/trashIcon';
+import LeftIcon from '../../assets/icons/lefticon';
+import RightIcon from '../../assets/icons/righticon';
+import ArrowIcon from '../../assets/icons/arrowIcon';
+
+function Library() {
+  const itemsPerPage = 10;
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [elementStates, setElementStates] = useState<boolean[]>(
+    Array.from({ length: 0 }, () => false),
+  );
+  const totalItems = elementStates.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const handleMouseEnter = (index: number) => {
+    const newStates = [...elementStates];
+    newStates[index] = true;
+    setElementStates(newStates);
+  };
+
+  const handleMouseLeave = (index: number) => {
+    const newStates = [...elementStates];
+    newStates[index] = false;
+    setElementStates(newStates);
+  };
+
+  const next = () => {
+    if (currentPage === totalPages) return;
+    setCurrentPage(currentPage + 1);
+  };
+
+  const prev = () => {
+    if (currentPage === 1) return;
+    setCurrentPage(currentPage - 1);
+  };
+
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const middlePage = Math.ceil(currentPage / 5) * 5;
+    const startPage = Math.max(1, middlePage - 4);
+    const endPage = Math.min(totalPages, middlePage);
+
+    for (let i = startPage; i <= endPage; i += 1) {
+      pageNumbers.push(i);
+    }
+
+    return pageNumbers;
+  };
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+  return (
+    <Card width="w-3/5" height="min-h-[50vh]">
+      <div className="m-3 text-xl font-bold">
+        내 서재 ({elementStates.length})
+      </div>
+      {elementStates.length > 0 ? (
+        <div>
+          <div className="grid grid-cols-5 gap-2">
+            {elementStates
+              .slice(startIndex, endIndex)
+              .map((isMouseOver, index) => (
+                <div
+                  className="m-3"
+                  key={Math.random()}
+                  onMouseEnter={() => handleMouseEnter(index + startIndex)}
+                  onMouseLeave={() => handleMouseLeave(index + startIndex)}>
+                  <div className="bg-MAIN-100 min-h-[25vh]">
+                    {isMouseOver && <TrashCan />}
+                  </div>
+                  <p>책 제목 : 책책</p>
+                  <p>상태 : 상태</p>
+                  <p>가격 : 9999원</p>
+                </div>
+              ))}
+          </div>
+
+          <div className="flex justify-center mt-4">
+            <button type="button" onClick={prev} disabled={currentPage === 1}>
+              <LeftIcon />
+            </button>
+            {getPageNumbers().map(pageNumber => (
+              <button
+                onClick={() => setCurrentPage(pageNumber)}
+                className={`mx-2 p-2  ${
+                  currentPage === pageNumber
+                    ? 'bg-SECONDARY-300 rounded-full w-10'
+                    : ''
+                }`}
+                key={pageNumber}
+                type="button">
+                {pageNumber}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={next}
+              disabled={currentPage === totalPages}>
+              <RightIcon />
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex h-4/5 justify-center">
+          <div className="my-auto">
+            <p className="text-3xl">검색 기록이 없어요 😥</p>
+            <a
+              href="/search"
+              className="flex text-xl mt-3 w-max hover:text-FONT-300">
+              <ArrowIcon /> 검색하러가기
+            </a>
+          </div>
+        </div>
+      )}
+    </Card>
+  );
+}
+
+export default Library;
