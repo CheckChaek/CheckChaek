@@ -1,13 +1,15 @@
-import { Fragment, useRef } from 'react';
+import { ReactNode, Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import Login from '../logInModal';
 
 interface ModalProps {
   closeModal: () => void;
   OpenModal: boolean;
+  children: ReactNode;
+  width: string;
+  height: string;
 }
 
-function Modal({ closeModal, OpenModal }: ModalProps) {
+function Modal({ closeModal, OpenModal, children, width, height }: ModalProps) {
   const cancelButtonRef = useRef(null);
 
   return (
@@ -20,8 +22,9 @@ function Modal({ closeModal, OpenModal }: ModalProps) {
               enter="ease-out duration-300"
               enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               enterTo="opacity-100 translate-y-0 sm:scale-100">
-              <Dialog.Panel className="overflow-hidden rounded-3xl w-1/4 h-[75vh]">
-                <Login />
+              <Dialog.Panel
+                className={`overflow-hidden rounded-3xl ${width} ${height}`}>
+                {children}
               </Dialog.Panel>
             </Transition.Child>
           </div>

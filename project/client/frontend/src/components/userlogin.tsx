@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Modal from './login_page/modal';
+import Login from './logInModal';
 
 function UserLogin() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -23,7 +24,13 @@ function UserLogin() {
         </button>
       </div>
 
-      <Modal closeModal={closeModal} OpenModal={modalOpen} />
+      <Modal
+        closeModal={closeModal}
+        OpenModal={modalOpen}
+        width="w-1/4"
+        height="h-[75vh]">
+        <Login />
+      </Modal>
     </div>
   );
 }
