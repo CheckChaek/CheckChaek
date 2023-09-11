@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Modal from './login_page/modal';
-import Login from './logInModal';
+import Modal from './modal';
+import Login from '../common/logInContents';
 
 function UserLogin() {
   const [modalOpen, setModalOpen] = useState(false);

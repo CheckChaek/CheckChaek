@@ -1,15 +1,19 @@
 import { useState } from 'react';
-import Card from '../components/card';
-import ImageSlider from '../components/imageSlider';
-import MemoizmImageUploader from '../components/imageUploader';
+
+import { useNavigate } from 'react-router-dom';
+import Card from '../components/common/card';
+import ImageSlider from '../components/predict_page/imageSlider';
+import MemoizmImageUploader from '../components/predict_page/imageUploader';
+import PredictBtn from '../components/common/predictBtn';
 
 function PredictPage() {
   const [imageList, setImageList] = useState<File[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isDrag, setIsDrag] = useState(false);
+  const navigate = useNavigate();
   return (
     <div className="Predict">
-      <Card width="" height="">
+      <Card width="w-3/4" height="min-h-[80vh]">
         <div className="">
           <ImageSlider
             imageList={imageList}
@@ -20,7 +24,7 @@ function PredictPage() {
             setIsDrag={setIsDrag}
           />
         </div>
-        <div className="ImageUploader h-[100vh]">
+        <div className="ImageUploader">
           <MemoizmImageUploader
             imageList={imageList}
             setImageList={setImageList}
@@ -28,6 +32,17 @@ function PredictPage() {
             isDrag={isDrag}
             setIsDrag={setIsDrag}
           />
+        </div>
+        <div className="flex justify-center my-2">
+          <PredictBtn
+            width="w-[25rem]"
+            height="h-[4rem]"
+            defaultColor="bg-BUTTON1-500"
+            selectedColor="bg-BUTTON1-900"
+            fontColor="text-FONT-50 text-lg"
+            action={() => navigate('/result')}>
+            결과 확인하기
+          </PredictBtn>
         </div>
       </Card>
     </div>

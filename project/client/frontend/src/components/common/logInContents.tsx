@@ -1,5 +1,5 @@
-import KakaoLogin from '../assets/images/kakao_login/kakao_login_medium_wide.png';
-import CheckChaek from '../assets/images/logo/CheckChaek.png';
+import KakaoLogin from '../../assets/images/kakao_login/kakao_login_medium_wide.png';
+import CheckChaek from '../../assets/images/logo/CheckChaek.png';
 
 function login() {
   return (

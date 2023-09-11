@@ -1,4 +1,4 @@
-import Card from '../components/card';
+import Card from '../components/common/card';
 import Goodcover from '../assets/images/guide/goodcover.jpg';
 import Badcover from '../assets/images/guide/badcover.jpg';
 import Goodback from '../assets/images/guide/goodback.jpg';

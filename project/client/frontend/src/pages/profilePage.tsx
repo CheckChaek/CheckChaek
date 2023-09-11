@@ -1,4 +1,4 @@
-import Card from '../components/card';
+import Card from '../components/common/card';
 import SearchBar from '../components/profile_page/searchBar';
 import Library from '../components/profile_page/library';
 
