@@ -22,9 +22,9 @@ function App() {
         </a>
         <div className="flex items-center space-x-4">
           {[
+            ['가이드', '/guide'],
             ['예측', '/predict'],
             ['내 서재', '/history'],
-            ['가이드', '/guide'],
           ].map(([title, url]) => (
             <a
               href={url}

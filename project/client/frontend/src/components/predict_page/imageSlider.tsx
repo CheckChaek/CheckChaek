@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { FileUploader } from 'react-drag-drop-files';
 // import SimpleImageSlider from 'react-simple-image-slider';
 
