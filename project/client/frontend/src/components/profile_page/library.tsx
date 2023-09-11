@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Card from '../card';
+import Card from '../common/card';
 import TrashCan from '../../assets/icons/trashIcon';
 import LeftIcon from '../../assets/icons/lefticon';
 import RightIcon from '../../assets/icons/righticon';

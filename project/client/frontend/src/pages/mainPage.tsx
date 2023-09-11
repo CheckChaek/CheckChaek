@@ -1,5 +1,5 @@
 import MainBooks from '../assets/images/main_page/books.png';
-import Login from '../components/logInModal';
+import Login from '../components/common/logInContents';
 
 function MainPage() {
   return (

@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 // 로그인
-import UserLogin from './components/userlogin';
-import UserDropdown from './components/userdropdown';
+import UserLogin from './components/login_page/userlogin';
+import UserDropdown from './components/login_page/userdropdown';
 // 페이지
 import MainPage from './pages/mainPage';
 import ProfilePage from './pages/profilePage';
