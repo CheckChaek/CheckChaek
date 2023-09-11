@@ -9,7 +9,7 @@ function PredictPage() {
   const [isDrag, setIsDrag] = useState(false);
   return (
     <div className="Predict">
-      <Card>
+      <Card width="" height="">
         <div className="">
           <ImageSlider
             imageList={imageList}

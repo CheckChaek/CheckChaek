@@ -1,12 +1,12 @@
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import UserIcon from '../assets/icons/user';
+import UserIcon from '../assets/icons/usericon';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function userDropdown() {
+function userDropdown() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -58,3 +58,5 @@ export default function userDropdown() {
     </Menu>
   );
 }
+
+export default userDropdown;
