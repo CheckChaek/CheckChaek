@@ -6,6 +6,10 @@ import ImageSlider from '../components/predict_page/imageSlider';
 import MemoizmImageUploader from '../components/predict_page/imageUploader';
 import PredictBtn from '../components/common/predictBtn';
 
+interface ParamsInterface {
+  status: string;
+}
+
 function PredictPage() {
   const [imageList, setImageList] = useState<File[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -40,7 +44,7 @@ function PredictPage() {
             defaultColor="bg-BUTTON1-500"
             selectedColor="bg-BUTTON1-900"
             fontColor="text-FONT-50 text-lg"
-            action={() => navigate('/result')}>
+            action={() => navigate('/result', { state: '3' })}>
             결과 확인하기
           </PredictBtn>
         </div>
