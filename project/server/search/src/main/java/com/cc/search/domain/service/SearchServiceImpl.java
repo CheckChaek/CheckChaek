@@ -3,9 +3,7 @@ package com.cc.search.domain.service;
 import com.cc.search.domain.dto.SearchResponse;
 import lombok.extern.slf4j.Slf4j;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -26,7 +24,6 @@ public class SearchServiceImpl implements SearchService {
         // webClient 기본 설정
         WebClient webClient = WebClient
                 .builder()
-//                .defaultHeader("Content-Type", "application/json")
                 .baseUrl(aladin_api_url)
                 .build();
 
@@ -45,7 +42,6 @@ public class SearchServiceImpl implements SearchService {
                 .bodyToMono(SearchResponse.class)
                 .block();
 
-//        log.info(response.toString());
         return response;
     }
 }
