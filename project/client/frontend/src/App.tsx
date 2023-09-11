@@ -7,14 +7,13 @@ import MainPage from './pages/mainPage';
 import ProfilePage from './pages/profilePage';
 import ResultPage from './pages/imageResultPage';
 import PredictPage from './pages/imagePredictPage';
-import UserDropdown from './components/userdropdown';
-import CheckChaek from './assets/images/logo/CheckChaek.png';
 import GuidePage from './pages/guidePage';
 // 로고
 import CheckChaek from './assets/images/logo/CheckChaek.png';
 
 function App() {
   const isLogin = false;
+
   return (
     <div className="App">
       <nav className="flex justify-around items-center py-4 px-6 text-xl shadow-md">
