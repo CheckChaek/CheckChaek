@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import UserIcon from '../assets/icons/usericon';
+import UserIcon from '../../assets/icons/usericon';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -11,7 +11,7 @@ function userDropdown() {
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-          <UserIcon />
+          <UserIcon styleString="w-6 h-6" />
           허재
         </Menu.Button>
       </div>
