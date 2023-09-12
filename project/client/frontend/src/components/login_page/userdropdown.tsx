@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import UserIcon from '../assets/icons/usericon';
+import UserIcon from '../../assets/icons/usericon';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
