@@ -71,7 +71,9 @@ function Library() {
                   onMouseEnter={() => handleMouseEnter(index + startIndex)}
                   onMouseLeave={() => handleMouseLeave(index + startIndex)}>
                   <div className="bg-MAIN-100 min-h-[25vh]">
-                    {isMouseOver && <TrashCan />}
+                    {isMouseOver && (
+                      <TrashCan styleString="w-1/3 h-1/4 cursor-pointer" />
+                    )}
                   </div>
                   <p>책 제목 : 책책</p>
                   <p>상태 : 상태</p>
@@ -82,7 +84,7 @@ function Library() {
 
           <div className="flex justify-center mt-4">
             <button type="button" onClick={prev} disabled={currentPage === 1}>
-              <LeftIcon />
+              <LeftIcon styleString="w-6 h-6" />
             </button>
             {getPageNumbers().map(pageNumber => (
               <button
@@ -101,7 +103,7 @@ function Library() {
               type="button"
               onClick={next}
               disabled={currentPage === totalPages}>
-              <RightIcon />
+              <RightIcon styleString="w-6 h-6" />
             </button>
           </div>
         </div>
@@ -112,7 +114,7 @@ function Library() {
             <a
               href="/search"
               className="flex text-xl mt-3 w-max hover:text-FONT-300">
-              <ArrowIcon /> 검색하러가기
+              <ArrowIcon styleString="w-6 h-6 mr-2" /> 검색하러가기
             </a>
           </div>
         </div>

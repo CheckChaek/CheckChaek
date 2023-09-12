@@ -1,14 +1,4 @@
-import { ReactNode } from 'react';
-
-interface BtnInfo {
-  width: string;
-  height: string;
-  defaultColor: string;
-  selectedColor: string;
-  fontColor: string;
-  action: () => void;
-  children: ReactNode;
-}
+import { BtnInfo } from '../../interface/common';
 
 function PredictBtn({
   width,
