@@ -1,21 +1,19 @@
 import { FileUploader } from 'react-drag-drop-files';
-// import SimpleImageSlider from 'react-simple-image-slider';
 
-interface ImageProps {
-  imageList: File[];
-  setImageList: React.Dispatch<React.SetStateAction<File[]>>;
-  currentImageIndex: number;
-  setCurrentImageIndex: React.Dispatch<React.SetStateAction<number>>;
-  isDrag: boolean;
-  setIsDrag: React.Dispatch<React.SetStateAction<boolean>>;
-}
+// interface
+import ImageProps from '../../interface/predict';
+
+// icons
+import RightIcon from '../../assets/icons/righticon';
+import LeftIcon from '../../assets/icons/lefticon';
+
 const fileTypes = ['JPG', 'PNG', 'JPEG'];
 function ImageSlider({
   imageList,
-  setImageList,
-  currentImageIndex,
-  setCurrentImageIndex,
   isDrag,
+  currentImageIndex,
+  setImageList,
+  setCurrentImageIndex,
   setIsDrag,
 }: ImageProps) {
   const indexLeftHandler = () => {
@@ -42,35 +40,11 @@ function ImageSlider({
           />
           {/* left  */}
           <button type="button" onClick={indexLeftHandler}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="hidden group-hover:block w-10 h-10 absolute top-[45%] left-[25%] text-2xl rounded-full bg-BACKGROUND-700 bg-opacity-30 p-2 text-FONT-50 cursor-pointer">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 19.5L8.25 12l7.5-7.5"
-              />
-            </svg>
+            <LeftIcon styleString="hidden group-hover:block w-10 h-10 absolute top-[45%] left-[25%] text-2xl rounded-full bg-BACKGROUND-700 bg-opacity-30 p-2 text-FONT-50 cursor-pointer" />
           </button>
           {/* right */}
           <button type="button" onClick={indexRightHandler}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="hidden group-hover:block w-10 h-10 absolute top-[45%] right-[25%]  text-2xl rounded-full bg-BACKGROUND-700 bg-opacity-30 p-2 text-FONT-50 cursor-pointer">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8.25 4.5l7.5 7.5-7.5 7.5"
-              />
-            </svg>
+            <RightIcon styleString="hidden group-hover:block w-10 h-10 absolute top-[45%] right-[25%]  text-2xl rounded-full bg-BACKGROUND-700 bg-opacity-30 p-2 text-FONT-50 cursor-pointer" />
           </button>
         </div>
       </div>

@@ -1,4 +1,6 @@
-function TrashCan() {
+import { IconInterface } from '../../interface/common';
+
+function TrashCan({ styleString }: IconInterface) {
   return (
     <div className="flex justify-center items-center align-middle min-h-[25vh]">
       <svg
@@ -7,7 +9,7 @@ function TrashCan() {
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="w-1/3 h-1/4 cursor-pointer">
+        className={`${styleString}`}>
         <path
           strokeLinecap="round"
           strokeLinejoin="round"

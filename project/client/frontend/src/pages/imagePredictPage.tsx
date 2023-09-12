@@ -1,14 +1,10 @@
 import { useState } from 'react';
-
 import { useNavigate } from 'react-router-dom';
+
 import Card from '../components/common/card';
 import ImageSlider from '../components/predict_page/imageSlider';
 import MemoizmImageUploader from '../components/predict_page/imageUploader';
 import PredictBtn from '../components/common/predictBtn';
-
-interface ParamsInterface {
-  status: string;
-}
 
 function PredictPage() {
   const [imageList, setImageList] = useState<File[]>([]);
@@ -18,7 +14,7 @@ function PredictPage() {
   return (
     <div className="Predict">
       <Card width="w-3/4" height="min-h-[80vh]">
-        <div className="">
+        <div className="ImageSlider">
           <ImageSlider
             imageList={imageList}
             setImageList={setImageList}

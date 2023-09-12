@@ -1,12 +1,6 @@
-import { ReactNode } from 'react';
+import { CardProps } from '../../interface/common';
 
-interface CardPros {
-  children: ReactNode;
-  width: string;
-  height: string;
-}
-
-function Card({ children, width, height }: CardPros) {
+function Card({ children, width, height }: CardProps) {
   return (
     <div className={`flex justify-center mt-8 ${height}`}>
       <div className={`${width} rounded-2xl overflow-hidden shadow-2xl p-16`}>

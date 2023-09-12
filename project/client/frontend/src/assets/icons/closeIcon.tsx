@@ -1,6 +1,6 @@
 import { IconInterface } from '../../interface/common';
 
-function LeftIcon({ styleString }: IconInterface) {
+export default function CloseIcon({ styleString }: IconInterface) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -12,10 +12,8 @@ function LeftIcon({ styleString }: IconInterface) {
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M15.75 19.5L8.25 12l7.5-7.5"
+        d="M6 18L18 6M6 6l12 12"
       />
     </svg>
   );
 }
-
-export default LeftIcon;
