@@ -30,6 +30,7 @@ dependencies {
     implementation 'com.auth0:java-jwt:4.2.1'
     implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.1.4'
 
+    runtimeOnly 'com.h2database:h2'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
