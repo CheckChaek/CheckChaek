@@ -9,7 +9,7 @@ from api import views
 
 from api.views import *
 
-# http://127.0.0.1:8000/swagger/
+# http://127.0.0.1:8085/swagger/
 
 schema_view_v1 = get_schema_view(
     openapi.Info(
