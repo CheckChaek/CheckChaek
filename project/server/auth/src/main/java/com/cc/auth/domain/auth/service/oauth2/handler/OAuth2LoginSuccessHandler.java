@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private static final String TOKEN = "token";
     private static final String REFRESH_TOKEN = "refreshToken";
-    private static final String REDIRECT_URL = "http://localhost:8080/login/redirect";
+
+    @Value("${spring.security.oauth2.redirectUrl}")
+    private String REDIRECT_URL;
 
     private final JwtProvider jwtProvider;
     private final MemberRepository memberRepository;
