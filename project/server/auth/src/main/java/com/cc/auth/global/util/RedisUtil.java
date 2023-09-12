@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
+@SuppressWarnings("unchecked")
 public class RedisUtil {
 
     private final RedisTemplate<String, Object> redisTemplate;
