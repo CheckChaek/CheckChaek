@@ -16,7 +16,7 @@ public class RedisUtil {
     private final RedisTemplate<String, Object> redisBlackListTemplate;
 
     public void set(String key, Object o, int minutes) {
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer(o.getClass()));
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(o.getClass()));
         redisTemplate.opsForValue().set(key, o, minutes, TimeUnit.MINUTES);
     }
 
@@ -33,7 +33,7 @@ public class RedisUtil {
     }
 
     public void setBlackList(String key, Object o, Long expiration) {
-        redisBlackListTemplate.setValueSerializer(new Jackson2JsonRedisSerializer(o.getClass()));
+        redisBlackListTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(o.getClass()));
         redisBlackListTemplate.opsForValue().set(key, o, expiration, TimeUnit.MILLISECONDS);
     }
 
