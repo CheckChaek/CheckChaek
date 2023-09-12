@@ -7,6 +7,8 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from .serializers import image_serializer
 
+from status_classification import image_classification
+
 @swagger_auto_schema(method='post', request_body=image_serializer)  # 요청 스키마 설정
 @api_view(['POST'])
 def test_api(request):
@@ -14,5 +16,8 @@ def test_api(request):
         serializer = image_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            url = serializer.data["image_url"]
+
+            st = image_classification.image_classification(url)
+            return Response(st, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
