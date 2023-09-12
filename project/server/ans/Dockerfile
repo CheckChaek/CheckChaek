@@ -3,8 +3,6 @@ FROM python:3.11
 RUN pip install django
 RUN pip install djangorestframework
 RUN pip install drf-yasg
-RUN pip install torch
-RUN pip install torchvision
 
 WORKDIR /usr/src/app
 
