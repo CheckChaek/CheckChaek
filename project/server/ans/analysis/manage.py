@@ -3,6 +3,7 @@
 import os
 import sys
 
+# http://127.0.0.1:8086/swagger/
 
 def main():
     """Run administrative tasks."""
