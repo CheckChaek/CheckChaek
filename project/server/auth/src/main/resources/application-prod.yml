@@ -9,7 +9,7 @@ server:
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://ubuntu@j9a606.p.ssafy.io:3306/checkchaeck?characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mariadb://j9a606.p.ssafy.io:3306/checkchaeck?characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: 1234
 
