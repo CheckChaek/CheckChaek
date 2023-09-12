@@ -75,4 +75,4 @@ function ResultPage() {
   );
 }
 
-export default Test;
+export default ResultPage;

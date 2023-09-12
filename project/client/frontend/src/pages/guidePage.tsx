@@ -6,7 +6,7 @@ import Badback from '../assets/images/guide/badback.jpg';
 import Goodside from '../assets/images/guide/goodside.jpg';
 import Badside from '../assets/images/guide/badside.jpg';
 
-function guidePage() {
+function GuidePage() {
   return (
     <Card width="w-3/4" height="min-h-[80vh]">
       <p className="text-4xl font-bold text-center ">사진 입력 가이드라인</p>
@@ -98,4 +98,4 @@ function guidePage() {
   );
 }
 
-export default guidePage;
+export default GuidePage;
