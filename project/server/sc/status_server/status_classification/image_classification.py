@@ -40,15 +40,18 @@ def get_image_status_by_image_list(image_list):
     status_degree = 0
 
     print(image_status)
+
     for status in image_status:
         if status == 'best':
             status_degree += 3
         elif status == 'high':
             status_degree += 2
-        elif status_degree == 'medium':
+        elif status == 'medium':
             status_degree += 1
 
     status_degree = status_degree / len(image_list)
 
-
+    print(status_degree)
+    print(int(status_degree))
+    
     return class_names[int(status_degree)]
