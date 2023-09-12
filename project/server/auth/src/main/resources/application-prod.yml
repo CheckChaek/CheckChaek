@@ -37,6 +37,7 @@ spring:
 
   security:
     oauth2:
+      redirectUrl: http://j9a606.p.ssafy.io:8081/login/redirect
       client:
         registration:
           kakao:
