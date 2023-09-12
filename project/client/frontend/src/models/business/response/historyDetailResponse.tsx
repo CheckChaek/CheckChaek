@@ -1,13 +1,13 @@
-import { Book, HistoriesResponse } from '../../../interface/api';
+import { BookInfo, Response } from '../../../interface/api';
 
-class Histories {
+class HistoryDetailResponse {
   code: string;
 
   message: string;
 
-  data: Map<string, Book[]>;
+  data: Map<string, BookInfo>;
 
-  constructor(response: HistoriesResponse) {
+  constructor(response: Response) {
     this.code = response.code;
     this.message = response.message;
     this.data = response.data;
@@ -18,12 +18,12 @@ class Histories {
   }
 
   public get Message(): string {
-    return this.message;
+    return this.Message;
   }
 
-  public get Data(): Map<string, Book[]> {
+  public get Data(): Map<string, BookInfo> {
     return this.data;
   }
 }
 
-export default Histories;
+export default HistoryDetailResponse;
