@@ -11,13 +11,16 @@ from status_classification import image_classification
 
 @swagger_auto_schema(method='post', request_body=image_serializer)  # 요청 스키마 설정
 @api_view(['POST'])
-def test_api(request):
+def status_classification(request):
     if request.method == 'POST':
         serializer = image_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            url = serializer.data["image_url"]
+            image_list = serializer.data['image_list']
+            print(image_list)
 
-            st = image_classification.image_classification(url)
+            st = image_classification.get_image_status_by_image_list(image_list)
+
             return Response(st, status=status.HTTP_201_CREATED)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

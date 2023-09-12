@@ -1,9 +1,9 @@
 from django.core import serializers
 from rest_framework import serializers
-from .models import image
+from .models import image_list
 
 class image_serializer(serializers.ModelSerializer):
     class Meta:
-        model = image
-        fields = ['image_url']
-    image_url = serializers.CharField(max_length=1000)
+        model = image_list
+        fields = ['image_list']
+    image_list = serializers.JSONField()
