@@ -1,0 +1,10 @@
+server:
+  port: 8084
+  servlet:
+    context-path: /search
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+aladin.ttbkey: ttbkyt96001058001
