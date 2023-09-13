@@ -10,6 +10,6 @@ COPY . .
 
 WORKDIR /usr/src/app/analysis
 
-CMD ["python", "manage.py", "runserver","--noreload", "8086"]
+CMD ["python", "manage.py", "runserver","--noreload", "0.0.0.0:8000"]
 
-EXPOSE 8086
+EXPOSE 8000
