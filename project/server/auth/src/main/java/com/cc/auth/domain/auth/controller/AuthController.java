@@ -33,9 +33,8 @@ public class AuthController {
 
     @DeleteMapping("/member")
     public ResponseEntity<EnvelopeResponse<String>> delete(@AuthenticationPrincipal PrincipalDetails principalDetails){
-        System.out.println("delete 호출");
-//        Member member = principalDetails.getMember();
-        return new  ResponseEntity<>(new EnvelopeResponse<>(HttpStatus.CREATED.value(), "test성공"), HttpStatus.CREATED);
+
+        return new  ResponseEntity<>(new EnvelopeResponse<>(HttpStatus.OK.value(), authService.deleteMember(principalDetails.getMember())), HttpStatus.CREATED);
 
     }
 }
