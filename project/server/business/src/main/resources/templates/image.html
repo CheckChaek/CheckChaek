@@ -7,10 +7,10 @@
 <body>
 <h1>파일 업로드</h1> <hr>
 
-<form th:action="@{/image}" method="post" enctype="multipart/form-data">
+<form action="http://localhost:8080/image" method="post" enctype="multipart/form-data">
     제목 : <input type="text" name="title"> <br>
     파일 : <input type="file" name="file"> <br>
-    <button>등록하기</button>
+    <button type="submit">등록하기</button>
 </form>
 
 </body>

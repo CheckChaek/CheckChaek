@@ -20,5 +20,11 @@ public class ImageDto {
                 .build();
         return build;
     }
+    @Builder
+    public ImageDto(Long id, String title, String filePath) {
+        this.id = id;
+        this.title = title;
+        this.filePath = filePath;
+    }
 
 }
