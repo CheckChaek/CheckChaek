@@ -1,15 +1,19 @@
 import React from 'react';
 import './index.css';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { ModalProvider } from './components/common/modalClass';
+import { store } from './store/store';
 
 ReactDOM.render(
-  <ModalProvider>
-    <App />
-  </ModalProvider>,
+  <Provider store={store}>
+    <ModalProvider>
+      <App />
+    </ModalProvider>
+  </Provider>,
   document.getElementById('root'),
 );
 // If you want your app to work offline and load faster, you can change

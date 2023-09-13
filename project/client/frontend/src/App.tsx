@@ -8,6 +8,7 @@ import ProfilePage from './pages/profilePage';
 import ResultPage from './pages/imageResultPage';
 import PredictPage from './pages/imagePredictPage';
 import GuidePage from './pages/guidePage';
+import SocialLogin from './pages/socialLogin';
 // 로고
 import CheckChaek from './assets/images/logo/CheckChaek.png';
 
@@ -44,6 +45,7 @@ function App() {
           <Route path="/result" element={<ResultPage />} />
           <Route path="/history" element={<ProfilePage />} />
           <Route path="/guide" element={<GuidePage />} />
+          <Route path="/login/redirect" element={<SocialLogin />} />
         </Routes>
       </Router>
       <div className="snap-center mt-3 BottomSheet m-screen h-[132px] bg-BUTTON2-200" />

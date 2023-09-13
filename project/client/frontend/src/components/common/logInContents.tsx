@@ -1,4 +1,5 @@
 import KakaoLogin from '../../assets/images/kakao_login/kakao_login_medium_wide.png';
+import GooogleLogin from '../../assets/images/google_login/google_login_logo.png';
 import CheckChaek from '../../assets/images/logo/CheckChaek.png';
 
 function login() {
@@ -11,11 +12,23 @@ function login() {
         <img src={CheckChaek} alt="CheckChaek" className="mx-auto py-24" />
       </div>
       <div className="LoginKakaoBtn h-1/6 pt-10">
-        <img
-          src={KakaoLogin}
-          alt="KakaoLoginBtn"
-          className="mx-auto shadow-lg"
-        />
+        <a href="http://j9a606.p.ssafy.io:8081/oauth2/authorization/kakao">
+          <img
+            src={KakaoLogin}
+            alt="KakaoLoginBtn"
+            className="mx-auto shadow-lg"
+          />
+        </a>
+      </div>
+
+      <div className="mb-3">
+        <a href="http://j9a606.p.ssafy.io:8081/oauth2/authorization/google">
+          <img
+            src={GooogleLogin}
+            alt="GoogleLoginBtn"
+            className="mx-auto shadow-lg"
+          />
+        </a>
       </div>
 
       <div className="LoginContent">
