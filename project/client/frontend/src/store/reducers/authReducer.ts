@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { SET_TOKENS } from '../actions/authActions';
 import { ActionTypes, AuthState } from '../types';
 

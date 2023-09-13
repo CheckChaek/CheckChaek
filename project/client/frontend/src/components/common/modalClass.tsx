@@ -20,6 +20,7 @@ export function ModalProvider({ children }: ModalProviderProps) {
   const modals = {
     userLogin: false,
   };
+
   const [modalOpen, setModalOpen] = useState<{ [key: string]: boolean }>(
     modals,
   );
