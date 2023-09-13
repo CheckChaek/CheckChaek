@@ -12,6 +12,6 @@ COPY . .
 
 WORKDIR /usr/src/app/status_server
 
-CMD ["python", "manage.py", "runserver","--noreload", "8000"]
+CMD ["python", "manage.py", "runserver","--noreload", "0.0.0.0:8000"]
 
 EXPOSE 8000

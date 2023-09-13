@@ -24,3 +24,8 @@ def status_classification(request):
             return Response(st, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def test_api(request):
+    data = {'message':'test complete'}
+    return Response(data)
