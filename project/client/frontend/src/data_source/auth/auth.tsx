@@ -20,6 +20,7 @@ function GetLogout({ token, dispatch }: Logout): void {
       )
       .then(() => {
         dispatch();
+        window.location.href = '/';
       })
       .catch(() => {});
   }

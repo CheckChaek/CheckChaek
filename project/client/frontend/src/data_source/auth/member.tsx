@@ -16,6 +16,7 @@ function GetSignout({ token, dispatch }: SignOut): void {
       })
       .then(() => {
         dispatch();
+        window.location.href = '/';
       })
       .catch(() => {});
   }
