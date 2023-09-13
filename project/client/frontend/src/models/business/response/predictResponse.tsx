@@ -1,6 +1,6 @@
 import { BookInfo, Response } from '../../../interface/api';
 
-class BookInfoResponseModel {
+class PredictResponseModel {
   code: string;
 
   message: string;
@@ -26,4 +26,4 @@ class BookInfoResponseModel {
   }
 }
 
-export default BookInfoResponseModel;
+export default PredictResponseModel;
