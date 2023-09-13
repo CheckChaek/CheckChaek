@@ -1,6 +1,7 @@
 # 기본 라이브러리 추가
 from urllib import request
 
+from django.conf import settings
 # REST_Framework 라이브러리 추가
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -8,7 +9,7 @@ from rest_framework.utils import json
 
 # 구글 클라우드 비전 API
 import os
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "D:\client_secret_key.json"
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = settings.STATIC_ROOT + "/client_secret_key.json"
 from google.cloud import vision
 
 # Create your views here.
