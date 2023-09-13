@@ -2,6 +2,8 @@ import torch
 from PIL import Image
 from torchvision import datasets, models, transforms
 from collections import deque
+import requests
+from io import BytesIO
 
 # 모델 불러오기
 model_load = torch.load('./models/model_ft_v1.pth')
@@ -11,7 +13,16 @@ model_load = torch.load('./models/model_ft_v1.pth')
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def image_classification(image_url):
-    image = Image.open(image_url)
+    response = requests.get(image_url)
+    if response.status_code == 200:
+        # 이미지 데이터를 BytesIO 객체로 읽기
+        image_data = BytesIO(response.content)
+
+        # BytesIO에서 이미지 열기
+        image = Image.open(image_data)
+
+    else:
+        print("Failed to retrieve image from S3")
     
     transforms_test = transforms.Compose([
         transforms.Resize((224, 224)),

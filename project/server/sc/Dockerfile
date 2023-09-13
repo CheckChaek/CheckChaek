@@ -5,6 +5,7 @@ RUN pip install djangorestframework
 RUN pip install drf-yasg
 RUN pip install torch
 RUN pip install torchvision
+RUN pip install requests
 
 WORKDIR /usr/src/app
 
