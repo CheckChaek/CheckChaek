@@ -22,7 +22,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final JwtProvider jwtProvider;
-    @PostMapping("/logout")
+    @PostMapping("/auth/logout")
     public ResponseEntity<EnvelopeResponse<String>> logout(@AuthenticationPrincipal PrincipalDetails principalDetails, HttpServletRequest request){
 
         Optional<String> accessToken = jwtProvider.extractAccessToken(request);
