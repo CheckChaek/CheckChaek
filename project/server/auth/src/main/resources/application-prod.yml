@@ -69,7 +69,7 @@ spring:
   data:
     redis:
       port: 6379
-      host: j9a606.p.ssafy.io
+      host: localhost
 
 
 jwt:
