@@ -11,9 +11,11 @@ import GuidePage from './pages/guidePage';
 import SocialLogin from './pages/socialLogin';
 // 로고
 import CheckChaek from './assets/images/logo/CheckChaek.png';
+// 기능
+import { useAccessToken } from './data_source/apiInfo';
 
 function App() {
-  const isLogin = false;
+  const token = useAccessToken();
 
   return (
     <div className="App">
@@ -35,7 +37,7 @@ function App() {
             </a>
           ))}
         </div>
-        {isLogin ? <UserDropdown /> : <UserLogin />}
+        {token ? <UserDropdown /> : <UserLogin />}
       </nav>
 
       <Router>

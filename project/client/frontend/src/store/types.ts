@@ -11,4 +11,8 @@ export interface SetTokensAction {
   };
 }
 
-export type ActionTypes = SetTokensAction;
+export interface LogoutAction {
+  type: 'LOGOUT';
+}
+
+export type ActionTypes = SetTokensAction | LogoutAction;

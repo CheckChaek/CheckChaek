@@ -13,16 +13,6 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = createStore(persistedReducer);
 
-store.subscribe(() => {
-  const state: RootState = store.getState();
-  const { accessToken, refreshToken } = state.auth;
-
-  if (accessToken && refreshToken) {
-    sessionStorage.setItem('accessToken', accessToken);
-    sessionStorage.setItem('refreshToken', refreshToken);
-  }
-});
-
 const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof rootReducer>;
