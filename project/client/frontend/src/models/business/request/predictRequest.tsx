@@ -1,4 +1,4 @@
-class BookInfoRequestModel {
+class PredictRequestModel {
   imageList: File[];
 
   constructor(props: File[]) {
@@ -14,4 +14,4 @@ class BookInfoRequestModel {
   }
 }
 
-export default BookInfoRequestModel;
+export default PredictRequestModel;
