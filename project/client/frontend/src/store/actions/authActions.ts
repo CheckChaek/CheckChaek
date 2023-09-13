@@ -1,3 +1,13 @@
+export const LOGOUT = 'LOGOUT';
+
+export interface LogoutAction {
+  type: typeof LOGOUT;
+}
+
+export const logout = (): LogoutAction => ({
+  type: LOGOUT,
+});
+
 export const SET_TOKENS = 'SET_TOKENS';
 
 export interface SetTokensAction {

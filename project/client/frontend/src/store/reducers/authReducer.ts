@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { SET_TOKENS } from '../actions/authActions';
+import { LOGOUT, SET_TOKENS } from '../actions/authActions';
 import { ActionTypes, AuthState } from '../types';
 
 const initialState: AuthState = {
@@ -15,8 +15,12 @@ const authReducer = (
     case SET_TOKENS:
       return {
         ...state,
-        accessToken: action.payload.accessToken as string,
-        refreshToken: action.payload.refreshToken as string,
+        accessToken: action.payload.accessToken,
+        refreshToken: action.payload.refreshToken,
+      };
+    case LOGOUT:
+      return {
+        ...initialState,
       };
     default:
       return state;
