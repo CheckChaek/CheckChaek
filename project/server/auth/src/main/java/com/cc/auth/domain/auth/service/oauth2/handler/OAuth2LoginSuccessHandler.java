@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 @RequiredArgsConstructor
 @Component
@@ -36,9 +38,13 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
 //        PrincipalDetails principalDetails =(PrincipalDetails)authentication.getPrincipal();
 //        loginSuccess(response, principalDetails);
-
         TokenMapping tokenMapping = saveUser(authentication);
-        response.sendRedirect(getRedirectUrl(tokenMapping));
+
+        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+        String nickname = principal.getMember().getNickname();
+
+        System.out.println("===============================");
+        response.sendRedirect(getRedirectUrl(tokenMapping, nickname));
     }
 
     private TokenMapping saveUser(Authentication authentication){
@@ -51,8 +57,12 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         return token;
     }
 
-    private String getRedirectUrl(TokenMapping token){
+    private String getRedirectUrl(TokenMapping token, String nickname) throws UnsupportedEncodingException {
+
+        String encodedNickname = URLEncoder.encode(nickname, "UTF-8");
+
         return UriComponentsBuilder.fromUriString(REDIRECT_URL)
+                .queryParam("nickname", encodedNickname)
                 .queryParam(TOKEN, token.getAccessToken())
                 .queryParam(REFRESH_TOKEN, token.getRefreshToken())
                 .build().toUriString();
