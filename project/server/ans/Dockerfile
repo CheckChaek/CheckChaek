@@ -10,6 +10,9 @@ COPY . .
 
 WORKDIR /usr/src/app/analysis
 
-CMD ["python", "manage.py", "runserver","--noreload", "0.0.0.0:8000"]
+RUN python manage.py makemigrations
+RUN python manage.py migrate
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 EXPOSE 8000
