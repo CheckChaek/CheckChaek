@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -40,17 +41,28 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         OauthType provider = oAuth2UserInfo.getProvider(); // kakao
         String providerId = oAuth2UserInfo.getProviderId();
+
+        String nickname = null;
+        try {
+            nickname = oAuth2UserInfo.getNickname();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("nickanme"+ nickname);
+
         String username = provider+"_"+providerId;  // kakao_123102401051349
         String email = oAuth2UserInfo.getEmail();
 //      Role role = Role.GUEST;
 
         Optional<Member> memberOptional = memberRepository.findByOauthIdentifier(username);
 
+        String finalNickname = nickname;
         Member memberEntity = memberOptional.orElseGet(() -> {
             return Member.builder()
                     .oauthType(provider)
                     .oauthIdentifier(username)
                     .activated(true)
+                    .nickname(finalNickname)
 //                  .role(role)
                     .build();
         });
