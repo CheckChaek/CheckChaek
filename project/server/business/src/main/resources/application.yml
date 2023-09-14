@@ -1,8 +1,8 @@
 cloud:
   aws:
     credentials:
-      accessKey: AKIATAEGQITM4DIXMJIL
-      secretKey: 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
+      accessKey: 
+      secretKey: 
     s3:
       bucket: imagebucket606
     region:
