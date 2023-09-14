@@ -1,5 +1,6 @@
 package com.cc.auth.domain.auth.service;
 
+import com.cc.auth.domain.auth.dto.LogoutResponseDto;
 import com.cc.auth.domain.auth.service.jwt.JwtProvider.JwtProvider;
 import com.cc.auth.domain.member.domain.Member;
 import com.cc.auth.domain.member.repository.MemberRepository;
@@ -17,7 +18,7 @@ public class AuthService {
     private final RedisUtil redisUtil;
     private final MemberRepository memberRepository;
 
-    public String logout(Member member, Optional<String> optionalAccessToken) {
+    public LogoutResponseDto logout(Member member, Optional<String> optionalAccessToken) {
 
         String accessToken = optionalAccessToken.get();
 
@@ -28,11 +29,6 @@ public class AuthService {
         member.deleteRefreshToken();
         memberRepository.save(member);
 
-        return "로그아웃 완료";
-    }
-
-    public String deleteMember(Member member) {
-        memberRepository.delete(member);
-        return "회원탈퇴 완료";
+        return LogoutResponseDto.of(member);
     }
 }
