@@ -4,11 +4,12 @@ import { useDispatch } from 'react-redux';
 import UserIcon from '../../assets/icons/usericon';
 import GetLogout from '../../data_source/auth/auth';
 import GetSignout from '../../data_source/auth/member';
-import { useAccessToken } from '../../data_source/apiInfo';
+import { useAccessToken, useNickname } from '../../data_source/apiInfo';
 import { logout } from '../../store/actions/authActions';
 
 function UserDropdown() {
   const token = useAccessToken();
+  const name = useNickname();
   const dispatch = useDispatch();
 
   const handleLogout = () => {
@@ -20,7 +21,7 @@ function UserDropdown() {
       <div>
         <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 hover:rounded-t-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:ring-1 hover:ring-inset hover:ring-gray-300 hover:bg-gray-50">
           <UserIcon styleString="w-6 h-6" />
-          허재
+          {name}
         </Menu.Button>
       </div>
 

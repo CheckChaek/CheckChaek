@@ -9,7 +9,13 @@ interface ModalProps {
   height: string;
 }
 
-function Modal({ closeModal, OpenModal, children, width, height }: ModalProps) {
+function Modal({
+  closeModal,
+  OpenModal = false,
+  children,
+  width,
+  height,
+}: ModalProps) {
   const cancelButtonRef = useRef(null);
 
   return (

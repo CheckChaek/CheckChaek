@@ -1,8 +1,13 @@
 import KakaoLogin from '../../assets/images/kakao_login/kakao_login_medium_wide.png';
 import GooogleLogin from '../../assets/images/google_login/google_login_logo.png';
 import CheckChaek from '../../assets/images/logo/CheckChaek.png';
+import { AUTH_URI } from '../../data_source/apiInfo';
 
 function login() {
+  const handleLogin = (url: string) => {
+    window.location.href = `${AUTH_URI}/oauth2/authorization/${url}`;
+  };
+
   return (
     <div className="LoginPart h-full min-w-[384px]  bg-BACKGROUND-50 rounded-lg shadow-md">
       <div className="LoginTitle h-1/4 ">
@@ -12,23 +17,23 @@ function login() {
         <img src={CheckChaek} alt="CheckChaek" className="mx-auto py-24" />
       </div>
       <div className="LoginKakaoBtn h-1/6 pt-10">
-        <a href="http://j9a606.p.ssafy.io:8081/oauth2/authorization/kakao">
+        <button type="button" onClick={() => handleLogin('kakao')}>
           <img
             src={KakaoLogin}
             alt="KakaoLoginBtn"
             className="mx-auto shadow-lg"
           />
-        </a>
+        </button>
       </div>
 
       <div className="mb-3">
-        <a href="http://j9a606.p.ssafy.io:8081/oauth2/authorization/google">
+        <button type="button" onClick={() => handleLogin('google')}>
           <img
             src={GooogleLogin}
             alt="GoogleLoginBtn"
             className="mx-auto shadow-lg"
           />
-        </a>
+        </button>
       </div>
 
       <div className="LoginContent">

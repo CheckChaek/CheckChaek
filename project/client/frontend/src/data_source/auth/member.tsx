@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { AUTH_URI } from '../apiInfo';
 
-interface SignOut {
+interface Auth {
   token: string | null;
   dispatch: () => void;
 }
 
-function GetSignout({ token, dispatch }: SignOut): void {
+function GetSignout({ token, dispatch }: Auth): void {
   if (token) {
     axios
       .delete(`${AUTH_URI}/member`, {
@@ -16,7 +16,9 @@ function GetSignout({ token, dispatch }: SignOut): void {
       })
       .then(() => {
         dispatch();
-        window.location.href = '/';
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 100);
       })
       .catch(() => {});
   }

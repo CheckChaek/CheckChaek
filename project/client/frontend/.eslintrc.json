@@ -33,6 +33,7 @@
   },
   "rules": {
     "react/react-in-jsx-scope": "off",
+    "@typescript-eslint/default-param-last": "off",
     "prettier/prettier": ["error", { "endOfLine": "auto" }]
   }
 }

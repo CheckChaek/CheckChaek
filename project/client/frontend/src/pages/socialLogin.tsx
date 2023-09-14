@@ -8,12 +8,15 @@ function SocialLogin() {
   useEffect(() => {
     const handleCallback = () => {
       const urlParams = new URLSearchParams(window.location.search);
+      const nickname = urlParams.get('nickname');
       const accessToken = urlParams.get('token');
       const refreshToken = urlParams.get('refreshToken');
 
-      if (accessToken && refreshToken) {
-        dispatch(setTokens(accessToken, refreshToken));
-        window.location.replace('/');
+      if (accessToken && refreshToken && nickname) {
+        dispatch(setTokens(accessToken, refreshToken, nickname));
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 100);
       }
     };
 

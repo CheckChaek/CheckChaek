@@ -1,10 +1,10 @@
-/* eslint-disable */
 import { LOGOUT, SET_TOKENS } from '../actions/authActions';
 import { ActionTypes, AuthState } from '../types';
 
 const initialState: AuthState = {
   accessToken: null,
   refreshToken: null,
+  nickname: null,
 };
 
 const authReducer = (
@@ -17,6 +17,7 @@ const authReducer = (
         ...state,
         accessToken: action.payload.accessToken,
         refreshToken: action.payload.refreshToken,
+        nickname: action.payload.nickname,
       };
     case LOGOUT:
       return {
