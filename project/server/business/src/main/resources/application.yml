@@ -1,0 +1,96 @@
+cloud:
+  aws:
+    credentials:
+      accessKey: 
+      secretKey: 
+    s3:
+      bucket: imagebucket606
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  # datasource:
+  #   driver-class-name: org.mariadb.jdbc.Driver
+  #   url: jdbc:mariadb://localhost:3306/checkchaeck?characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
+  #   username: root
+  #   password: ssafy
+
+  # H2 Setting Info (H2 Console에 접속하기 위한 설정정보 입력)
+#  h2:
+#    console:
+#      enabled: true  # H2 Console을 사용할지 여부 (H2 Console은 H2 Database를 UI로 제공해주는 기능)
+#      path: /h2-console  # H2 Console의 Path
+#      settings:
+#        web-allow-others: true
+  # Database Setting Info (Database를 H2로 사용하기 위해 H2연결 정보 입력)
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver  # Database를 H2로 사용하겠다.
+    url: jdbc:mariadb://j9a606.p.ssafy.io/checkchaeck  # H2 접속 정보
+    username: root  # H2 접속 시 입력할 username 정보 (원하는 것으로 입력)
+    password: 1234 # H2 접속 시 입력할 password 정보 (원하는 것으로 입력)
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: Asia/Seoul
+        default_batch_fetch_size: 1000
+    show-sql: true
+
+  security:
+    oauth2:
+      redirectUrl: http://localhost:8080/login/redirect
+      client:
+        registration:
+          kakao:
+            client-id: c5827bdd1888edc3b7a7c64483fb1159
+            client-secret: o9cosxxIlRLYoDbKbms8v02pOJBDyO7t
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            authorization-grant-type: authorization_code
+            client-authentication-method: client_secret_post
+            client-name: Kakao
+            scope:
+              - profile_nickname
+          #              - profile_image
+          google:
+            client-id: 195520493714-ichavs28t68gacsli4hal2t8lsl7s1q4.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - profile
+              - email
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+  data:
+    redis:
+      port: 6379
+      host: localhost
+
+
+jwt:
+  secretKey: checkchaeck
+
+  access:
+    expiration: 3600000 # 1시간(60분) (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h))
+    header: Authorization
+
+  refresh:
+    expiration: 1209600000 #  (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h) * 24L(h -> 하루) * 14(2주))
+    header: Authorization-refresh
