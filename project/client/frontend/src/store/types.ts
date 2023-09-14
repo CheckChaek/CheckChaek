@@ -1,6 +1,7 @@
 export interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
+  nickname: string | null;
 }
 
 export interface SetTokensAction {
@@ -8,6 +9,7 @@ export interface SetTokensAction {
   payload: {
     accessToken: string | null;
     refreshToken: string | null;
+    nickname: string | null;
   };
 }
 

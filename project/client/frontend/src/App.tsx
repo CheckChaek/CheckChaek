@@ -27,7 +27,7 @@ function App() {
           {[
             ['가이드', '/guide'],
             ['예측', '/predict'],
-            ['내 서재', '/history'],
+            token ? ['내 서재', '/history'] : ['', ''],
           ].map(([title, url]) => (
             <a
               href={url}
@@ -50,7 +50,9 @@ function App() {
           <Route path="/login/redirect" element={<SocialLogin />} />
         </Routes>
       </Router>
-      <div className="snap-center mt-3 BottomSheet m-screen h-[132px] bg-BUTTON2-200" />
+      <div className="flex snap-center BottomSheet m-screen h-[132px] bg-BUTTON2-200">
+        <p className="m-auto"> © 2023 CheckChaek All rights reserved.</p>
+      </div>
     </div>
   );
 }

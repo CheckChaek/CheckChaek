@@ -17,13 +17,7 @@ interface ModalProviderProps {
 }
 
 export function ModalProvider({ children }: ModalProviderProps) {
-  const modals = {
-    userLogin: false,
-  };
-
-  const [modalOpen, setModalOpen] = useState<{ [key: string]: boolean }>(
-    modals,
-  );
+  const [modalOpen, setModalOpen] = useState<{ [key: string]: boolean }>({});
 
   const openModal = (modalName: string) => {
     setModalOpen(prevState => ({ ...prevState, [modalName]: true }));

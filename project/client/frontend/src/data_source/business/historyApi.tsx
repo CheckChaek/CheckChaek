@@ -24,6 +24,7 @@ function HistoryAllApi() {
       .catch(e => console.log(e));
   }
 }
+
 function HistoryDetailApi(bookId: number) {
   const url = `${historyUri}/${bookId}`;
   const accessToken = useAccessToken();

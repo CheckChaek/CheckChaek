@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { AUTH_URI } from '../apiInfo';
 
-interface Logout {
+interface Auth {
   token: string | null;
   dispatch: () => void;
 }
 
-function GetLogout({ token, dispatch }: Logout): void {
+function GetLogout({ token, dispatch }: Auth): void {
   if (token) {
     axios
       .post(
@@ -20,7 +20,9 @@ function GetLogout({ token, dispatch }: Logout): void {
       )
       .then(() => {
         dispatch();
-        window.location.href = '/';
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 100);
       })
       .catch(() => {});
   }
