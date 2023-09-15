@@ -32,13 +32,13 @@ function ImageUploader({
     <ul className="w-100 h-100 grid grid-cols-5 mt-8 place-content-center ">
       {imageList.map((image, index) => (
         <button
-          key={index.toString()}
+          key={Math.random()}
           type="submit"
           onClick={() => {
             setCurrentImageIndex(index);
           }}>
           <li
-            key={index.toString()}
+            key={Math.random()}
             className="w-32 h-32 m-auto mt-6 group relative">
             <div className="absolute  hidden group-hover:block right-0">
               {/* <button type="button" onClick={() => imageDeleteHandler(index)}> */}
