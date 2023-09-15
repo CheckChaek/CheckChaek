@@ -1,4 +1,5 @@
 import { FileUploader } from 'react-drag-drop-files';
+import React from 'react';
 
 // interface
 import ImageProps from '../../interface/predict';
@@ -12,16 +13,10 @@ function ImageSlider({
   imageList,
   isDrag,
   currentImageIndex,
-  // modalOpen,
-  // setImageList,
   imageRegistHandler,
   setCurrentImageIndex,
-  // closeModal,
-  // openModal,
   setIsDrag,
 }: ImageProps) {
-  // const modalName = 'imageLimit';
-
   const indexLeftHandler = () => {
     const isFirstSlide = currentImageIndex === 0;
     const newIndex = isFirstSlide
@@ -56,16 +51,7 @@ function ImageSlider({
       </div>
     );
   }
-  // const imageRegistHandler = (files: File[]) => {
-  //   const tempImagelist = [...imageList, ...files];
 
-  //   if (tempImagelist.length > 10) {
-  //     // alert('10개까지만 됨');
-  //     openModal(modalName);
-  //   } else {
-  //     setImageList(tempImagelist);
-  //   }
-  // };
   return (
     <div className="ImageInput flex justify-center mt-10 h-[40vh] w-full ">
       <FileUploader
@@ -86,4 +72,6 @@ function ImageSlider({
   );
 }
 
-export default ImageSlider;
+const MemoizmImageSlider = React.memo(ImageSlider);
+
+export default MemoizmImageSlider;

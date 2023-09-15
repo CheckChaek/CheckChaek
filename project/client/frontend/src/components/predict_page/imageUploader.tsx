@@ -1,9 +1,6 @@
 import React from 'react';
 import { FileUploader } from 'react-drag-drop-files';
 
-// interface
-// import ImageProps from '../../interface/predict';
-
 // icons
 import PhotoIcon from '../../assets/icons/photoIcon';
 import CloseIcon from '../../assets/icons/closeIcon';
@@ -11,8 +8,6 @@ import CloseIcon from '../../assets/icons/closeIcon';
 interface ImageProps {
   imageList: File[];
   isDrag: boolean;
-  // modalName: string;
-  // openModal: (key: string) => void;
   imageRegistHandler: (files: File[]) => void;
   setImageList: React.Dispatch<React.SetStateAction<File[]>>;
   setCurrentImageIndex: React.Dispatch<React.SetStateAction<number>>;
@@ -23,23 +18,11 @@ const fileTypes = ['JPG', 'PNG', 'GIF'];
 function ImageUploader({
   imageList,
   isDrag,
-  // modalName,
-  // openModal,
   setImageList,
   setCurrentImageIndex,
   setIsDrag,
   imageRegistHandler,
 }: ImageProps) {
-  //   image 추가 시 핸들링 함수
-  // const imageRegistHandler = (files: File[]) => {
-  //   const tempImagelist = [...imageList, ...files];
-
-  //   if (tempImagelist.length > 10) {
-  //     openModal(modalName);
-  //   } else {
-  //     setImageList(tempImagelist);
-  //   }
-  // };
   const imageDeleteHandler = (index: number) => {
     setImageList([...imageList].filter((item, idx) => idx !== index));
   };
@@ -49,17 +32,22 @@ function ImageUploader({
     <ul className="w-100 h-100 grid grid-cols-5 mt-8 place-content-center ">
       {imageList.map((image, index) => (
         <button
+          key={index.toString()}
           type="submit"
           onClick={() => {
             setCurrentImageIndex(index);
           }}>
           <li
-            key={Math.random()}
+            key={index.toString()}
             className="w-32 h-32 m-auto mt-6 group relative">
             <div className="absolute  hidden group-hover:block right-0">
-              <button type="button" onClick={() => imageDeleteHandler(index)}>
-                <CloseIcon styleString="w-6 h-6 text-LOGO-600" />
-              </button>
+              {/* <button type="button" onClick={() => imageDeleteHandler(index)}> */}
+              <CloseIcon
+                styleString="w-6 h-6 text-LOGO-600"
+                clickMethod={(idx: number) => imageDeleteHandler(idx)}
+                index={index}
+              />
+              {/* </button> */}
             </div>
             <img
               alt="갤러리 이미지"
