@@ -11,6 +11,9 @@ import CloseIcon from '../../assets/icons/closeIcon';
 interface ImageProps {
   imageList: File[];
   isDrag: boolean;
+  // modalName: string;
+  // openModal: (key: string) => void;
+  imageRegistHandler: (files: File[]) => void;
   setImageList: React.Dispatch<React.SetStateAction<File[]>>;
   setCurrentImageIndex: React.Dispatch<React.SetStateAction<number>>;
   setIsDrag: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,24 +22,28 @@ interface ImageProps {
 const fileTypes = ['JPG', 'PNG', 'GIF'];
 function ImageUploader({
   imageList,
+  isDrag,
+  // modalName,
+  // openModal,
   setImageList,
   setCurrentImageIndex,
-  isDrag,
   setIsDrag,
+  imageRegistHandler,
 }: ImageProps) {
   //   image 추가 시 핸들링 함수
-  const imageRegistHandler = (files: File[]) => {
-    const tempImagelist = [...imageList, ...files];
+  // const imageRegistHandler = (files: File[]) => {
+  //   const tempImagelist = [...imageList, ...files];
 
-    if (tempImagelist.length > 10) {
-      alert('10개까지만 됨');
-    } else {
-      setImageList(tempImagelist);
-    }
-  };
+  //   if (tempImagelist.length > 10) {
+  //     openModal(modalName);
+  //   } else {
+  //     setImageList(tempImagelist);
+  //   }
+  // };
   const imageDeleteHandler = (index: number) => {
     setImageList([...imageList].filter((item, idx) => idx !== index));
   };
+
   return (
     // 렌더링 파트
     <ul className="w-100 h-100 grid grid-cols-5 mt-8 place-content-center ">
