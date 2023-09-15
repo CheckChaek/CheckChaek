@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
-                // .addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationProcessingFilter.class)
+                .addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationProcessingFilter.class)
                 .headers().frameOptions().disable()
 
                 .and()
