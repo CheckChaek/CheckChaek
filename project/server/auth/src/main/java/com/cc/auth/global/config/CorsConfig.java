@@ -21,8 +21,8 @@ public class CorsConfig {
 
       source.registerCorsConfiguration("/**", config);
 
-      FilterRegistrationBean<CorsFilter> filterBean = new FilterRegistrationBean<>(new CorsFilter(source));
-      filterBean.setOrder(0);
+      // FilterRegistrationBean<CorsFilter> filterBean = new FilterRegistrationBean<>(new CorsFilter(source));
+      // filterBean.setOrder(0);
 
       return new CorsFilter(source);
    }
