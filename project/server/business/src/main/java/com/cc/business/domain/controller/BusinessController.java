@@ -3,11 +3,13 @@ import com.cc.business.domain.dto.BusinessInfoDto;
 import com.cc.business.domain.service.BusinessService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "예제 API", description = "Swagger 테스트용 API")
 @RestController
 @RequestMapping("/business")
 public class BusinessController {
