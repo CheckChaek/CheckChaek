@@ -3,7 +3,7 @@ import Card from '../common/card';
 import TrashCan from '../../assets/icons/trashIcon';
 import LeftIcon from '../../assets/icons/lefticon';
 import RightIcon from '../../assets/icons/righticon';
-import ArrowIcon from '../../assets/icons/arrowIcon';
+import RightArrowIcon from '../../assets/icons/rightArrowIcon';
 
 function Library() {
   const itemsPerPage = 10;
@@ -114,7 +114,7 @@ function Library() {
             <a
               href="/search"
               className="flex text-xl mt-3 w-max hover:text-FONT-300">
-              <ArrowIcon styleString="w-6 h-6 mr-2" /> 검색하러가기
+              <RightArrowIcon styleString="w-6 h-6 mr-2" /> 검색하러가기
             </a>
           </div>
         </div>

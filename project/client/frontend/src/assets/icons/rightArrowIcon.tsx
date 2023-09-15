@@ -1,6 +1,6 @@
 import { IconInterface } from '../../interface/common';
 
-function ArrowIcon({ styleString }: IconInterface) {
+function RightArrowIcon({ styleString }: IconInterface) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -18,4 +18,4 @@ function ArrowIcon({ styleString }: IconInterface) {
   );
 }
 
-export default ArrowIcon;
+export default RightArrowIcon;
