@@ -18,8 +18,8 @@ function App() {
   const token = useAccessToken();
 
   return (
-    <div className="App">
-      <nav className="flex justify-around items-center py-4 px-6 text-xl shadow-md">
+    <div className="App h-screen snap-y snap-mandatory overflow-scroll scrollbar-hidden">
+      <nav className="flex justify-around items-center py-4 px-6 text-xl shadow-md w-screen">
         <a href="/">
           <img src={CheckChaek} alt="CheckChaek" />
         </a>
@@ -39,7 +39,6 @@ function App() {
         </div>
         {token ? <UserDropdown /> : <UserLogin />}
       </nav>
-
       <Router>
         <Routes>
           <Route path="/" element={<MainPage />} />
@@ -50,7 +49,7 @@ function App() {
           <Route path="/login/redirect" element={<SocialLogin />} />
         </Routes>
       </Router>
-      <div className="flex snap-center BottomSheet m-screen h-[132px] bg-BUTTON2-200">
+      <div className="flex BottomSheet w-screen h-[132px] bg-BUTTON2-200">
         <p className="m-auto"> © 2023 CheckChaek All rights reserved.</p>
       </div>
     </div>

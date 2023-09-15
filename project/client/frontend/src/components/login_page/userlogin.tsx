@@ -20,8 +20,8 @@ function UserLogin() {
       <Modal
         closeModal={() => closeModal(modalName)}
         OpenModal={modalOpen[modalName]}
-        width="w-1/4"
-        height="h-[75vh]">
+        width="w-[400px]"
+        height="h-[680px] ">
         <Login />
       </Modal>
     </div>

@@ -9,35 +9,36 @@ function login() {
   };
 
   return (
-    <div className="LoginPart h-full min-w-[384px]  bg-BACKGROUND-50 rounded-lg shadow-md">
+    <div className="LoginPart h-[680px] w-[400px] my-auto bg-BACKGROUND-50 rounded-lg shadow-md">
       <div className="LoginTitle h-1/4 ">
         <h2 className="text-center font-bold text-3xl pt-16">시작하기</h2>
       </div>
-      <div className="LoginLogo h-2/5 flex justify-center">
+      <div className="LoginLogo h-2/5 flex justify-center ">
         <img src={CheckChaek} alt="CheckChaek" className="mx-auto py-24" />
       </div>
-      <div className="LoginKakaoBtn h-1/6 pt-10">
-        <button type="button" onClick={() => handleLogin('kakao')}>
-          <img
-            src={KakaoLogin}
-            alt="KakaoLoginBtn"
-            className="mx-auto shadow-lg"
-          />
-        </button>
-      </div>
-
-      <div className="mb-3">
-        <button type="button" onClick={() => handleLogin('google')}>
-          <img
-            src={GooogleLogin}
-            alt="GoogleLoginBtn"
-            className="mx-auto shadow-lg"
-          />
-        </button>
+      <div className="py-4 flex-cols">
+        <div className="LoginKakaoBtn flex justify-center pb-2">
+          <button type="button" onClick={() => handleLogin('kakao')}>
+            <img
+              src={KakaoLogin}
+              alt="KakaoLoginBtn"
+              className="mx-auto shadow-lg"
+            />
+          </button>
+        </div>
+        <div className="LoginGoogleBtn flex justify-center">
+          <button type="button" onClick={() => handleLogin('google')}>
+            <img
+              src={GooogleLogin}
+              alt="GoogleLoginBtn"
+              className="mx-auto shadow-lg"
+            />
+          </button>
+        </div>
       </div>
 
       <div className="LoginContent">
-        <hr className="w-10/12 mx-auto mb-3" />
+        <hr className="w-10/12 mx-auto pb-3 opacity-10  " />
         <p className="ServiceTerms text-center font-bold">서비스 약관</p>
       </div>
     </div>
