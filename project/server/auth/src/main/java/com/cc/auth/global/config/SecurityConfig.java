@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
-                .addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationProcessingFilter.class)
+                // .addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationProcessingFilter.class)
                 .headers().frameOptions().disable()
 
                 .and()
@@ -84,6 +84,7 @@ public class SecurityConfig {
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
             http
                     .addFilter(corsConfig.corsFilter())
+                    .addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationProcessingFilter.class)
                     .addFilter(new JwtAuthenticationProcessingFilter(authenticationManager, jwtProvider, memberRepository));
         }
     }
