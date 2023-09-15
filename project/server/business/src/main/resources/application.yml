@@ -19,8 +19,8 @@ server:
       force: true
 
 spring:
-  # datasource:
-  #   driver-class-name: org.mariadb.jdbc.Driver
+  #   driver-cl
+  # datasource:ass-name: org.mariadb.jdbc.Driver
   #   url: jdbc:mariadb://localhost:3306/checkchaeck?characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
   #   username: root
   #   password: ssafy
@@ -33,11 +33,12 @@ spring:
 #      settings:
 #        web-allow-others: true
   # Database Setting Info (Database를 H2로 사용하기 위해 H2연결 정보 입력)
+
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver  # Database를 H2로 사용하겠다.
-    url: jdbc:mariadb://j9a606.p.ssafy.io/checkchaeck  # H2 접속 정보
-    username: root  # H2 접속 시 입력할 username 정보 (원하는 것으로 입력)
-    password: ash0906! # H2 접속 시 입력할 password 정보 (원하는 것으로 입력)
+    driver-class-name: org.mariadb.jdbc.Driver  # Database를 MariaDB로 사용하겠다.
+    url: jdbc:mariadb://j9a606.p.ssafy.io/checkchaeck  # MariaDB로 접속 정보
+    username: root  # MariaDB로 접속 시 입력할 username 정보 (원하는 것으로 입력)
+    password: ash0906! # MariaDB로 접속 시 입력할 password 정보 (원하는 것으로 입력)
 
   jpa:
     hibernate:

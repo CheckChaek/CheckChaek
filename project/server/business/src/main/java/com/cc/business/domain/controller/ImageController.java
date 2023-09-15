@@ -32,7 +32,7 @@ public class ImageController {
     public String execWrite(@NotNull ImageDto imageDto, MultipartFile file) throws IOException {
         String imgPath = s3Service.upload(file);
         imageDto.setFilePath(imgPath);
-        System.out.println("실행됨??");
+//        System.out.println("실행됨??");
         imageService.savePost(imageDto);
 
 

@@ -21,6 +21,7 @@ public class BusinessController {
 
     @PostMapping("/imageInfo")
     public List<BusinessInfoDto> getImageInfo(@RequestBody List<String> imageList) {
+
         return businessService.processImages(imageList);
     }
 
