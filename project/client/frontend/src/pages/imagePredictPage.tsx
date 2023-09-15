@@ -21,7 +21,6 @@ function PredictPage() {
     const tempImagelist = [...imageList, ...files];
 
     if (tempImagelist.length > 10) {
-      // alert('10개까지만 됨');
       openModal(modalName);
     } else {
       setImageList(tempImagelist);
@@ -35,12 +34,9 @@ function PredictPage() {
           <ImageSlider
             imageRegistHandler={imageRegistHandler}
             imageList={imageList}
-            // setImageList={setImageList}
             currentImageIndex={currentImageIndex}
             setCurrentImageIndex={setCurrentImageIndex}
             isDrag={isDrag}
-            // openModal={openModal}
-            // modalName="modalName"
             setIsDrag={setIsDrag}
           />
         </div>
@@ -51,8 +47,6 @@ function PredictPage() {
             setCurrentImageIndex={setCurrentImageIndex}
             isDrag={isDrag}
             setIsDrag={setIsDrag}
-            // openModal={openModal}
-            // modalName="modalName"
             imageRegistHandler={imageRegistHandler}
           />
         </div>
