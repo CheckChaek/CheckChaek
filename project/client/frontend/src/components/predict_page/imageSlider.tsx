@@ -12,10 +12,16 @@ function ImageSlider({
   imageList,
   isDrag,
   currentImageIndex,
-  setImageList,
+  // modalOpen,
+  // setImageList,
+  imageRegistHandler,
   setCurrentImageIndex,
+  // closeModal,
+  // openModal,
   setIsDrag,
 }: ImageProps) {
+  // const modalName = 'imageLimit';
+
   const indexLeftHandler = () => {
     const isFirstSlide = currentImageIndex === 0;
     const newIndex = isFirstSlide
@@ -50,15 +56,16 @@ function ImageSlider({
       </div>
     );
   }
-  const imageRegistHandler = (files: File[]) => {
-    const tempImagelist = [...imageList, ...files];
+  // const imageRegistHandler = (files: File[]) => {
+  //   const tempImagelist = [...imageList, ...files];
 
-    if (tempImagelist.length > 10) {
-      alert('10개까지만 됨');
-    } else {
-      setImageList(tempImagelist);
-    }
-  };
+  //   if (tempImagelist.length > 10) {
+  //     // alert('10개까지만 됨');
+  //     openModal(modalName);
+  //   } else {
+  //     setImageList(tempImagelist);
+  //   }
+  // };
   return (
     <div className="ImageInput flex justify-center mt-10 h-[40vh] w-full ">
       <FileUploader
