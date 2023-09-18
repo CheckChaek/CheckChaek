@@ -22,7 +22,6 @@ def bookScan(input):
     if input.method == 'POST':
         data = json.loads(input.body)
         path = data['img_url']
-        #print(path)
 
         # request.urlopen()
         content = request.urlopen(path).read()
@@ -40,4 +39,4 @@ def bookScan(input):
                 "{}\nFor more info on error messages, check: "
                 "https://cloud.google.com/apis/design/errors".format(response.error.message)
             )
-        return Response({"data": textList})
+        return Response(textList)
