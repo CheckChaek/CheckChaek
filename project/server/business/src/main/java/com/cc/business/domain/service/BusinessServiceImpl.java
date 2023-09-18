@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -12,42 +14,94 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+@Slf4j
 @Service
 public class BusinessServiceImpl implements BusinessService {
+
+    @Value("${server.url}")
+    String SERVER_URL;
+
+    @Value("${ta.port}")
+    String TA_PORT;
+
+    @Value("${search.port}")
+    String SEARCH_PORT;
+
+    @Value("${sc.port}")
+    String SC_PORT;
+
+    @Value("${ans.port}")
+    String ANS_PORT;
+
     private final BusinessRepository businessRepository;
 
     public BusinessServiceImpl(BusinessRepository businessRepository) {
         this.businessRepository = businessRepository;
     }
 
-    // 담당 : 이정석
     @Override
-    public List<BusinessInfoDto> processImages(List<String> imageList) {
-        // 이미지 처리 및 정보 추출 로직을 구현
-        List<BusinessInfoDto> result = new ArrayList<>();
+    public List<BookDto> processImages(List<String> imageList) {
+        log.info("이미지 처리 실행");
+        /* 이미지에서 text 추출 */
+        List<String> textList = getImageText(imageList);
 
-        // 각 이미지에 대한 처리와 정보 추출을 수행하고 결과를 result 리스트에 추가
-
+        /* 추출된 글자를 이용하여 책 정보 검색 */
+        List<BookDto> result = getBookInfo(textList);
         return result;
     }
 
-    // 담당 : 이승환
-    // TA
     @Override
-    public List<String> getImageText(List<String> imageUrlList) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getImageText'");
+    public List<String> getImageText(List<String> imageList) {
+        log.info("이미지 추출 실행");
+        // webClient 기본 설정
+        WebClient webClient = WebClient
+                .builder()
+                .baseUrl(SERVER_URL + ":" + TA_PORT)
+                .build();
+
+        HashMap<String, String> request = new HashMap<>();
+        request.put("img_url", imageList.get(0));
+
+        // api 요청
+        List<String> response = webClient
+                .post()
+                .uri("/ta/abstraction")
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(List.class)
+                .block();
+        log.info("TA 결과: {}", response);
+        return response;
     }
 
     // search
     @Override
-    public BusinessInfoDto getBookInfo(String bookTest) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getBookInfo'");
+    public  List<BookDto> getBookInfo(List<String> imageList) {
+        // webClient 기본 설정
+        WebClient webClient = WebClient
+                .builder()
+                .baseUrl(SERVER_URL + ":" + SEARCH_PORT)
+                .build();
+
+        HashMap<String, List<String>> request = new HashMap<>();
+        request.put("textList", imageList);
+
+        // api 요청
+        List<BookDto> response = webClient
+                .post()
+                .uri("/search/bookinfo")
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(List.class)
+                .block();
+        log.info("Search 결과: {}", response);
+        return response;
     }
 
     // sc

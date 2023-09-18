@@ -1,5 +1,5 @@
-# 프로젝트 서버 URL 및 포트 설정
-server.url: http://localhost
+# 프로젝트 서버 URL
+server.url: http://j9a606.p.ssafy.io
 ta.port: 8083
 search.port: 8084
 sc.port: 8085
