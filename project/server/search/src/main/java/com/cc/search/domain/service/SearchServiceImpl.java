@@ -1,5 +1,6 @@
 package com.cc.search.domain.service;
 
+import com.cc.search.domain.dto.BookDto;
 import com.cc.search.domain.dto.SearchResponse;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +19,7 @@ public class SearchServiceImpl implements SearchService {
     String TTBKEY;
 
     @Override
-    public SearchResponse getBookInfo(List<String> textList) {
+    public List<BookDto> getBookInfo(List<String> textList) {
         String aladin_api_url = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx";
 
         // webClient 기본 설정
@@ -28,19 +29,31 @@ public class SearchServiceImpl implements SearchService {
                 .build();
 
         // api 요청
-        SearchResponse response = webClient
-                .get()
-                .uri(uriBuilder ->
-                        uriBuilder
-                                .queryParam("ttbkey", TTBKEY)
-                                .queryParam("Query", textList.get(0))
-                                .queryParam("QueryType", "Title")
-                                .queryParam("Output", "JS")
-                                .queryParam("Version", "20131101")
-                                .build())
-                .retrieve()
-                .bodyToMono(SearchResponse.class)
-                .block();
+        List<BookDto> response = new ArrayList<>();
+        for(String keyword : textList) {
+            SearchResponse data  = webClient
+                    .get()
+                    .uri(uriBuilder ->
+                            uriBuilder
+                                    .queryParam("ttbkey", TTBKEY)
+                                    .queryParam("Query", keyword)
+                                    .queryParam("QueryType", "Title")
+                                    .queryParam("Output", "JS")
+                                    .queryParam("Version", "20131101")
+                                    .queryParam("MaxResults", 50) // 최대 50개 까지만 검색가능
+                                    .build())
+                    .retrieve()
+                    .bodyToMono(SearchResponse.class)
+                    .block();
+//            log.info("검색결과: {}", data);
+
+            /* 검색결과 리스트 반환 */
+            List<BookDto> bookList = data.getItem();
+            log.info("검색결과 총 갯수: {}", bookList.size());
+            for(BookDto book : bookList) {
+                response.add(book);
+            }
+        }
 
         return response;
     }

@@ -1,5 +1,6 @@
 package com.cc.search.domain.controller;
 
+import com.cc.search.domain.dto.BookDto;
 import com.cc.search.domain.dto.SearchResponse;
 import com.cc.search.domain.service.SearchService;
 import org.springframework.http.HttpStatus;
@@ -21,8 +22,8 @@ public class SearchController {
     }
 
     @PostMapping("/bookinfo")
-    public ResponseEntity<SearchResponse> getBookInfo(@RequestBody HashMap<String, Object> request) {
-        SearchResponse result = ss.getBookInfo((List<String>) request.get("textList"));
+    public ResponseEntity<List<BookDto>> getBookInfo(@RequestBody HashMap<String, Object> request) {
+        List<BookDto> result = ss.getBookInfo((List<String>) request.get("textList"));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
