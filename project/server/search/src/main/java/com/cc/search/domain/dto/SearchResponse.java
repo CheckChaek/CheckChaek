@@ -20,4 +20,23 @@ public class SearchResponse {
     int searchCategoryId;
     String searchCategoryName;
     List<BookDto> item;
+
+    @Override
+    public String toString() {
+        return "SearchResponse{" +
+                "version='" + version + '\'' +
+                ", logo='" + logo + '\'' +
+                ", title='" + title + '\'' +
+                ", link='" + link + '\'' +
+                ", pubDate='" + pubDate + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", totalResults=" + totalResults +
+                ", startIndex=" + startIndex +
+                ", itemsPerPage=" + itemsPerPage +
+                ", query='" + query + '\'' +
+                ", searchCategoryId=" + searchCategoryId +
+                ", searchCategoryName='" + searchCategoryName + '\'' +
+                ", item=" + item +
+                '}';
+    }
 }
