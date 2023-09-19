@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface SearchService {
 
-    List<BookDto> getBookInfo(List<String> textList);
+    BookDto getBookInfo(List<String> textList);
 
 }

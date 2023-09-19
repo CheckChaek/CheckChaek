@@ -22,8 +22,8 @@ public class SearchController {
     }
 
     @PostMapping("/bookinfo")
-    public ResponseEntity<List<BookDto>> getBookInfo(@RequestBody HashMap<String, Object> request) {
-        List<BookDto> result = ss.getBookInfo((List<String>) request.get("textList"));
+    public ResponseEntity<BookDto> getBookInfo(@RequestBody HashMap<String, Object> request) {
+        BookDto result = ss.getBookInfo((List<String>) request.get("textList"));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
