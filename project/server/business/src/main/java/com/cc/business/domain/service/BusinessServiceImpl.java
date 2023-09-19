@@ -46,19 +46,20 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public List<BookDto> processImages(List<String> imageList) {
+    public BookDto processImages(List<String> imageList) {
         log.info("이미지 처리 실행");
         /* 이미지에서 text 추출 */
         List<String> textList = getImageText(imageList);
 
         /* 추출된 글자를 이용하여 책 정보 검색 */
-        List<BookDto> result = getBookInfo(textList);
+        BookDto result = getBookInfo(textList);
         return result;
     }
 
     @Override
     public List<String> getImageText(List<String> imageList) {
-        log.info("이미지 추출 실행");
+        log.info("이미지에서 글자 추출 실행 {}", imageList);
+
         // webClient 기본 설정
         WebClient webClient = WebClient
                 .builder()
@@ -82,7 +83,8 @@ public class BusinessServiceImpl implements BusinessService {
 
     // search
     @Override
-    public  List<BookDto> getBookInfo(List<String> imageList) {
+    public  BookDto getBookInfo(List<String> textList) {
+        log.info("추출된 글자로 책 정보 검색");
         // webClient 기본 설정
         WebClient webClient = WebClient
                 .builder()
@@ -90,15 +92,15 @@ public class BusinessServiceImpl implements BusinessService {
                 .build();
 
         HashMap<String, List<String>> request = new HashMap<>();
-        request.put("textList", imageList);
+        request.put("textList", textList);
 
         // api 요청
-        List<BookDto> response = webClient
+        BookDto response = webClient
                 .post()
                 .uri("/search/bookinfo")
                 .bodyValue(request)
                 .retrieve()
-                .bodyToMono(List.class)
+                .bodyToMono(BookDto.class)
                 .block();
         log.info("Search 결과: {}", response);
         return response;
@@ -136,7 +138,6 @@ public class BusinessServiceImpl implements BusinessService {
     // ans
     @Override
     public BusinessInfoDto getBookPrice(String imageStatus) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getBookPrice'");
+        return null;
     }
 }
