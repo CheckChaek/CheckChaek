@@ -48,6 +48,11 @@ spring:
         default_batch_fetch_size: 1000
     show-sql: true
 
+    servlet:
+      multipart:
+        max-file-size: 100MB
+        max-request-size: 100MB
+
 # Swagger 설정
 springdoc:
   packages-to-scan: com.cc.domain.business.controllers

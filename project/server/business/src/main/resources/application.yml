@@ -28,24 +28,8 @@ cloud:
     stack:
       auto: false
 
-
 # DB 설정
 spring:
-  #   driver-cl
-  # datasource:ass-name: org.mariadb.jdbc.Driver
-  #   url: jdbc:mariadb://localhost:3306/checkchaeck?characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
-  #   username: root
-  #   password: ssafy
-
-  # H2 Setting Info (H2 Console에 접속하기 위한 설정정보 입력)
-#  h2:
-#    console:
-#      enabled: true  # H2 Console을 사용할지 여부 (H2 Console은 H2 Database를 UI로 제공해주는 기능)
-#      path: /h2-console  # H2 Console의 Path
-#      settings:
-#        web-allow-others: true
-  # Database Setting Info (Database를 H2로 사용하기 위해 H2연결 정보 입력)
-
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver  # Database를 MariaDB로 사용하겠다.
     url: jdbc:mariadb://j9a606.p.ssafy.io/checkchaeck  # MariaDB로 접속 정보
@@ -62,6 +46,11 @@ spring:
           time_zone: Asia/Seoul
         default_batch_fetch_size: 1000
     show-sql: true
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 # Swagger 설정
 springdoc:
