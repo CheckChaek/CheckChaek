@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @AllArgsConstructor
@@ -24,18 +26,17 @@ public class ImageController {
 
     @GetMapping("/image")
     public String dispWrite() {
-
         return "/image";
     }
 
     @PostMapping("/image")
     public String execWrite(@NotNull ImageDto imageDto, MultipartFile file) throws IOException {
-        String imgPath = s3Service.upload(file);
-        imageDto.setFilePath(imgPath);
+        List<MultipartFile> fileList = new ArrayList<>();
+        fileList.add(file);
+        List<String> imageUrlList = s3Service.upload(fileList);
+        imageDto.setFilePath(imageUrlList.get(0));
 //        System.out.println("실행됨??");
         imageService.savePost(imageDto);
-
-
         return "redirect:/image";
     }
 }

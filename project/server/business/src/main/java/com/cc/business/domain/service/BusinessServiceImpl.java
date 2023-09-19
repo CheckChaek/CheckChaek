@@ -16,7 +16,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -46,19 +45,19 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public BookDto processImages(List<String> imageList) {
+    public AladinResponseDto processImages(List<String> imageUrlList) {
         log.info("이미지 처리 실행");
         /* 이미지에서 text 추출 */
-        List<String> textList = getImageText(imageList);
+        List<String> textList = getImageText(imageUrlList);
 
         /* 추출된 글자를 이용하여 책 정보 검색 */
-        BookDto result = getBookInfo(textList);
+        AladinResponseDto result = getBookInfo(textList);
         return result;
     }
 
     @Override
-    public List<String> getImageText(List<String> imageList) {
-        log.info("이미지에서 글자 추출 실행 {}", imageList);
+    public List<String> getImageText(List<String> imageUrlList) {
+        log.info("이미지에서 글자 추출 실행 {}", imageUrlList);
 
         // webClient 기본 설정
         WebClient webClient = WebClient
@@ -67,7 +66,7 @@ public class BusinessServiceImpl implements BusinessService {
                 .build();
 
         HashMap<String, String> request = new HashMap<>();
-        request.put("img_url", imageList.get(0));
+        request.put("img_url", imageUrlList.get(0));
 
         // api 요청
         List<String> response = webClient
@@ -83,7 +82,7 @@ public class BusinessServiceImpl implements BusinessService {
 
     // search
     @Override
-    public  BookDto getBookInfo(List<String> textList) {
+    public AladinResponseDto getBookInfo(List<String> textList) {
         log.info("추출된 글자로 책 정보 검색");
         // webClient 기본 설정
         WebClient webClient = WebClient
@@ -95,12 +94,12 @@ public class BusinessServiceImpl implements BusinessService {
         request.put("textList", textList);
 
         // api 요청
-        BookDto response = webClient
+        AladinResponseDto response = webClient
                 .post()
                 .uri("/search/bookinfo")
                 .bodyValue(request)
                 .retrieve()
-                .bodyToMono(BookDto.class)
+                .bodyToMono(AladinResponseDto.class)
                 .block();
         log.info("Search 결과: {}", response);
         return response;

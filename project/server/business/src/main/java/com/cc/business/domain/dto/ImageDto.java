@@ -12,7 +12,7 @@ public class ImageDto {
     private String title;
     private String filePath;
 
-    public  ImageEntity toEntity(){
+    public ImageEntity toEntity(){
         ImageEntity build = ImageEntity.builder()
                 .id(id)
                 .title(title)
