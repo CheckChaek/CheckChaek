@@ -19,7 +19,7 @@ public class SearchServiceImpl implements SearchService {
     String TTBKEY;
 
     @Override
-    public List<BookDto> getBookInfo(List<String> textList) {
+    public BookDto getBookInfo(List<String> textList) {
         String aladin_api_url = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx";
 
         // webClient 기본 설정
@@ -29,7 +29,7 @@ public class SearchServiceImpl implements SearchService {
                 .build();
 
         // api 요청
-        List<BookDto> response = new ArrayList<>();
+        BookDto response = new BookDto();
         for(String keyword : textList) {
             SearchResponse data  = webClient
                     .get()
@@ -40,18 +40,17 @@ public class SearchServiceImpl implements SearchService {
                                     .queryParam("QueryType", "Title")
                                     .queryParam("Output", "JS")
                                     .queryParam("Version", "20131101")
-                                    .queryParam("MaxResults", 50) // 최대 50개 까지만 검색가능
+                                    .queryParam("MaxResults", 10) // 최대 50개 까지만 검색가능
                                     .build())
                     .retrieve()
                     .bodyToMono(SearchResponse.class)
                     .block();
-//            log.info("검색결과: {}", data);
 
             /* 검색결과 리스트 반환 */
             List<BookDto> bookList = data.getItem();
-            log.info("검색결과 총 갯수: {}", bookList.size());
-            for(BookDto book : bookList) {
-                response.add(book);
+            if(!bookList.isEmpty()) {
+                response = bookList.get(0);
+                break;
             }
         }
 
