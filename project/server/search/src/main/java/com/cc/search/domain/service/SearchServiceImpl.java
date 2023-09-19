@@ -53,7 +53,7 @@ public class SearchServiceImpl implements SearchService {
                 break;
             }
         }
-
+        log.info("검색결과: {}", response);
         return response;
     }
 }
