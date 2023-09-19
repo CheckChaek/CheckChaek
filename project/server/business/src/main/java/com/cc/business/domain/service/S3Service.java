@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @NoArgsConstructor
@@ -42,11 +44,17 @@ public class S3Service {
                 .build();
     }
 
-    public String upload(MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename();
+    public List<String> upload(List<MultipartFile> imageList) throws IOException {
+        List<String> imageUrlList = new ArrayList<>();
+        for(MultipartFile file : imageList) {
+            String fileName = file.getOriginalFilename();
 
-        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-        return s3Client.getUrl(bucket, fileName).toString();
+            s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            String fileUrl = s3Client.getUrl(bucket, fileName).toString();
+            imageUrlList.add(fileUrl);
+        }
+
+        return imageUrlList;
     }
 }

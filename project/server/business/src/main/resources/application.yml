@@ -63,51 +63,6 @@ spring:
         default_batch_fetch_size: 1000
     show-sql: true
 
-  security:
-    oauth2:
-      redirectUrl: http://localhost:8080/login/redirect
-      client:
-        registration:
-          kakao:
-            client-id: c5827bdd1888edc3b7a7c64483fb1159
-            client-secret: o9cosxxIlRLYoDbKbms8v02pOJBDyO7t
-            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
-            authorization-grant-type: authorization_code
-            client-authentication-method: client_secret_post
-            client-name: Kakao
-            scope:
-              - profile_nickname
-          #              - profile_image
-          google:
-            client-id: 195520493714-ichavs28t68gacsli4hal2t8lsl7s1q4.apps.googleusercontent.com
-            client-secret: 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
-            scope:
-              - profile
-              - email
-        provider:
-          kakao:
-            authorization-uri: https://kauth.kakao.com/oauth/authorize
-            token-uri: https://kauth.kakao.com/oauth/token
-            user-info-uri: https://kapi.kakao.com/v2/user/me
-            user-name-attribute: id
-
-  data:
-    redis:
-      port: 6379
-      host: localhost
-
-
-jwt:
-  secretKey: checkchaeck
-
-  access:
-    expiration: 3600000 # 1시간(60분) (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h))
-    header: Authorization
-
-  refresh:
-    expiration: 1209600000 #  (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h) * 24L(h -> 하루) * 14(2주))
-    header: Authorization-refresh
-
 # Swagger 설정
 springdoc:
   packages-to-scan: com.cc.domain.business.controllers
