@@ -44,7 +44,8 @@ public class BusinessController {
     @PostMapping("/imageinfo")
     public ResponseEntity<EnvelopeResponse<HashMap<String, Object>>> getImageInfo(HttpServletRequest request, @RequestBody List<MultipartFile> imageList) throws Exception {
 
-//        int memberId = isAuthorized(request);
+       int memberId = isAuthorized(request);
+       System.out.println("=======memberId======" + memberId);
 //        log.info("사용자 ID: {}", memberId);
 
         log.info("이미지 정보 요청값: {}", imageList.size());
