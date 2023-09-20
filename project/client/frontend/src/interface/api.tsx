@@ -1,20 +1,29 @@
-export interface BookInfo {
+// predict
+export interface BookInfoResponse {
+  bookId: number;
   title: string;
   author: string;
   publisher: string;
-  status: number;
-  price: number;
   image: string;
-  // minprice: number;
-  // maxprice: number;
-  // ogprice: number;
 }
 
-export interface Response {
+export interface PredictBookInfoResponse {
+  title: string;
+  author: string;
+  publisher: string;
+  iamge: string;
+  status: string;
+  originalPrice: number;
+  estimatedPrice: number;
+}
+
+export interface APIResponse {
   code: string;
   message: string;
-  data: Map<string, BookInfo>;
+  data: Map<string, PredictBookInfoResponse>;
 }
+
+// history
 
 export interface Book {
   title: string;

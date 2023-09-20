@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { Response } from '../../interface/api';
+import { APIResponse } from '../../interface/api';
 import { BUSINESS_URI, useAccessToken } from '../apiInfo';
 
 const historyUri = `${BUSINESS_URI}/history`;
@@ -17,7 +17,7 @@ function HistoryAllApi() {
       })
       .then(res => {
         if (res.status === 200) {
-          return res.data as Response;
+          return res.data as APIResponse;
         }
         return res.statusText;
       })
@@ -38,7 +38,7 @@ function HistoryDetailApi(bookId: number) {
       })
       .then(res => {
         if (res.status === 200) {
-          return res.data as Response;
+          return res.data as APIResponse;
         }
         return res.statusText;
       })
@@ -59,7 +59,7 @@ function HistorySearchApi(keyword: string) {
       })
       .then(res => {
         if (res.status === 200) {
-          return res.data as Response;
+          return res.data as APIResponse;
         }
         return res.statusText;
       })
