@@ -81,7 +81,12 @@ public class JwtAuthenticationProcessingFilter extends BasicAuthenticationFilter
                 .filter(jwtProvider::isTokenValid)
                 .ifPresent(accessToken -> jwtProvider.extractEmail(accessToken)
                         .ifPresent(username -> memberRepository.findByOauthIdentifier(username)
-                                    .ifPresent(this::saveAuthentication)));
+                                    .ifPresentOrElse(
+                                            this::saveAuthentication,
+                                            () -> {
+                                                throw new IllegalArgumentException("Username not found");
+                                            }
+                                    )));
 
         filterChain.doFilter(request, response);
     }

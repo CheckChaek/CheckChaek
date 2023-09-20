@@ -8,7 +8,7 @@ import lombok.Getter;
 @Builder
 public class DeleteMemberResponseDto {
 
-    private Long memberId;
+    private int memberId;
 
     public static DeleteMemberResponseDto of(Member member){
 

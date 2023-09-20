@@ -8,7 +8,7 @@ import lombok.Getter;
 @Builder
 public class LogoutResponseDto {
 
-    private Long memberid;
+    private int memberid;
 
     public static LogoutResponseDto of(Member member){
         return LogoutResponseDto.builder()

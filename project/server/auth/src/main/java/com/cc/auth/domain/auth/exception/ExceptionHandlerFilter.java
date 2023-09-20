@@ -27,6 +27,10 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             System.out.println(e);
             System.out.println(e.getMessage());
             setErrorResponse(response, AuthErrorCode.EXPIRED_TOKEN);
+        } catch (IllegalArgumentException e){
+            System.out.println(e);
+            System.out.println(e.getMessage());
+            setErrorResponse(response, AuthErrorCode.NOT_FOUND_USER);
         }
     }
 
