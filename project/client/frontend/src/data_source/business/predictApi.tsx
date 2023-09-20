@@ -13,23 +13,22 @@ function PredictApi(imageList: File[]) {
         {
           params: {
             imageList,
+            bookInfo,
           },
         },
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       )
       .then(res => {
         if (res.status === 200) {
-          return res.data as Response;
+          return res.data as APIResponse;
         }
         return res.statusText;
       })
       .catch(e => console.log(e));
   }
 }
-
-export default PredictApi;
