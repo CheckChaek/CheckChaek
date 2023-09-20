@@ -110,6 +110,9 @@ module.exports = {
         950: '#301b1a ',
       },
     },
+    fontFamily: {
+      'do-hyeon': ['Do Hyeon', 'Do Hyeon'],
+    },
   },
   plugins: [],
 };
