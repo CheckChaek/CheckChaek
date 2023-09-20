@@ -1,6 +1,9 @@
 package com.cc.business.domain.service;// BusinessServiceImpl.java
 import com.cc.business.domain.dto.*;
-import com.cc.business.domain.repository.BusinessRepository;
+import com.cc.business.domain.entity.BookEntity;
+import com.cc.business.domain.entity.BookImageEntity;
+import com.cc.business.domain.repository.BookImageRepository;
+import com.cc.business.domain.repository.BookRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,10 +41,12 @@ public class BusinessServiceImpl implements BusinessService {
     @Value("${ans.port}")
     String ANS_PORT;
 
-    private final BusinessRepository businessRepository;
+    private BookRepository bookRepository;
+    private BookImageRepository bookImageRepository;
 
-    public BusinessServiceImpl(BusinessRepository businessRepository) {
-        this.businessRepository = businessRepository;
+    public BusinessServiceImpl(BookRepository bookRepository, BookImageRepository bookImageRepository) {
+        this.bookRepository = bookRepository;
+        this.bookImageRepository = bookImageRepository;
     }
 
     @Override
@@ -52,6 +57,7 @@ public class BusinessServiceImpl implements BusinessService {
 
         /* 추출된 글자를 이용하여 책 정보 검색 */
         AladinResponseDto result = getBookInfo(textList);
+
         return result;
     }
 
@@ -138,5 +144,29 @@ public class BusinessServiceImpl implements BusinessService {
     @Override
     public BusinessInfoDto getBookPrice(String imageStatus) {
         return null;
+    }
+
+    @Override
+    public int saveBookInfo(BookDto bookInfo, int memberId) {
+        BookEntity bookEntity = new BookEntity().builder()
+                .title(bookInfo.getTitle())
+                .publisher(bookInfo.getPublisher())
+                .author(bookInfo.getAuthor())
+                .cover_image(bookInfo.getImage())
+                .member_id(memberId)
+                .build();
+        return  bookRepository.save(bookEntity).getBook_id();
+    }
+
+    @Override
+    public void saveS3URL(List<String> imageUrlList, int bookId) {
+        for(int i=0; i<imageUrlList.size(); i++) {
+            BookImageEntity bookImageEntity = new BookImageEntity().builder()
+                    .image_path("checkchaeck")
+                    .image_url(imageUrlList.get(i))
+                    .book_id(bookId)
+                    .build();
+            bookImageRepository.save(bookImageEntity);
+        }
     }
 }

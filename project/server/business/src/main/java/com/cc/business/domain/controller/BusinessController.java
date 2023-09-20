@@ -37,7 +37,7 @@ public class BusinessController {
         log.info("이미지 정보 요청값: {}", imageList.size());
         /* S3에 이미지 저장 */
         List<String> imageUrlList = s3Service.upload(imageList);
-        /* DB에 이미지 저장(추후 추가) */
+        log.info("S3 이미지 저장 경로 {}", imageUrlList);
 
         /* 글자 추출 후 책 검색 */
         AladinResponseDto aladinResponse = businessService.processImages(imageUrlList);
@@ -47,6 +47,13 @@ public class BusinessController {
         bookInfo.setPublisher(aladinResponse.getPublisher());
         bookInfo.setImage(aladinResponse.getCover());
 
+        /* step1. 책 정보 먼저 저장 */
+        int bookId = businessService.saveBookInfo(bookInfo, 8);
+        log.info("책 번호: {}", bookId);
+
+        /* step2. 저장된 책의 id를 가지고 이미지 정보를 저장 */
+        businessService.saveS3URL(imageUrlList, bookId);
+
         HashMap<String, Object> data = new HashMap<>();
         data.put("bookInfo", bookInfo);
 
@@ -54,9 +61,11 @@ public class BusinessController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PostMapping("/bookstatus")
-    public ResponseEntity<EnvelopeResponse<BookDto>> getImageStatus(@RequestBody BookDto bookInfo) throws Exception {
+    @PostMapping("/bookpredict")
+    public ResponseEntity<EnvelopeResponse<BookDto>> getImageStatus(@RequestBody HashMap<String, BookDto> request) throws Exception {
+        log.info("이미지 상태 분류 요청값: {}", request.get("bookInfo"));
 //        String status = businessService.getImageStatus(bookInfo);
+
         return null;
     }
 }
