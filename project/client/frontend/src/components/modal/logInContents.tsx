@@ -3,7 +3,7 @@ import GooogleLogin from '../../assets/images/google_login/google_login_logo.png
 import CheckChaek from '../../assets/images/logo/CheckChaek.png';
 import { AUTH_URI } from '../../data_source/apiInfo';
 
-function login() {
+function Login() {
   const handleLogin = (url: string) => {
     window.location.href = `${AUTH_URI}/oauth2/authorization/${url}`;
   };
@@ -45,4 +45,4 @@ function login() {
   );
 }
 
-export default login;
+export default Login;

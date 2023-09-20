@@ -1,7 +1,6 @@
 // Modal class
 import { useState } from 'react';
-
-import { useModal } from '../components/common/modalClass';
+import { useModal } from '../components/modal/modalClass';
 
 function ImagePredictController() {
   const { modalOpen, openModal, closeModal } = useModal();
