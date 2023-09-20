@@ -1,6 +1,6 @@
-import Modal from './modal';
-import { useModal } from '../common/modalClass';
-import Login from '../common/logInContents';
+import Modal from '../modal/modal';
+import { useModal } from '../modal/modalClass';
+import Login from '../modal/logInContents';
 
 function UserLogin() {
   const { modalOpen, openModal, closeModal } = useModal();

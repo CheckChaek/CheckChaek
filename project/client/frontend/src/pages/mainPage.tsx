@@ -1,5 +1,5 @@
 import MainBooks from '../assets/images/main_page/books.png';
-import Login from '../components/common/logInContents';
+import Login from '../components/modal/logInContents';
 import LeftArrowIcon from '../assets/icons/leftArrowIcon';
 import RightArrowIcon from '../assets/icons/rightArrowIcon';
 
