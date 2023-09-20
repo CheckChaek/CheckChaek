@@ -1,5 +1,6 @@
 package com.cc.business.domain.service;// BusinessService.java
 import com.cc.business.domain.dto.AladinResponseDto;
+import com.cc.business.domain.dto.BookDto;
 import com.cc.business.domain.dto.BusinessInfoDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -20,4 +21,10 @@ public interface BusinessService {
 
     // ans 서버에 상태와 가격을 전송하면 가격 결과 반환;
     BusinessInfoDto getBookPrice(String imageStatus);
+
+    // 책 정보 DB에 저장
+    int saveBookInfo(BookDto bookInfo, int memberId);
+
+    // S3에 저장된 이미지 경로 DB에 저장
+    void saveS3URL(List<String> imageUrlList, int bookId);
 }
