@@ -91,7 +91,7 @@ function PredictPage() {
       <Modal
         closeModal={() => closeModal(guidemodalName)}
         OpenModal={modalOpen[guidemodalName]}
-        width="w-[70%]"
+        width="w-[41%]"
         height="h-[100%]">
         <Guide okAction={() => closeModal(guidemodalName)} />
       </Modal>

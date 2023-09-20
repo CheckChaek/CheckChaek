@@ -13,7 +13,7 @@ interface Content {
 function Guide({ okAction }: Content) {
   return (
     <div className="w-full h-full bg-MAIN-50 opacity-90">
-      <Card width="w-3/4" height="min-h-[80vh]">
+      <Card width="w-full" height="min-h-[80vh]">
         <p className="text-4xl font-bold text-center ">사진 입력 가이드라인</p>
         <div className="bg-MAIN-100 min-h-[15vh] max-w-[90vh] mx-auto rounded-md text-2xl text-center mt-10 flex flex-col justify-center items-center p-8">
           <p>
