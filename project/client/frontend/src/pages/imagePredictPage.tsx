@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Modal from '../components/login_page/modal';
@@ -14,7 +14,21 @@ function PredictPage() {
   const [imageList, setImageList] = useState<File[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isDrag, setIsDrag] = useState(false);
+
   const modalName = 'imageLimit';
+  const guideRef = useRef(true);
+  const guidemodalName = 'guide';
+  const handleGuide = useCallback(() => {
+    if (guideRef.current) {
+      openModal(guidemodalName);
+      guideRef.current = false;
+    }
+  }, [openModal]);
+
+  useEffect(() => {
+    handleGuide();
+  }, [handleGuide]);
+
   const navigate = useNavigate();
 
   const imageRegistHandler = (files: File[]) => {
@@ -70,6 +84,17 @@ function PredictPage() {
         <AlertContents
           content="이미지는 10개까지 입니다."
           okAction={() => closeModal(modalName)}
+        />
+      </Modal>
+
+      <Modal
+        closeModal={() => closeModal(guidemodalName)}
+        OpenModal={modalOpen[guidemodalName]}
+        width="w-[400px]"
+        height="h-60">
+        <AlertContents
+          content="이거슨 가이드."
+          okAction={() => closeModal(guidemodalName)}
         />
       </Modal>
     </div>
