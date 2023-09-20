@@ -33,6 +33,7 @@ dependencies {
     implementation 'org.hibernate.validator:hibernate-validator:7.0.2.Final' // Hibernate Validator 버전은 변경 가능합니다.
     // webClient
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.0.0'
 
     runtimeOnly 'com.h2database:h2'
     compileOnly 'org.projectlombok:lombok'
