@@ -2,7 +2,6 @@ package com.cc.business.domain.controller;// BusinessController.java
 import com.cc.business.domain.controller.openfeign.AuthOpenFeign;
 import com.cc.business.domain.dto.AladinResponseDto;
 import com.cc.business.domain.dto.BookDto;
-import com.cc.business.domain.dto.BusinessInfoDto;
 import com.cc.business.domain.entity.BookEntity;
 import com.cc.business.domain.service.BusinessService;
 import com.cc.business.domain.service.ImageService;
@@ -76,9 +75,12 @@ public class BusinessController {
     }
 
     @PostMapping("/bookpredict")
-    public ResponseEntity<EnvelopeResponse<BookEntity>> predictBookInfo(@RequestBody HashMap<String, BookDto> request) throws Exception {
-        log.info("수정된 책 정보 요청값: {}", request.get("bookInfo"));
-        BookDto editedBookInfo = request.get("bookInfo");
+    public ResponseEntity<EnvelopeResponse<BookEntity>> predictBookInfo(HttpServletRequest request, @RequestBody HashMap<String, BookDto> params) throws Exception {
+
+        int memberId = isAuthorized(request);
+        log.info("{}", memberId);
+        log.info("수정된 책 정보 요청값: {}", params.get("bookInfo"));
+        BookDto editedBookInfo = params.get("bookInfo");
 
         /* 책ID를 이용하여 S3에 저장된 이미지 리스트 호출  */
         List<String> imageUrlList = businessService.getImageUrlList(editedBookInfo.getBookId());
@@ -100,7 +102,7 @@ public class BusinessController {
 
         /* 재검색된 책의 정보 DB에 저장 */
         certainBookInfo.setBookId(editedBookInfo.getBookId());
-        certainBookInfo.setMemberId(8);
+        certainBookInfo.setMemberId(memberId);
         businessService.saveCertainBookInfo(certainBookInfo);
 
         EnvelopeResponse response = new EnvelopeResponse(200, "최종 책의 정보 반환 성공", certainBookInfo);
