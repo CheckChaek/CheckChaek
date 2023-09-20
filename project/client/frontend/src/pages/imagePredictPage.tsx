@@ -72,7 +72,7 @@ function PredictPage() {
             defaultColor="bg-BUTTON1-500"
             selectedColor="bg-BUTTON1-900"
             fontColor="text-FONT-50 text-lg"
-            action={() => navigate('/result', { state: '0' })}>
+            action={() => navigate('/result', { state: imageList })}>
             결과 확인하기
           </PredictBtn>
         </div>
