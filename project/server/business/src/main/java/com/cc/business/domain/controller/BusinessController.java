@@ -1,4 +1,5 @@
 package com.cc.business.domain.controller;// BusinessController.java
+import com.cc.business.domain.controller.openfeign.AuthOpenFeign;
 import com.cc.business.domain.dto.AladinResponseDto;
 import com.cc.business.domain.dto.BookDto;
 import com.cc.business.domain.dto.BusinessInfoDto;
@@ -8,8 +9,11 @@ import com.cc.business.domain.service.ImageService;
 import com.cc.business.domain.service.S3Service;
 import com.cc.business.global.common.response.EnvelopeResponse;
 
+import feign.FeignException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,20 +26,27 @@ import java.util.List;
 @Slf4j
 @Tag(name = "예제 API", description = "Swagger 테스트용 API")
 @RestController
+@RequiredArgsConstructor
 public class BusinessController {
 
-    private BusinessService businessService;
-    private S3Service s3Service;
-    private ImageService imageService;
+    private final BusinessService businessService;
+    private final S3Service s3Service;
+    private final ImageService imageService;
+    private final AuthOpenFeign authOpenFeign;
 
-    public BusinessController(BusinessService businessService, S3Service s3Service, ImageService imageService) {
-        this.businessService = businessService;
-        this.s3Service = s3Service;
-        this.imageService = imageService;
+    private int isAuthorized(HttpServletRequest request) throws FeignException {
+        String Authorization = request.getHeader("Authorization");
+        String AuthorizationRefresh = request.getHeader("Authorization-refresh");
+        int memberId;
+        memberId = authOpenFeign.connectToAuthServer(Authorization,AuthorizationRefresh);
+        return memberId;
     }
 
     @PostMapping("/imageinfo")
-    public ResponseEntity<EnvelopeResponse<HashMap<String, Object>>> getImageInfo(@RequestBody List<MultipartFile> imageList) throws Exception {
+    public ResponseEntity<EnvelopeResponse<HashMap<String, Object>>> getImageInfo(HttpServletRequest request, @RequestBody List<MultipartFile> imageList) throws Exception {
+
+        int memberId = isAuthorized(request);
+
         log.info("이미지 정보 요청값: {}", imageList.size());
         /* S3에 이미지 저장 */
         List<String> imageUrlList = s3Service.upload(imageList);
@@ -50,7 +61,7 @@ public class BusinessController {
         bookInfo.setImage(aladinResponse.getCover());
 
         /* step1. 책 정보 먼저 저장 */
-        int bookId = businessService.saveBookInfo(bookInfo, 8);
+        int bookId = businessService.saveBookInfo(bookInfo, memberId);
         log.info("책 번호: {}", bookId);
         bookInfo.setBookId(bookId);
 
@@ -93,5 +104,11 @@ public class BusinessController {
         BusinessInfoDto businessInfoDto = new BusinessInfoDto();
         EnvelopeResponse response = new EnvelopeResponse(200, "최종 책의 정보 반환 성공", businessInfoDto);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/test")
+    public int test(HttpServletRequest request){
+        return isAuthorized(request);
     }
 }
