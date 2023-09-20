@@ -19,6 +19,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -142,8 +143,30 @@ public class BusinessServiceImpl implements BusinessService {
 
     // ans
     @Override
-    public BusinessInfoDto getBookPrice(String imageStatus) {
-        return null;
+    public int getBookPrice(BookEntity certainBookInfo) {
+        // webClient 기본 설정
+        WebClient webClient = WebClient
+                .builder()
+                .baseUrl(SERVER_URL + ":" + ANS_PORT)
+                .build();
+
+        HashMap<String, Object> request = new HashMap<>();
+        request.put("image_status", certainBookInfo.getStatus());
+        request.put("image_title", certainBookInfo.getTitle());
+        request.put("image_publisher", certainBookInfo.getPublisher());
+        request.put("image_author", certainBookInfo.getAuthor());
+        request.put("image_price", certainBookInfo.getOriginalPrice());
+
+        // api 요청
+        int response = webClient
+                .post()
+                .uri("/analysis/bookprice")
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(Integer.class)
+                .block();
+//        log.info("Ans 결과: {}", response);
+        return response;
     }
 
     @Override
@@ -152,21 +175,74 @@ public class BusinessServiceImpl implements BusinessService {
                 .title(bookInfo.getTitle())
                 .publisher(bookInfo.getPublisher())
                 .author(bookInfo.getAuthor())
-                .cover_image(bookInfo.getImage())
-                .member_id(memberId)
+                .coverImage(bookInfo.getImage())
+                .memberId(memberId)
                 .build();
-        return  bookRepository.save(bookEntity).getBook_id();
+        return  bookRepository.save(bookEntity).getBookId();
     }
 
     @Override
     public void saveS3URL(List<String> imageUrlList, int bookId) {
         for(int i=0; i<imageUrlList.size(); i++) {
             BookImageEntity bookImageEntity = new BookImageEntity().builder()
-                    .image_path("checkchaeck")
-                    .image_url(imageUrlList.get(i))
-                    .book_id(bookId)
+                    .imagePath("checkchaeck")
+                    .imageUrl(imageUrlList.get(i))
+                    .bookId(bookId)
                     .build();
             bookImageRepository.save(bookImageEntity);
         }
     }
+
+    @Override
+    public List<String> getImageUrlList(int bookId) {
+        List<BookImageEntity> response = bookImageRepository.findAllByBookId(bookId);
+        List<String>  imageUrlList = new ArrayList<>();
+        for(int i=0; i<response.size(); i++) {
+            imageUrlList.add(response.get(i).getImageUrl());
+        }
+        return imageUrlList;
+    }
+
+    @Override
+    public BookEntity searchCertainBookInfo(BookDto bookInfo) {
+        // webClient 기본 설정
+        WebClient webClient = WebClient
+                .builder()
+                .baseUrl(SERVER_URL + ":" + SEARCH_PORT)
+                .build();
+
+        String keyword = bookInfo.getTitle() + " " + bookInfo.getAuthor() + " " + bookInfo.getPublisher();
+        HashMap<String, String> request = new HashMap<>();
+        request.put("keyword", keyword);
+
+        // api 요청
+        List<AladinResponseDto> response = webClient
+                .post()
+                .uri("/search/certainbookinfo")
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(List.class)
+                .block();
+//        log.info("Search 결과: {}", response);
+        ObjectMapper mapper = new ObjectMapper();
+        AladinResponseDto arDto = mapper.convertValue(response.get(0), AladinResponseDto.class);
+
+
+        BookEntity result = new BookEntity();
+        result.setTitle(arDto.getTitle());
+        result.setAuthor(arDto.getAuthor());
+        result.setPublisher(arDto.getPublisher());
+        result.setCoverImage(arDto.getCover());
+        result.setOriginalPrice(arDto.getPriceStandard());
+
+        return result;
+    }
+
+    @Override
+    public void saveCertainBookInfo(BookEntity certainBookInfo) {
+        log.info("저장할 값: {}", certainBookInfo);
+        bookRepository.save(certainBookInfo);
+    }
+
+
 }

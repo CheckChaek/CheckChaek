@@ -1,7 +1,7 @@
 package com.cc.business.domain.service;// BusinessService.java
 import com.cc.business.domain.dto.AladinResponseDto;
 import com.cc.business.domain.dto.BookDto;
-import com.cc.business.domain.dto.BusinessInfoDto;
+import com.cc.business.domain.entity.BookEntity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.List;
@@ -20,11 +20,20 @@ public interface BusinessService {
     String getImageStatus(List<String> imageUrlList) throws JsonProcessingException;
 
     // ans 서버에 상태와 가격을 전송하면 가격 결과 반환;
-    BusinessInfoDto getBookPrice(String imageStatus);
+    int getBookPrice(BookEntity certainBookInfo);
 
     // 책 정보 DB에 저장
     int saveBookInfo(BookDto bookInfo, int memberId);
 
     // S3에 저장된 이미지 경로 DB에 저장
     void saveS3URL(List<String> imageUrlList, int bookId);
+
+    // 특정 멤버의 특정 책에 대한 S3에 저장된 이미지 검색
+    List<String> getImageUrlList(int bookId);
+
+    // 정확한 책 제목, 저자, 출판사를 이용하여 알라딘 검색 API 호출
+    BookEntity searchCertainBookInfo(BookDto bookInfo);
+
+    // 정확하게 검색된 책의 정보를 DB에 저장
+    void saveCertainBookInfo(BookEntity certainBookInfo);
 }
