@@ -1,23 +1,22 @@
 package com.cc.business.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity(name = "book")
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class BookEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int book_id;
-    @Column(nullable = false)
-    int member_id;
+    int bookId;
+    @Column(name = "member_id", nullable = false)
+    int memberId;
     @Column(nullable = false)
     String title;
     @Column
@@ -25,7 +24,11 @@ public class BookEntity {
     @Column
     String author;
     @Column
-    int state;
+    String status;
+    @Column(name = "cover_image")
+    String coverImage;
     @Column
-    String cover_image;
+    int originalPrice;
+    @Column
+    int estimatedPrice;
 }
