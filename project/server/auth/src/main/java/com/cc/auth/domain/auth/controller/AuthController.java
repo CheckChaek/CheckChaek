@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,5 +30,13 @@ public class AuthController {
         Member member = principalDetails.getMember();
 
         return new ResponseEntity<EnvelopeResponse<LogoutResponseDto>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "로그아웃 완료", authService.logout(member, accessToken)), HttpStatus.OK);
+    }
+
+    @GetMapping("/authorization")
+    public String test (HttpServletRequest request, @AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        String id = principalDetails.getMember().getOauthIdentifier();
+
+        return id;
     }
 }
