@@ -33,10 +33,7 @@ public class AuthController {
     }
 
     @GetMapping("/authorization")
-    public String test (HttpServletRequest request, @AuthenticationPrincipal PrincipalDetails principalDetails){
-
-        String id = principalDetails.getMember().getOauthIdentifier();
-
-        return id;
+    public int authorization (HttpServletRequest request, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        return principalDetails.getMember().getId();
     }
 }

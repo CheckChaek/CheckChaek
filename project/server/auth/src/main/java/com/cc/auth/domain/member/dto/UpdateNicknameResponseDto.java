@@ -8,7 +8,7 @@ import lombok.Getter;
 @Builder
 public class UpdateNicknameResponseDto {
 
-    private Long memberId;
+    private int memberId;
     private String nickname;
 
     public static UpdateNicknameResponseDto of(Member member){
