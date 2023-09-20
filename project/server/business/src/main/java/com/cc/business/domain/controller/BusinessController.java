@@ -65,7 +65,7 @@ public class BusinessController {
     }
 
     @PostMapping("/bookpredict")
-    public ResponseEntity<EnvelopeResponse<BusinessInfoDto>> predictBookInfo(@RequestBody HashMap<String, BookDto> request) throws Exception {
+    public ResponseEntity<EnvelopeResponse<BookEntity>> predictBookInfo(@RequestBody HashMap<String, BookDto> request) throws Exception {
         log.info("수정된 책 정보 요청값: {}", request.get("bookInfo"));
         BookDto editedBookInfo = request.get("bookInfo");
 
@@ -83,15 +83,16 @@ public class BusinessController {
         certainBookInfo.setStatus(imageStatus);
 
         /* 책의 상태를 이용하여 재평가된 책의 가격 반환 */
-//        int bookPrice = businessService.getBookPrice(certainBookInfo);
-//        log.info("재평가된 책의 가격: {}", bookPrice);
-//        certainBookInfo.setEstimatedPrice(bookPrice);
+        int bookPrice = businessService.getBookPrice(certainBookInfo);
+        log.info("재평가된 책의 가격: {}", bookPrice);
+        certainBookInfo.setEstimatedPrice(bookPrice);
 
         /* 재검색된 책의 정보 DB에 저장 */
+        certainBookInfo.setBookId(editedBookInfo.getBookId());
+        certainBookInfo.setMemberId(8);
+        businessService.saveCertainBookInfo(certainBookInfo);
 
-
-        BusinessInfoDto businessInfoDto = new BusinessInfoDto();
-        EnvelopeResponse response = new EnvelopeResponse(200, "최종 책의 정보 반환 성공", businessInfoDto);
+        EnvelopeResponse response = new EnvelopeResponse(200, "최종 책의 정보 반환 성공", certainBookInfo);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

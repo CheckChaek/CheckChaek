@@ -33,4 +33,7 @@ public interface BusinessService {
 
     // 정확한 책 제목, 저자, 출판사를 이용하여 알라딘 검색 API 호출
     BookEntity searchCertainBookInfo(BookDto bookInfo);
+
+    // 정확하게 검색된 책의 정보를 DB에 저장
+    void saveCertainBookInfo(BookEntity certainBookInfo);
 }
