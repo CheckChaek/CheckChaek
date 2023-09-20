@@ -15,7 +15,6 @@ function Navbar() {
         </a>
         <div className="flex items-center space-x-4">
           {[
-            ['가이드', '/guide'],
             ['예측', '/predict'],
             token ? ['내 서재', '/history'] : ['', ''],
           ].map(([title, url]) => (

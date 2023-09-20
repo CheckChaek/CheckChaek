@@ -8,6 +8,7 @@ import ImageSlider from '../components/predict_page/imageSlider';
 import MemoizmImageUploader from '../components/predict_page/imageUploader';
 import PredictBtn from '../components/common/predictBtn';
 import AlertContents from '../components/common/alertContents';
+import Guide from '../components/common/guide';
 
 function PredictPage() {
   const { modalOpen, openModal, closeModal } = useModal();
@@ -90,12 +91,9 @@ function PredictPage() {
       <Modal
         closeModal={() => closeModal(guidemodalName)}
         OpenModal={modalOpen[guidemodalName]}
-        width="w-[400px]"
-        height="h-60">
-        <AlertContents
-          content="이거슨 가이드."
-          okAction={() => closeModal(guidemodalName)}
-        />
+        width="w-[70%]"
+        height="h-[100%]">
+        <Guide okAction={() => closeModal(guidemodalName)} />
       </Modal>
     </div>
   );

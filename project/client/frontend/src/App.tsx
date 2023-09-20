@@ -4,7 +4,6 @@ import MainPage from './pages/mainPage';
 import ProfilePage from './pages/profilePage';
 import ResultPage from './pages/imageResultPage';
 import PredictPage from './pages/imagePredictPage';
-import GuidePage from './pages/guidePage';
 import SocialLogin from './pages/socialLogin';
 import ErrorPage from './pages/errorPage';
 // 나브바 & 바텀시트
@@ -20,7 +19,6 @@ function App() {
             <Route path="predict" element={<PredictPage />} />
             <Route path="result" element={<ResultPage />} />
             <Route path="history" element={<ProfilePage />} />
-            <Route path="guide" element={<GuidePage />} />
             <Route path="login/redirect" element={<SocialLogin />} />
           </Route>
           <Route path="*" element={<ErrorPage />} />
