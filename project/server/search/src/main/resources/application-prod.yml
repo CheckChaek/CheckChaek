@@ -8,3 +8,4 @@ server:
       force: true
 
 aladin.ttbkey: ttbkyt96001058001
+aladin.api.url: http://www.aladin.co.kr/ttb/api/ItemSearch.aspx
