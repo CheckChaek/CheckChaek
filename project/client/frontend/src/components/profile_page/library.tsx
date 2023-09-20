@@ -11,7 +11,7 @@ function Library() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [elementStates, setElementStates] = useState<boolean[]>(
-    Array.from({ length: 0 }, () => false),
+    Array.from({ length: 11 }, () => false),
   );
   const totalItems = elementStates.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -53,6 +53,10 @@ function Library() {
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+  // useEffect(() => {
+  //   HistoryAllApi();
+  // }, []);
 
   return (
     <Card width="w-3/5" height="min-h-[50vh]">
