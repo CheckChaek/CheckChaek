@@ -75,6 +75,8 @@ public class SearchServiceImpl implements SearchService {
                                 .queryParam("ttbkey", TTBKEY)
                                 .queryParam("Query", keyword)
                                 .queryParam("QueryType", "Title")
+                                .queryParam("QueryType", "Author")
+                                .queryParam("QueryType", "Publisher")
                                 .queryParam("Output", "JS")
                                 .queryParam("Version", "20131101")
                                 .queryParam("MaxResults", 50) // 최대 50개 까지만 검색가능
