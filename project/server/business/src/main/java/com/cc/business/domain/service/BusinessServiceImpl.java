@@ -1,4 +1,6 @@
 package com.cc.business.domain.service;// BusinessServiceImpl.java
+import com.amazonaws.services.dynamodbv2.xspec.L;
+import com.amazonaws.services.mq.model.UnauthorizedException;
 import com.cc.business.domain.dto.*;
 import com.cc.business.domain.entity.BookEntity;
 import com.cc.business.domain.entity.BookImageEntity;
@@ -258,5 +260,17 @@ public class BusinessServiceImpl implements BusinessService {
     public void saveCertainBookInfo(BookEntity certainBookInfo) {
         log.info("저장할 값: {}", certainBookInfo);
         bookRepository.save(certainBookInfo);
+    }
+
+    @Override
+    public Long deleteHistory(int memberId, Long bookId) {
+
+        BookEntity book = bookRepository.findById(bookId).get();
+        if (book.getMemberId() != memberId){
+            throw new UnauthorizedException("삭제권한없음");
+        }
+        bookRepository.deleteById(bookId);
+
+        return bookId;
     }
 }
