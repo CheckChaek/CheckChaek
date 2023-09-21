@@ -1,31 +1,22 @@
-//auth
-export interface authRequset {
+import { BookInfo, PredictBookInfo } from './predictResult';
+
+export interface AuthRequset {
   dispatch: () => void;
 }
 
 // predict
-export interface BookInfoResponse {
-  bookId: number;
-  title: string;
-  author: string;
-  publisher: string;
-  image: string;
-}
-
-export interface PredictBookInfoResponse {
-  title: string;
-  author: string;
-  publisher: string;
-  iamge: string;
-  status: string;
-  originalPrice: number;
-  estimatedPrice: number;
-}
 
 export interface APIResponse {
   code: string;
   message: string;
-  data: Map<string, PredictBookInfoResponse>;
+}
+
+export interface TaResponse extends APIResponse {
+  data: { bookInfo: BookInfo };
+}
+
+export interface PredictResponse extends APIResponse {
+  data: { predictBookInfo: PredictBookInfo };
 }
 
 // history
