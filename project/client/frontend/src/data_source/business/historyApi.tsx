@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { Response } from '../../interface/api';
-import { BUSINESS_URI } from '../apiInfo';
+import { BUSINESS_URI, useAccessToken } from '../apiInfo';
 
 const historyUri = `${BUSINESS_URI}/history`;
 function HistoryAllApi() {
   const url = `${historyUri}/all`;
-  const accessToken = sessionStorage.getItem('accessToken');
+  const accessToken = useAccessToken();
+  console.log(accessToken);
   if (accessToken) {
     axios
       .get(url, {
@@ -28,7 +29,7 @@ function HistoryAllApi() {
 
 function HistoryDetailApi(bookId: number) {
   const url = `${historyUri}/${bookId}`;
-  const accessToken = sessionStorage.getItem('accessToken');
+  const accessToken = useAccessToken();
   if (accessToken) {
     axios
       .get(url, {

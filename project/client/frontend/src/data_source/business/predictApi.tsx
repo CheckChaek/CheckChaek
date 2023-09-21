@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 import { Response } from '../../interface/api';
-import { BUSINESS_URI } from '../apiInfo';
+import { BUSINESS_URI, useAccessToken } from '../apiInfo';
 
 function PredictApi(imageList: File[]) {
   const url = `${BUSINESS_URI}/imageInfo`;
-  const accessToken = sessionStorage.getItem('accessToken');
+  const accessToken = useAccessToken();
   if (accessToken) {
     axios
       .post(
