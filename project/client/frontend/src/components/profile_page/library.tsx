@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Card from '../common/card';
 import TrashCan from '../../assets/icons/trashIcon';
 import LeftIcon from '../../assets/icons/lefticon';
 import RightIcon from '../../assets/icons/righticon';
 import RightArrowIcon from '../../assets/icons/rightArrowIcon';
+import { HistoryAllApi } from '../../data_source/business/historyApi';
 
 function Library() {
   const itemsPerPage = 10;
@@ -53,10 +54,9 @@ function Library() {
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-
-  // useEffect(() => {
-  //   HistoryAllApi();
-  // }, []);
+  useEffect(() => {
+    HistoryAllApi();
+  }, []);
 
   return (
     <Card width="w-3/5" height="min-h-[50vh]">
