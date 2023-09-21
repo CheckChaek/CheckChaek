@@ -3,6 +3,7 @@ import com.cc.business.domain.controller.openfeign.AuthOpenFeign;
 import com.cc.business.domain.dto.AladinResponseDto;
 import com.cc.business.domain.dto.BookDto;
 import com.cc.business.domain.dto.BusinessInfoDto;
+import com.cc.business.domain.dto.FindHistroyResponseDto;
 import com.cc.business.domain.entity.BookEntity;
 import com.cc.business.domain.service.BusinessService;
 import com.cc.business.domain.service.ImageService;
@@ -40,6 +41,11 @@ public class BusinessController {
         int memberId;
         memberId = authOpenFeign.connectToAuthServer(Authorization,AuthorizationRefresh);
         return memberId;
+    }
+
+    @GetMapping("/test")
+    public int test(HttpServletRequest request){
+        return isAuthorized(request);
     }
 
     @PostMapping("/imageinfo")
@@ -100,15 +106,22 @@ public class BusinessController {
 
         /* 재검색된 책의 정보 DB에 저장 */
 
-
         BusinessInfoDto businessInfoDto = new BusinessInfoDto();
         EnvelopeResponse response = new EnvelopeResponse(200, "최종 책의 정보 반환 성공", businessInfoDto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/history/all")
+    public ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>> findHistrory(HttpServletRequest request){
 
-    @GetMapping("/test")
-    public int test(HttpServletRequest request){
-        return isAuthorized(request);
+        int memberId = isAuthorized(request);
+        return new ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "회원검색이력목록", businessService.findHistory(memberId)), HttpStatus.OK);
     }
+
+    @GetMapping("/history/search")
+    public ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>> SearchHistory(HttpServletRequest request, @RequestParam String keyword){
+
+        int memberId = isAuthorized(request);
+        return new ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "회원검색이력목록", businessService.searchHistory(memberId, keyword)), HttpStatus.OK);
+    };
 }

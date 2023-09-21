@@ -19,6 +19,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -205,7 +206,6 @@ public class BusinessServiceImpl implements BusinessService {
         ObjectMapper mapper = new ObjectMapper();
         AladinResponseDto arDto = mapper.convertValue(response.get(0), AladinResponseDto.class);
 
-
         BookEntity result = new BookEntity();
         result.setTitle(arDto.getTitle());
         result.setAuthor(arDto.getAuthor());
@@ -214,5 +214,17 @@ public class BusinessServiceImpl implements BusinessService {
         result.setOriginalPrice(arDto.getPriceStandard());
 
         return result;
+    }
+
+    @Override
+    public FindHistroyResponseDto findHistory(int memberId) {
+        List<BookEntity> books = bookRepository.findAllByMemberId(memberId);
+        return FindHistroyResponseDto.of(books);
+    }
+
+    @Override
+    public FindHistroyResponseDto searchHistory(int memberId, String keyword) {
+        List<BookEntity> books = bookRepository.searchAllByMemberId(memberId, keyword);
+        return FindHistroyResponseDto.of(books);
     }
 }
