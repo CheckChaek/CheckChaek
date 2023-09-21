@@ -116,14 +116,9 @@ public class BusinessController {
         certainBookInfo.setMemberId(8);
         businessService.saveCertainBookInfo(certainBookInfo);
 
-<<<<<<< project/server/business/src/main/java/com/cc/business/domain/controller/BusinessController.java
-        BusinessInfoDto businessInfoDto = new BusinessInfoDto();
-        EnvelopeResponse response = new EnvelopeResponse(200, "최종 책의 정보 반환 성공", businessInfoDto);
-=======
         log.info("최종 데이터: {}", certainBookInfo);
 
         EnvelopeResponse response = new EnvelopeResponse(200, "최종 책의 정보 반환 성공", certainBookInfo);
->>>>>>> project/server/business/src/main/java/com/cc/business/domain/controller/BusinessController.java
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
