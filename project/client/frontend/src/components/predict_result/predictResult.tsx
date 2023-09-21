@@ -72,7 +72,7 @@ function PredictResult(props: { predictBookInfo: PredictBookInfo }) {
 
             <br />
             <p>새책 가격: {bookInfo.originalPrice}</p>
-            <p>예상 가격: {bookInfo.originalPrice}</p>
+            <p>예상 가격: {bookInfo.estimatedPrice}</p>
           </div>
           <div className="RestartBtn flex justify-center  mt-10">
             <PredictBtn
