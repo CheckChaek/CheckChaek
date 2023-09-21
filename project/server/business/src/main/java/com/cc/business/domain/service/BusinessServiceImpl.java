@@ -225,16 +225,21 @@ public class BusinessServiceImpl implements BusinessService {
                 .bodyToMono(List.class)
                 .block();
 //        log.info("Search 결과: {}", response);
-        ObjectMapper mapper = new ObjectMapper();
-        AladinResponseDto arDto = mapper.convertValue(response.get(0), AladinResponseDto.class);
 
         BookEntity result = new BookEntity();
-        result.setTitle(arDto.getTitle());
-        result.setAuthor(arDto.getAuthor());
-        result.setPublisher(arDto.getPublisher());
-        result.setCoverImage(arDto.getCover());
-        result.setOriginalPrice(arDto.getPriceStandard());
+        if(!response.isEmpty()) {
+            AladinResponseDto arDto = new AladinResponseDto();
+            ObjectMapper mapper = new ObjectMapper();
+            arDto = mapper.convertValue(response.get(0), AladinResponseDto.class);
 
+            result.setTitle(arDto.getTitle());
+            result.setAuthor(arDto.getAuthor());
+            result.setPublisher(arDto.getPublisher());
+            result.setCoverImage(arDto.getCover());
+            result.setOriginalPrice(arDto.getPriceStandard());
+        } else {
+            /* 검색 결과가 없을 때 에러처리 후 코드와 메시지로 반환  */
+        }
         return result;
     }
 
