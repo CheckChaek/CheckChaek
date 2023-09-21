@@ -2,7 +2,7 @@ import { IconInterface } from '../../interface/common';
 
 function TrashCan({ styleString }: IconInterface) {
   return (
-    <div className="flex justify-center items-center align-middle min-h-[25vh]">
+    <div className="absolute top-[0] flex justify-center items-center align-middle min-h-[25vh]">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

@@ -1,30 +1,29 @@
 import axios from 'axios';
-import { APIResponse } from '../../interface/api';
+import { APIResponse, HistoriesResponse } from '../../interface/api';
 import { BUSINESS_URI, useAccessToken } from '../apiInfo';
 
 const historyUri = `${BUSINESS_URI}/history`;
-function HistoryAllApi() {
+async function HistoryAllApi() {
   const url = `${historyUri}/all`;
   const accessToken = useAccessToken();
-  console.log(accessToken);
   if (accessToken) {
-    axios
-      .get(url, {
+    try {
+      const response = await axios.get<HistoriesResponse>(url, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-      })
-      .then(res => {
-        if (res.status === 200) {
-          return res.data as APIResponse;
-        }
-        return res.statusText;
-      })
-      .catch(e => {
-        console.log(e);
       });
+
+      if (response.status === 200) {
+        return response.data.data.history;
+      }
+      return response.statusText;
+    } catch (e) {
+      console.log(e);
+    }
   }
+  return null;
 }
 
 function HistoryDetailApi(bookId: number) {
@@ -46,6 +45,7 @@ function HistoryDetailApi(bookId: number) {
       })
       .catch(e => console.log(e));
   }
+  return null;
 }
 function HistorySearchApi(keyword: string) {
   const url = `${historyUri}/search`;
