@@ -4,6 +4,7 @@ import { authRequset } from '../../interface/api';
 
 function LogoutAPI(token: string, { dispatch }: authRequset): void {
   if (token) {
+    console.log(token);
     axios
       .post(
         `${AUTH_URI}/auth/logout`,
@@ -14,13 +15,16 @@ function LogoutAPI(token: string, { dispatch }: authRequset): void {
           },
         },
       )
-      .then(() => {
+      .then(r => {
+        console.log(r);
         dispatch();
         setTimeout(() => {
           window.location.href = '/';
         }, 100);
       })
-      .catch(() => {});
+      .catch(error => {
+        console.log(error);
+      });
   }
 }
 
