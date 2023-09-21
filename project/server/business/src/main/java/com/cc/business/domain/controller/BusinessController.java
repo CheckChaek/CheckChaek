@@ -85,7 +85,7 @@ public class BusinessController {
     }
 
     @PostMapping("/bookpredict")
-    public ResponseEntity<EnvelopeResponse<BookEntity>> predictBookInfo(HttpServletRequest request, @RequestBody HashMap<String, BookDto> params) throws Exception {
+    public ResponseEntity<EnvelopeResponse<HashMap<String, BookEntity>>> predictBookInfo(HttpServletRequest request, @RequestBody HashMap<String, BookDto> params) throws Exception {
 
 //        int memberId = isAuthorized(request);
 //        log.info("{}", memberId);
@@ -116,8 +116,10 @@ public class BusinessController {
         businessService.saveCertainBookInfo(certainBookInfo);
 
         log.info("최종 데이터: {}", certainBookInfo);
+        HashMap<String, BookEntity> data = new HashMap<>();
+        data.put("predictBookInfo", certainBookInfo);
 
-        EnvelopeResponse response = new EnvelopeResponse(200, "최종 책의 정보 반환 성공", certainBookInfo);
+        EnvelopeResponse response = new EnvelopeResponse(200, "최종 책의 정보 반환 성공", data);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
