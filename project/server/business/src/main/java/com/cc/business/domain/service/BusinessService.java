@@ -42,4 +42,5 @@ public interface BusinessService {
     // 정확하게 검색된 책의 정보를 DB에 저장
     void saveCertainBookInfo(BookEntity certainBookInfo);
 
+    Long deleteHistory(int memberId, Long bookId);
 }
