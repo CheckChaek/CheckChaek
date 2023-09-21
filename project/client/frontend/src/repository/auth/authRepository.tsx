@@ -1,8 +1,8 @@
 import { useAccessToken } from '../../data_source/apiInfo';
 import LogoutAPI from '../../data_source/auth/auth';
-import { authRequset } from '../../interface/api';
+import { AuthRequset } from '../../interface/api';
 
-function Logoutrepository({ dispatch }: authRequset): void {
+function Logoutrepository({ dispatch }: AuthRequset): void {
   const accessToken = useAccessToken();
   if (accessToken) {
     LogoutAPI(accessToken, { dispatch });
