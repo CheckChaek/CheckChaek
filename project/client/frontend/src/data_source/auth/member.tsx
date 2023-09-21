@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { AUTH_URI } from '../apiInfo';
+import { AUTH_URI, useAccessToken } from '../apiInfo';
 
 interface Auth {
-  token: string | null;
   dispatch: () => void;
 }
 
-function GetSignout({ token, dispatch }: Auth): void {
+function GetSignout({ dispatch }: Auth): void {
+  const token = useAccessToken();
   if (token) {
     axios
       .delete(`${AUTH_URI}/member`, {

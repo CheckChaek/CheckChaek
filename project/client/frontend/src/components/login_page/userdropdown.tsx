@@ -4,11 +4,10 @@ import { useDispatch } from 'react-redux';
 import UserIcon from '../../assets/icons/usericon';
 import GetLogout from '../../data_source/auth/auth';
 import GetSignout from '../../data_source/auth/member';
-import { useAccessToken, useNickname } from '../../data_source/apiInfo';
+import { useNickname } from '../../data_source/apiInfo';
 import { logout } from '../../store/actions/authActions';
 
 function UserDropdown() {
-  const token = useAccessToken();
   const name = useNickname();
   const dispatch = useDispatch();
 
@@ -39,7 +38,7 @@ function UserDropdown() {
               <button
                 type="button"
                 className="w-full bg-gray-100 text-gray-900 block px-4 py-2 text-sm hover:bg-SECONDARY-100"
-                onClick={() => GetLogout({ token, dispatch: handleLogout })}>
+                onClick={() => GetLogout({ dispatch: handleLogout })}>
                 로그아웃
               </button>
             </Menu.Item>
@@ -47,7 +46,7 @@ function UserDropdown() {
               <button
                 type="button"
                 className="w-full bg-gray-100 text-gray-900 block px-4 py-2 text-sm hover:bg-SECONDARY-100"
-                onClick={() => GetSignout({ token, dispatch: handleLogout })}>
+                onClick={() => GetSignout({ dispatch: handleLogout })}>
                 회원탈퇴
               </button>
             </Menu.Item>
