@@ -48,7 +48,7 @@ public class BusinessController {
 //       System.out.println("=======memberId======" + memberId);
 //        log.info("사용자 ID: {}", memberId);
 
-        log.info("이미지 정보 요청값: {}", imageList.size());
+        log.info("이미지 정보 요청값: {}", imageList);
         /* S3에 이미지 저장 */
         List<String> imageUrlList = s3Service.upload(imageList);
         log.info("S3 이미지 저장 경로 {}", imageUrlList);
@@ -71,6 +71,8 @@ public class BusinessController {
 
         HashMap<String, Object> data = new HashMap<>();
         data.put("bookInfo", bookInfo);
+
+        log.info("최종 데이터: {}", data);
 
         EnvelopeResponse<HashMap<String, Object>> result = new EnvelopeResponse(200, "이미지 검색 성공", data);
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -106,6 +108,8 @@ public class BusinessController {
         certainBookInfo.setBookId(editedBookInfo.getBookId());
         certainBookInfo.setMemberId(8);
         businessService.saveCertainBookInfo(certainBookInfo);
+
+        log.info("최종 데이터: {}", certainBookInfo);
 
         EnvelopeResponse response = new EnvelopeResponse(200, "최종 책의 정보 반환 성공", certainBookInfo);
         return new ResponseEntity<>(response, HttpStatus.OK);
