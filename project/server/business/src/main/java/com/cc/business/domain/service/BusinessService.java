@@ -38,4 +38,8 @@ public interface BusinessService {
     FindHistroyResponseDto findHistory(int memberId);
 
     FindHistroyResponseDto searchHistory(int memberId, String keyword);
+
+    // 정확하게 검색된 책의 정보를 DB에 저장
+    void saveCertainBookInfo(BookEntity certainBookInfo);
+
 }

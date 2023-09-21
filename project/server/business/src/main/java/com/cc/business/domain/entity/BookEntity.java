@@ -27,8 +27,8 @@ public class BookEntity {
     String status;
     @Column(name = "cover_image")
     String coverImage;
-    @Column
+    @Column(name = "original_price")
     int originalPrice;
-    @Column
+    @Column(name = "estimated_price")
     int estimatedPrice;
 }

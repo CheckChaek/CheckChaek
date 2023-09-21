@@ -51,9 +51,11 @@ public class BusinessController {
     @PostMapping("/imageinfo")
     public ResponseEntity<EnvelopeResponse<HashMap<String, Object>>> getImageInfo(HttpServletRequest request, @RequestBody List<MultipartFile> imageList) throws Exception {
 
-        int memberId = isAuthorized(request);
+//       int memberId = isAuthorized(request);
+//       System.out.println("=======memberId======" + memberId);
+//        log.info("사용자 ID: {}", memberId);
 
-        log.info("이미지 정보 요청값: {}", imageList.size());
+        log.info("이미지 정보 요청값: {}", imageList);
         /* S3에 이미지 저장 */
         List<String> imageUrlList = s3Service.upload(imageList);
         log.info("S3 이미지 저장 경로 {}", imageUrlList);
@@ -67,7 +69,7 @@ public class BusinessController {
         bookInfo.setImage(aladinResponse.getCover());
 
         /* step1. 책 정보 먼저 저장 */
-        int bookId = businessService.saveBookInfo(bookInfo, memberId);
+        int bookId = businessService.saveBookInfo(bookInfo, 8);
         log.info("책 번호: {}", bookId);
         bookInfo.setBookId(bookId);
 
@@ -77,14 +79,19 @@ public class BusinessController {
         HashMap<String, Object> data = new HashMap<>();
         data.put("bookInfo", bookInfo);
 
+        log.info("최종 데이터: {}", data);
+
         EnvelopeResponse<HashMap<String, Object>> result = new EnvelopeResponse(200, "이미지 검색 성공", data);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping("/bookpredict")
-    public ResponseEntity<EnvelopeResponse<BusinessInfoDto>> predictBookInfo(@RequestBody HashMap<String, BookDto> request) throws Exception {
-        log.info("수정된 책 정보 요청값: {}", request.get("bookInfo"));
-        BookDto editedBookInfo = request.get("bookInfo");
+    public ResponseEntity<EnvelopeResponse<BookEntity>> predictBookInfo(HttpServletRequest request, @RequestBody HashMap<String, BookDto> params) throws Exception {
+
+//        int memberId = isAuthorized(request);
+//        log.info("{}", memberId);
+        log.info("수정된 책 정보 요청값: {}", params.get("bookInfo"));
+        BookDto editedBookInfo = params.get("bookInfo");
 
         /* 책ID를 이용하여 S3에 저장된 이미지 리스트 호출  */
         List<String> imageUrlList = businessService.getImageUrlList(editedBookInfo.getBookId());
@@ -100,14 +107,23 @@ public class BusinessController {
         certainBookInfo.setStatus(imageStatus);
 
         /* 책의 상태를 이용하여 재평가된 책의 가격 반환 */
-//        int bookPrice = businessService.getBookPrice(certainBookInfo);
-//        log.info("재평가된 책의 가격: {}", bookPrice);
-//        certainBookInfo.setEstimatedPrice(bookPrice);
+        int bookPrice = businessService.getBookPrice(certainBookInfo);
+        log.info("재평가된 책의 가격: {}", bookPrice);
+        certainBookInfo.setEstimatedPrice(bookPrice);
 
         /* 재검색된 책의 정보 DB에 저장 */
+        certainBookInfo.setBookId(editedBookInfo.getBookId());
+        certainBookInfo.setMemberId(8);
+        businessService.saveCertainBookInfo(certainBookInfo);
 
+<<<<<<< project/server/business/src/main/java/com/cc/business/domain/controller/BusinessController.java
         BusinessInfoDto businessInfoDto = new BusinessInfoDto();
         EnvelopeResponse response = new EnvelopeResponse(200, "최종 책의 정보 반환 성공", businessInfoDto);
+=======
+        log.info("최종 데이터: {}", certainBookInfo);
+
+        EnvelopeResponse response = new EnvelopeResponse(200, "최종 책의 정보 반환 성공", certainBookInfo);
+>>>>>>> project/server/business/src/main/java/com/cc/business/domain/controller/BusinessController.java
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

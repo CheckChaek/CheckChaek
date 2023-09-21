@@ -145,7 +145,29 @@ public class BusinessServiceImpl implements BusinessService {
     // ans
     @Override
     public int getBookPrice(BookEntity certainBookInfo) {
-        return 0;
+        // webClient 기본 설정
+        WebClient webClient = WebClient
+                .builder()
+                .baseUrl(SERVER_URL + ":" + ANS_PORT)
+                .build();
+
+        HashMap<String, Object> request = new HashMap<>();
+        request.put("image_status", certainBookInfo.getStatus());
+        request.put("image_title", certainBookInfo.getTitle());
+        request.put("image_publisher", certainBookInfo.getPublisher());
+        request.put("image_author", certainBookInfo.getAuthor());
+        request.put("image_price", certainBookInfo.getOriginalPrice());
+
+        // api 요청
+        int response = webClient
+                .post()
+                .uri("/analysis/bookprice")
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(Integer.class)
+                .block();
+//        log.info("Ans 결과: {}", response);
+        return response;
     }
 
     @Override
@@ -202,7 +224,7 @@ public class BusinessServiceImpl implements BusinessService {
                 .retrieve()
                 .bodyToMono(List.class)
                 .block();
-        log.info("Search 결과: {}", response);
+//        log.info("Search 결과: {}", response);
         ObjectMapper mapper = new ObjectMapper();
         AladinResponseDto arDto = mapper.convertValue(response.get(0), AladinResponseDto.class);
 
@@ -226,5 +248,10 @@ public class BusinessServiceImpl implements BusinessService {
     public FindHistroyResponseDto searchHistory(int memberId, String keyword) {
         List<BookEntity> books = bookRepository.searchAllByMemberId(memberId, keyword);
         return FindHistroyResponseDto.of(books);
+    }
+
+    public void saveCertainBookInfo(BookEntity certainBookInfo) {
+        log.info("저장할 값: {}", certainBookInfo);
+        bookRepository.save(certainBookInfo);
     }
 }
