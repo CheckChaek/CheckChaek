@@ -2,7 +2,6 @@ package com.cc.business.domain.controller;// BusinessController.java
 import com.cc.business.domain.controller.openfeign.AuthOpenFeign;
 import com.cc.business.domain.dto.AladinResponseDto;
 import com.cc.business.domain.dto.BookDto;
-import com.cc.business.domain.dto.BusinessInfoDto;
 import com.cc.business.domain.dto.FindHistroyResponseDto;
 import com.cc.business.domain.entity.BookEntity;
 import com.cc.business.domain.service.BusinessService;
@@ -135,4 +134,11 @@ public class BusinessController {
         int memberId = isAuthorized(request);
         return new ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "회원검색이력목록", businessService.searchHistory(memberId, keyword)), HttpStatus.OK);
     };
+
+    @DeleteMapping("/history/{bookId}")
+    public ResponseEntity<EnvelopeResponse<Long>> DeleteHistory(HttpServletRequest request, @PathVariable Long bookId){
+
+        int memberId = isAuthorized(request);
+        return new ResponseEntity<EnvelopeResponse<Long>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "삭제완료", businessService.deleteHistory(memberId, bookId)), HttpStatus.OK);
+    }
 }
