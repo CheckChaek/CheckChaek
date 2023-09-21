@@ -43,6 +43,7 @@ public class SearchServiceImpl implements SearchService {
                                     .queryParam("Version", "20131101")
                                     .queryParam("MaxResults", 10) // 최대 50개 까지만 검색가능
                                     .queryParam("SearchTarget", "Book") // 최대 50개 까지만 검색가능
+                                    .queryParam("Cover", "Big")
                                     .build())
                     .retrieve()
                     .bodyToMono(SearchResponse.class)
@@ -80,7 +81,8 @@ public class SearchServiceImpl implements SearchService {
                                 .queryParam("Output", "JS")
                                 .queryParam("Version", "20131101")
                                 .queryParam("MaxResults", 50) // 최대 50개 까지만 검색가능
-                                .queryParam("SearchTarget", "Book") // 최대 50개 까지만 검색가능
+                                .queryParam("SearchTarget", "Book")
+                                .queryParam("Cover", "Big")
                                 .build())
                 .retrieve()
                 .bodyToMono(SearchResponse.class)
