@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 import { BookInterface } from '../../interface/predictResult';
 import { APIResponse } from '../../interface/api';
 import { BUSINESS_URI } from '../apiInfo';

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Response } from '../../interface/api';
+import { APIResponse } from '../../interface/api';
 import { BUSINESS_URI, useAccessToken } from '../apiInfo';
 
 const historyUri = `${BUSINESS_URI}/history`;

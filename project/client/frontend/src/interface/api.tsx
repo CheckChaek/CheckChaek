@@ -1,3 +1,8 @@
+//auth
+export interface authRequset {
+  dispatch: () => void;
+}
+
 // predict
 export interface BookInfoResponse {
   bookId: number;
