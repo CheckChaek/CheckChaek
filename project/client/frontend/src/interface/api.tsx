@@ -22,12 +22,15 @@ export interface PredictResponse extends APIResponse {
 // history
 
 export interface Book {
+  id: number;
+  price: string;
+  status: string | null;
   title: string;
-  image: string;
+  url: string;
 }
 
 export interface HistoriesResponse {
   code: string;
   message: string;
-  data: Map<string, Book[]>;
+  data: { history: Book[] };
 }

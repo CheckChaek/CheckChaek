@@ -15,8 +15,7 @@ function LogoutAPI(token: string, { dispatch }: AuthRequset): void {
           },
         },
       )
-      .then(r => {
-        console.log(r);
+      .then(() => {
         dispatch();
         setTimeout(() => {
           window.location.href = '/';

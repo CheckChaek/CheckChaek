@@ -1,32 +1,30 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Card from '../common/card';
 import TrashCan from '../../assets/icons/trashIcon';
 import LeftIcon from '../../assets/icons/lefticon';
 import RightIcon from '../../assets/icons/righticon';
 import RightArrowIcon from '../../assets/icons/rightArrowIcon';
-import { HistoryAllApi } from '../../data_source/business/historyApi';
+import { SearchResultProps } from '../../interface/profile';
 
-function Library() {
+function Library({ onSearchResults, onDelete }: SearchResultProps) {
   const itemsPerPage = 10;
-
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [elementStates, setElementStates] = useState<boolean[]>(
-    Array.from({ length: 11 }, () => false),
-  );
-  const totalItems = elementStates.length;
+  const totalItems = onSearchResults?.length || 0;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
+  const [hoverStates, setHoverStates] = useState<boolean[]>([]);
+
   const handleMouseEnter = (index: number) => {
-    const newStates = [...elementStates];
-    newStates[index] = true;
-    setElementStates(newStates);
+    const newHoverStates = [...hoverStates];
+    newHoverStates[index] = true;
+    setHoverStates(newHoverStates);
   };
 
   const handleMouseLeave = (index: number) => {
-    const newStates = [...elementStates];
-    newStates[index] = false;
-    setElementStates(newStates);
+    const newHoverStates = [...hoverStates];
+    newHoverStates[index] = false;
+    setHoverStates(newHoverStates);
   };
 
   const next = () => {
@@ -54,34 +52,40 @@ function Library() {
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-  useEffect(() => {
-    HistoryAllApi();
-  }, []);
 
   return (
     <Card width="w-3/5" height="min-h-[50vh]">
       <div className="m-3 text-xl font-bold">
-        내 서재 ({elementStates.length})
+        내 서재 ({onSearchResults?.length})
       </div>
-      {elementStates.length > 0 ? (
+      {onSearchResults?.length > 0 ? (
         <div>
-          <div className="grid grid-cols-5 gap-2">
-            {elementStates
-              .slice(startIndex, endIndex)
-              .map((isMouseOver, index) => (
+          <div className="grid grid-cols-5 gap-2 ">
+            {onSearchResults &&
+              onSearchResults.slice(startIndex, endIndex).map((book, index) => (
                 <div
                   className="m-3"
-                  key={Math.random()}
+                  key={book.id}
                   onMouseEnter={() => handleMouseEnter(index + startIndex)}
                   onMouseLeave={() => handleMouseLeave(index + startIndex)}>
-                  <div className="bg-MAIN-100 min-h-[25vh]">
-                    {isMouseOver && (
-                      <TrashCan styleString="w-1/3 h-1/4 cursor-pointer" />
+                  <div className="relative min-h-[25vh]">
+                    <img
+                      src={book.url}
+                      alt="asdasd"
+                      className=" min-h-[25vh]"
+                    />
+                    {hoverStates[index + startIndex] && (
+                      <TrashCan
+                        styleString="min-h-[25vh] w-1/3 h-1/4 cursor-pointer"
+                        action={() => {
+                          onDelete(book.id);
+                        }}
+                      />
                     )}
                   </div>
-                  <p>책 제목 : 책책</p>
-                  <p>상태 : 상태</p>
-                  <p>가격 : 9999원</p>
+                  <p>책 제목 : {book.title}</p>
+                  <p>상태 : {book.status || '상태'}</p>
+                  <p>가격 : {book.price}원</p>
                 </div>
               ))}
           </div>
@@ -116,7 +120,7 @@ function Library() {
           <div className="my-auto">
             <p className="text-3xl">검색 기록이 없어요 😥</p>
             <a
-              href="/search"
+              href="/predict"
               className="flex text-xl mt-3 w-max hover:text-FONT-300">
               <RightArrowIcon styleString="w-6 h-6 mr-2" /> 검색하러가기
             </a>

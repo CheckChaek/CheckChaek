@@ -1,63 +1,84 @@
 import axios from 'axios';
-import { BUSINESS_URI, useAccessToken } from '../apiInfo';
-import { HistoriesResponse } from '../../interface/api';
+import { APIResponse, HistoriesResponse } from '../../interface/api';
+import { BUSINESS_URI } from '../apiInfo';
 
 const historyUri = `${BUSINESS_URI}/history`;
-function HistoryAllApi() {
+function HistoryAllApi(token: string) {
   const url = `${historyUri}/all`;
-  const accessToken = useAccessToken();
-  console.log(accessToken);
-  if (accessToken) {
+  if (token) {
+    axios
+      .get<HistoriesResponse>(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(response => {
+        if (response.status === 200) {
+          return response.data.data.history;
+        }
+        return response.statusText;
+      })
+      .catch(() => {});
+  }
+  return null;
+}
+
+function HistoryDetailApi(token: string, bookId: number) {
+  const url = `${historyUri}/${bookId}`;
+  if (token) {
     axios
       .get(url, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then(res => {
         if (res.status === 200) {
-          return res.data as HistoriesResponse;
+          return res.data as APIResponse;
         }
         return res.statusText;
       })
-      .catch(e => {
-        console.log(e);
+      .catch(() => {});
+  }
+  return null;
+}
+async function HistorySearchApi(token: string, keyword: string) {
+  const url = `${historyUri}/search?keyword=${encodeURIComponent(keyword)}`;
+  if (token) {
+    try {
+      const response = await axios.get<HistoriesResponse>(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
       });
+
+      if (response.status === 200) {
+        return response.data.data.history;
+      }
+      return response.statusText;
+    } catch {
+      window.location.href = '/error';
+    }
   }
 }
 
-function HistoryDetailApi(bookId: number) {
-  const url = `${historyUri}/${bookId}`;
-  const accessToken = useAccessToken();
-  if (accessToken) {
+function HistoryDeleteApi(token: string, bookid: number) {
+  const url = `${historyUri}/${bookid}`;
+  if (token) {
     axios
-      .get(url, {
+      .delete(url, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       })
-      .then(res => {})
-      .catch(e => console.log(e));
-  }
-}
-function HistorySearchApi(keyword: string) {
-  const url = `${historyUri}/search`;
-  const accessToken = sessionStorage.getItem('accessToken');
-  if (accessToken) {
-    axios
-      .get(url, {
-        params: { keyword },
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then(res => {})
+      .then(() => {})
 
-      .catch(e => console.log(e));
+      .catch(() => {});
   }
 }
 
-export { HistoryAllApi, HistoryDetailApi, HistorySearchApi };
+export { HistoryAllApi, HistoryDetailApi, HistorySearchApi, HistoryDeleteApi };
