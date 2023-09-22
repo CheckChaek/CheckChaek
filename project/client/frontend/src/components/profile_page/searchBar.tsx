@@ -1,14 +1,14 @@
 import { useEffect, useState, useCallback } from 'react';
 import SearchIcon from '../../assets/icons/searchIcon';
 import { SearchProps } from '../../interface/profile';
-import { HistorySearchApi } from '../../data_source/business/historyApi';
+import { HistorySearchApirepository } from '../../repository/business/historyRepository';
 
 function searchBar({ onSearchResults }: SearchProps) {
   const [keyword, setKeyword] = useState<string>('');
-  const SearchResults = useCallback(onSearchResults, []);
+  const SearchResults = useCallback(onSearchResults, [onSearchResults]);
 
   useEffect(() => {
-    HistorySearchApi(keyword)
+    HistorySearchApirepository(keyword)
       .then(response => {
         if (response && typeof response !== 'string') {
           SearchResults(response);

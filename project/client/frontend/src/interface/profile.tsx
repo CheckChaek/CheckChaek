@@ -6,4 +6,5 @@ export interface SearchProps {
 
 export interface SearchResultProps {
   onSearchResults: Book[];
+  onDelete: (bookid: number) => void;
 }

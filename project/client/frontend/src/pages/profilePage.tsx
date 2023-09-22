@@ -4,6 +4,7 @@ import SearchBar from '../components/profile_page/searchBar';
 import Library from '../components/profile_page/library';
 import { useNickname } from '../data_source/apiInfo';
 import { Book } from '../interface/api';
+import { HistoryDeleteApirepository } from '../repository/business/historyRepository';
 
 function ProfilePage() {
   const name = useNickname();
@@ -12,6 +13,13 @@ function ProfilePage() {
   const handleSearch = (result: Book[]) => {
     Setsearch(result);
   };
+
+  const handleDelete = (bookid: number) => {
+    HistoryDeleteApirepository(bookid);
+    const updatedSearchResults = search.filter(book => book.id !== bookid);
+    Setsearch(updatedSearchResults);
+  };
+
   return (
     <>
       <Card width="w-3/5" height="min-h-[30vh]">
@@ -19,7 +27,7 @@ function ProfilePage() {
         <SearchBar onSearchResults={handleSearch} />
       </Card>
       <hr className="mt-5 w-3/5 mx-auto text-FONT-200" />
-      <Library onSearchResults={search} />
+      <Library onSearchResults={search} onDelete={handleDelete} />
     </>
   );
 }

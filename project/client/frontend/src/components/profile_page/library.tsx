@@ -1,16 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Card from '../common/card';
 import TrashCan from '../../assets/icons/trashIcon';
 import LeftIcon from '../../assets/icons/lefticon';
 import RightIcon from '../../assets/icons/righticon';
 import RightArrowIcon from '../../assets/icons/rightArrowIcon';
-import { HistoryAllApi } from '../../data_source/business/historyApi';
-import { Book } from '../../interface/api';
 import { SearchResultProps } from '../../interface/profile';
 
-function Library({ onSearchResults }: SearchResultProps) {
+function Library({ onSearchResults, onDelete }: SearchResultProps) {
   const itemsPerPage = 10;
-  const [history, setHistory] = useState<Book[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   const totalItems = onSearchResults?.length || 0;
@@ -56,26 +53,16 @@ function Library({ onSearchResults }: SearchResultProps) {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
 
-  useEffect(() => {
-    HistoryAllApi()
-      .then(response => {
-        if (response && typeof response !== 'string') {
-          setHistory(response);
-        }
-      })
-      .catch(() => {});
-  }, []);
-
   return (
     <Card width="w-3/5" height="min-h-[50vh]">
       <div className="m-3 text-xl font-bold">
         내 서재 ({onSearchResults?.length})
       </div>
-      {onSearchResults ? (
+      {onSearchResults?.length > 0 ? (
         <div>
           <div className="grid grid-cols-5 gap-2 ">
             {onSearchResults &&
-              onSearchResults.map((book, index) => (
+              onSearchResults.slice(startIndex, endIndex).map((book, index) => (
                 <div
                   className="m-3"
                   key={book.id}
@@ -88,7 +75,12 @@ function Library({ onSearchResults }: SearchResultProps) {
                       className=" min-h-[25vh]"
                     />
                     {hoverStates[index + startIndex] && (
-                      <TrashCan styleString="min-h-[25vh] w-1/3 h-1/4 cursor-pointer" />
+                      <TrashCan
+                        styleString="min-h-[25vh] w-1/3 h-1/4 cursor-pointer"
+                        action={() => {
+                          onDelete(book.id);
+                        }}
+                      />
                     )}
                   </div>
                   <p>책 제목 : {book.title}</p>
@@ -128,7 +120,7 @@ function Library({ onSearchResults }: SearchResultProps) {
           <div className="my-auto">
             <p className="text-3xl">검색 기록이 없어요 😥</p>
             <a
-              href="/search"
+              href="/predict"
               className="flex text-xl mt-3 w-max hover:text-FONT-300">
               <RightArrowIcon styleString="w-6 h-6 mr-2" /> 검색하러가기
             </a>

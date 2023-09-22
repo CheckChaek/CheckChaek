@@ -1,40 +1,37 @@
 import axios from 'axios';
 import { APIResponse, HistoriesResponse } from '../../interface/api';
-import { BUSINESS_URI, useAccessToken } from '../apiInfo';
+import { BUSINESS_URI } from '../apiInfo';
 
 const historyUri = `${BUSINESS_URI}/history`;
-async function HistoryAllApi() {
+function HistoryAllApi(token: string) {
   const url = `${historyUri}/all`;
-  const accessToken = useAccessToken();
-  if (accessToken) {
-    try {
-      const response = await axios.get<HistoriesResponse>(url, {
+  if (token) {
+    axios
+      .get<HistoriesResponse>(url, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
-      });
-
-      if (response.status === 200) {
-        return response.data.data.history;
-      }
-      return response.statusText;
-    } catch (e) {
-      console.log(e);
-    }
+      })
+      .then(response => {
+        if (response.status === 200) {
+          return response.data.data.history;
+        }
+        return response.statusText;
+      })
+      .catch(() => {});
   }
   return null;
 }
 
-function HistoryDetailApi(bookId: number) {
+function HistoryDetailApi(token: string, bookId: number) {
   const url = `${historyUri}/${bookId}`;
-  const accessToken = useAccessToken();
-  if (accessToken) {
+  if (token) {
     axios
       .get(url, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then(res => {
@@ -43,53 +40,45 @@ function HistoryDetailApi(bookId: number) {
         }
         return res.statusText;
       })
-      .catch(e => console.log(e));
+      .catch(() => {});
   }
   return null;
 }
-async function HistorySearchApi(keyword: string) {
+async function HistorySearchApi(token: string, keyword: string) {
   const url = `${historyUri}/search?keyword=${encodeURIComponent(keyword)}`;
-  const accessToken = useAccessToken();
-  if (accessToken) {
+  if (token) {
     try {
       const response = await axios.get<HistoriesResponse>(url, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
       if (response.status === 200) {
-        console.log(response);
         return response.data.data.history;
       }
       return response.statusText;
-    } catch (e) {
-      console.log(e);
+    } catch {
+      window.location.href = '/error';
     }
   }
 }
 
-function HistoryDeletehApi() {
-  const url = `${historyUri}/search`;
-  const accessToken = sessionStorage.getItem('accessToken');
-  if (accessToken) {
+function HistoryDeleteApi(token: string, bookid: number) {
+  const url = `${historyUri}/${bookid}`;
+  if (token) {
     axios
-      .get(url, {
+      .delete(url, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       })
-      .then(res => {
-        if (res.status === 200) {
-          return res.data as APIResponse;
-        }
-        return res.statusText;
-      })
+      .then(() => {})
 
-      .catch(e => console.log(e));
+      .catch(() => {});
   }
 }
 
-export { HistoryAllApi, HistoryDetailApi, HistorySearchApi, HistoryDeletehApi };
+export { HistoryAllApi, HistoryDetailApi, HistorySearchApi, HistoryDeleteApi };
