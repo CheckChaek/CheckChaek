@@ -6,13 +6,14 @@ import RightIcon from '../../assets/icons/righticon';
 import RightArrowIcon from '../../assets/icons/rightArrowIcon';
 import { HistoryAllApi } from '../../data_source/business/historyApi';
 import { Book } from '../../interface/api';
+import { SearchResultProps } from '../../interface/profile';
 
-function Library() {
+function Library({ onSearchResults }: SearchResultProps) {
   const itemsPerPage = 10;
   const [history, setHistory] = useState<Book[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const totalItems = history?.length || 0;
+  const totalItems = onSearchResults?.length || 0;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const [hoverStates, setHoverStates] = useState<boolean[]>([]);
@@ -67,15 +68,17 @@ function Library() {
 
   return (
     <Card width="w-3/5" height="min-h-[50vh]">
-      <div className="m-3 text-xl font-bold">내 서재 ({history?.length})</div>
-      {history ? (
+      <div className="m-3 text-xl font-bold">
+        내 서재 ({onSearchResults?.length})
+      </div>
+      {onSearchResults ? (
         <div>
           <div className="grid grid-cols-5 gap-2 ">
-            {history &&
-              history.map((book, index) => (
+            {onSearchResults &&
+              onSearchResults.map((book, index) => (
                 <div
                   className="m-3"
-                  key={Math.random()}
+                  key={book.id}
                   onMouseEnter={() => handleMouseEnter(index + startIndex)}
                   onMouseLeave={() => handleMouseLeave(index + startIndex)}>
                   <div className="relative min-h-[25vh]">

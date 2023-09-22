@@ -1,6 +1,22 @@
+import { useEffect, useState, useCallback } from 'react';
 import SearchIcon from '../../assets/icons/searchIcon';
+import { SearchProps } from '../../interface/profile';
+import { HistorySearchApi } from '../../data_source/business/historyApi';
 
-function searchBar() {
+function searchBar({ onSearchResults }: SearchProps) {
+  const [keyword, setKeyword] = useState<string>('');
+  const SearchResults = useCallback(onSearchResults, []);
+
+  useEffect(() => {
+    HistorySearchApi(keyword)
+      .then(response => {
+        if (response && typeof response !== 'string') {
+          SearchResults(response);
+        }
+      })
+      .catch(() => {});
+  }, [keyword, SearchResults]);
+
   return (
     <div className="w-3/4 h-1/5 m-auto mt-20">
       <div> 내 서재 검색</div>
@@ -9,6 +25,9 @@ function searchBar() {
         <input
           className="bg-transparent w-full"
           placeholder="기록을 검색해보세요."
+          onChange={event => {
+            setKeyword(event.target.value);
+          }}
         />
       </div>
     </div>

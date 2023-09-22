@@ -47,13 +47,35 @@ function HistoryDetailApi(bookId: number) {
   }
   return null;
 }
-function HistorySearchApi(keyword: string) {
+async function HistorySearchApi(keyword: string) {
+  const url = `${historyUri}/search?keyword=${encodeURIComponent(keyword)}`;
+  const accessToken = useAccessToken();
+  if (accessToken) {
+    try {
+      const response = await axios.get<HistoriesResponse>(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.status === 200) {
+        console.log(response);
+        return response.data.data.history;
+      }
+      return response.statusText;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+}
+
+function HistoryDeletehApi() {
   const url = `${historyUri}/search`;
   const accessToken = sessionStorage.getItem('accessToken');
   if (accessToken) {
     axios
       .get(url, {
-        params: { keyword },
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -70,4 +92,4 @@ function HistorySearchApi(keyword: string) {
   }
 }
 
-export { HistoryAllApi, HistoryDetailApi, HistorySearchApi };
+export { HistoryAllApi, HistoryDetailApi, HistorySearchApi, HistoryDeletehApi };
