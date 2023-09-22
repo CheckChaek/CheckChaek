@@ -1,59 +1,55 @@
 import axios from 'axios';
-import { BookInterface } from '../../interface/predictResult';
-import { APIResponse } from '../../interface/api';
 import { BUSINESS_URI } from '../apiInfo';
 
-const url = `${BUSINESS_URI}/imageinfo`;
+import { TaResponse, PredictResponse } from '../../interface/api';
+import { Book } from '../../interface/predictResult';
 
 export async function TaPredictDataSource(token: string, imageList: File[]) {
+  const url = `${BUSINESS_URI}/imageinfo`;
   const formData = new FormData();
   imageList.forEach(image => {
     formData.append('imageList', image);
   });
+  let response: TaResponse | undefined;
   if (token) {
     await axios
       .post(url, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          // Authorization: `Bearer ${token}`,
-          // Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NTIwMTA2OSwidXNlcm5hbWUiOiJHT09HTEVfMTEwMDM2OTkyMzQ1MDA2NTgzMTk1In0.7JEifuE9_rOyPRXWF1B7GPCgfO1KdtOQn6JWHWi1_SK8t0mcOAcJUemFweIK-O8zrwhARMviHPxP17FIW9sQ5Q`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then(res => {
-        // if (res.status === 200) {
-        //   return res.data as APIResponse;
-        // }
-        // return res.statusText;
-        return res;
+        console.log(res.data);
+
+        response = res.data as TaResponse;
       })
       .catch(e => console.log(e));
   }
+  return response;
 }
 
-export async function PredictApi(token: string, bookInfo: BookInterface) {
+export async function PredictApi(token: string, bookInfo: Book) {
+  const url = `${BUSINESS_URI}/bookpredict`;
+  let response: PredictResponse | undefined;
   if (token) {
+    console.log({ bookInfo });
     await axios
       .post(
         url,
-        {
-          params: {
-            bookInfo,
-          },
-        },
+        { bookInfo },
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
-            // Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
           },
         },
       )
       .then(res => {
-        // if (res.status === 200) {
-        //   return res.data as APIResponse;
-        // }
-        // return res.statusText;
-        return res;
+        console.log(res);
+        response = res.data as PredictResponse;
       })
       .catch(e => console.log(e));
   }
+  return response;
 }

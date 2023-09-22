@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 
-import { PredictBookInterface } from '../../interface/predictResult';
 import Card from '../common/card';
 // medals
 import State_medal_best from '../../assets/images/predict_result/state_medal_best.png';
@@ -8,14 +7,13 @@ import State_medal_high from '../../assets/images/predict_result/state_medal_hig
 import State_medal_medium from '../../assets/images/predict_result/state_medal_medium.png';
 import State_medal_low from '../../assets/images/predict_result/state_medal_low.png';
 import PredictBtn from '../common/predictBtn';
+import { PredictBookInfo } from '../../interface/predictResult';
 
-function PredictResult(props: {
-  PredictBookInfo: PredictBookInterface | undefined;
-}) {
+function PredictResult(props: { predictBookInfo: PredictBookInfo }) {
+  const { predictBookInfo } = props;
   const navigate = useNavigate();
-  const { PredictBookInfo } = props;
   const bookInfo =
-    PredictBookInfo === undefined
+    predictBookInfo === undefined
       ? {
           title: '제목',
           author: '저자',
@@ -23,9 +21,9 @@ function PredictResult(props: {
           status: '알 수 없음',
           originalPrice: '알 수 없음',
           estimatedPrice: '알 수 없음',
-          image: '알 수 없음',
+          coverImage: '알 수 없음',
         }
-      : PredictBookInfo;
+      : predictBookInfo;
   let medal;
   let status: string;
   switch (bookInfo.status) {
@@ -55,7 +53,7 @@ function PredictResult(props: {
       <div className="Result flex justify-center align-middle">
         <div className="ResultImage h-[32rem] w-[24rem] ml-20">
           <img
-            src={bookInfo.image && ''}
+            src={bookInfo.coverImage}
             alt="결과 이미지"
             className="h-full w-full"
           />
@@ -74,7 +72,7 @@ function PredictResult(props: {
 
             <br />
             <p>새책 가격: {bookInfo.originalPrice}</p>
-            <p>예상 가격: {bookInfo.originalPrice}</p>
+            <p>예상 가격: {bookInfo.estimatedPrice}</p>
           </div>
           <div className="RestartBtn flex justify-center  mt-10">
             <PredictBtn

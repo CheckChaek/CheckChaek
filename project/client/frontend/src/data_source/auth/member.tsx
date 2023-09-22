@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { AUTH_URI } from '../apiInfo';
-import { authRequset } from '../../interface/api';
+import { AuthRequset } from '../../interface/api';
 
-function SignoutAPI(token: string, { dispatch }: authRequset): void {
+function SignoutAPI(token: string, { dispatch }: AuthRequset): void {
   if (token) {
     axios
       .delete(`${AUTH_URI}/member`, {

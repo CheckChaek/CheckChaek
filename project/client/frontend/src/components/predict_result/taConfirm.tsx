@@ -1,19 +1,20 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 
-import { BookInterface } from '../../interface/predictResult';
-import { BookInfoResponse } from '../../interface/api';
 import Card from '../common/card';
 import PredictBtn from '../common/predictBtn';
+import { BookInfo } from '../../interface/predictResult';
 
 function TaConfirm(props: {
-  bookInfo: BookInfoResponse | undefined;
+  bookInfo: BookInfo;
+  // bookImage: string | undefined;
   pageHandleRegister: (num: number) => void;
   // setPageState: Dispatch<SetStateAction<number>>;
-  setBookInfo: Dispatch<SetStateAction<BookInterface>>;
+  setBookInfo: Dispatch<SetStateAction<BookInfo>>;
   setIsChecked: Dispatch<SetStateAction<boolean>>;
 }) {
   const {
     bookInfo,
+    // bookImage,
     pageHandleRegister,
     // setPageState,
     setBookInfo,
@@ -61,9 +62,11 @@ function TaConfirm(props: {
 
   const bookInfoHandler = () => {
     const newBookInfo = {
+      bookId: bookInfo.bookId,
       title: bookTitle,
       author: bookAuthor,
       publisher: bookPublisher,
+      image: bookInfo.image,
     };
     setBookInfo(newBookInfo);
   };
@@ -71,14 +74,13 @@ function TaConfirm(props: {
   const isCheckedHandler = () => {
     setIsChecked(true);
   };
-
   return (
     <div>
       <Card width="w-[80rem]" height="h-[40rem]">
         <div className="Result flex justify-center align-middle">
           <div className="ResultImage h-[32rem] w-[24rem] ml-20">
             <img
-              src={book.image && ''}
+              src={bookInfo.image}
               alt="결과 이미지"
               className="h-full w-full"
             />
@@ -91,7 +93,7 @@ function TaConfirm(props: {
                   <span>제목:</span>
                   <input
                     type="text"
-                    defaultValue={`${book.title && '책 제목'}`}
+                    defaultValue={`${book.title}`}
                     className="mb-4 ml-6"
                     id="title"
                     onChange={bookTitlehandler}
@@ -102,7 +104,7 @@ function TaConfirm(props: {
                   <span>저자:</span>
                   <input
                     type="text"
-                    defaultValue={`${book.author && '지은이'}`}
+                    defaultValue={`${book.author}`}
                     className="my-4 ml-6"
                     id="author"
                     onChange={bookAuthorhandler}
@@ -113,7 +115,7 @@ function TaConfirm(props: {
                   <span>출판사:</span>
                   <input
                     type="text"
-                    defaultValue={`${book.publisher && '출판사'}`}
+                    defaultValue={`${book.publisher}`}
                     className="mt-4 ml-2"
                     id="publisher"
                     onChange={bookPublisherhandler}
