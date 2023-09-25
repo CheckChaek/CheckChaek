@@ -22,7 +22,11 @@ function Navbar() {
     <>
       <nav className="flex justify-around items-center py-4 px-6 text-xl shadow-md w-screen">
         <a href="/">
-          <img src={CheckChaek} alt="CheckChaek" />
+          <img
+            src={CheckChaek}
+            alt="CheckChaek"
+            className="w-[81px] h-[55px]"
+          />
         </a>
         <div className="flex items-center space-x-4">
           <button
