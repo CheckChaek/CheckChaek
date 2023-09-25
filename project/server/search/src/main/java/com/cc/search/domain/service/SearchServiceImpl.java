@@ -61,7 +61,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public BookDto searchCertainBookInfo(String keyword) {
+    public BookDto searchCertainBookInfo(HashMap<String, Object> request) {
         // webClient 기본 설정
         WebClient webClient = WebClient
                 .builder()
@@ -74,7 +74,7 @@ public class SearchServiceImpl implements SearchService {
                 .uri(uriBuilder ->
                         uriBuilder
                                 .queryParam("ttbkey", TTBKEY)
-                                .queryParam("Query", keyword)
+                                .queryParam("Query", request.get("title"))
                                 .queryParam("QueryType", "Title")
                                 .queryParam("QueryType", "Author")
                                 .queryParam("QueryType", "Publisher")
@@ -89,11 +89,15 @@ public class SearchServiceImpl implements SearchService {
                 .block();
 
         /* 검색결과 리스트 반환 */
-        BookDto result;
-        if(data.getItem().isEmpty()) {
-            result = null;
-        } else {
-            result = data.getItem().get(0);
+        BookDto result = null;
+        if(!data.getItem().isEmpty()) {
+            log.info("책 목록: {}", data.getItem());
+            for(BookDto elem : data.getItem()) {
+                if(elem.getAuthor().contains((CharSequence) request.get("author")) && elem.getPublisher().contains((CharSequence) request.get("publisher"))) {
+                    result = elem;
+                    break;
+                }
+            }
         }
         log.info("검색결과: {}", result);
         return result;
