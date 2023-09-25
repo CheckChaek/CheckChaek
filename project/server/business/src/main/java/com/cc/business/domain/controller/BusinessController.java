@@ -107,7 +107,7 @@ public class BusinessController {
         BookEntity certainBookInfo = businessService.searchCertainBookInfo(editedBookInfo);
         log.info("정확한 책 정보: {}", certainBookInfo);
         if(certainBookInfo == null) {
-            EnvelopeResponse response = new EnvelopeResponse(200, "최종 책의 정보 반환 성공", null);
+            EnvelopeResponse response = new EnvelopeResponse(200, "책을 찾을 수가 없습니다.", null);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         certainBookInfo.setStatus(imageStatus);

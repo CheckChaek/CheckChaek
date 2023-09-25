@@ -219,28 +219,28 @@ public class BusinessServiceImpl implements BusinessService {
         request.put("keyword", keyword);
 
         // api 요청
-        List<AladinResponseDto> response = webClient
+        AladinResponseDto response = webClient
                 .post()
                 .uri("/search/certainbookinfo")
                 .bodyValue(request)
                 .retrieve()
-                .bodyToMono(List.class)
+                .bodyToMono(AladinResponseDto.class)
                 .block();
 //        log.info("Search 결과: {}", response);
 
         BookEntity result = new BookEntity();
-        if(!response.isEmpty()) {
+        if(response == null) {
+            result = null;
+        } else {
             AladinResponseDto arDto;
             ObjectMapper mapper = new ObjectMapper();
-            arDto = mapper.convertValue(response.get(0), AladinResponseDto.class);
+            arDto = mapper.convertValue(response, AladinResponseDto.class);
 
             result.setTitle(arDto.getTitle());
             result.setAuthor(arDto.getAuthor());
             result.setPublisher(arDto.getPublisher());
             result.setCoverImage(arDto.getCover());
             result.setOriginalPrice(arDto.getPriceStandard());
-        } else {
-            result = null;
         }
         return result;
     }
