@@ -82,41 +82,44 @@ function TaConfirm(props: {
             <img
               src={bookInfo.image}
               alt="결과 이미지"
-              className="h-full w-full"
+              className="min-h-[300px] min-w-[350px] rounded-2xl"
             />
           </div>
           <div className="ResultContents h-[32rem] w-[32rem] px-10  bg-MAIN-100 ml-10 rounded-2xl  p-10">
             <div className="w-full h-full relative ">
               {/* <div className="Contents text-2xl p-4 font-bold flex-col "> */}
+              <div className="font-bold text-center text-2xl mb-5">
+                📕📗 책을 확인해주세요 📗📕
+              </div>
               <form className="searchInfoHandlerRegister Contents text-2xl p-4 font-bold flex-col">
                 <label htmlFor="title">
-                  <span>제목:</span>
+                  <div className="my-2">제목</div>
                   <input
                     type="text"
                     defaultValue={`${book.title}`}
-                    className="mb-4 ml-6"
+                    className="mb-4 w-full"
                     id="title"
                     onChange={bookTitlehandler}
                   />
                 </label>
                 <br />
                 <label htmlFor="author">
-                  <span>저자:</span>
+                  <div className="my-2">저자</div>
                   <input
                     type="text"
                     defaultValue={`${book.author}`}
-                    className="my-4 ml-6"
+                    className="mb-4 min-w-full"
                     id="author"
                     onChange={bookAuthorhandler}
                   />
                 </label>
                 <br />
                 <label htmlFor="publisher">
-                  <span>출판사:</span>
+                  <div className="my-2">출판사</div>
                   <input
                     type="text"
                     defaultValue={`${book.publisher}`}
-                    className="mt-4 ml-2"
+                    className="mb-4 w-full"
                     id="publisher"
                     onChange={bookPublisherhandler}
                   />

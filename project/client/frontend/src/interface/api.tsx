@@ -12,11 +12,11 @@ export interface APIResponse {
 }
 
 export interface TaResponse extends APIResponse {
-  data: { bookInfo: BookInfo };
+  data: { bookInfo: BookInfo } | null;
 }
 
 export interface PredictResponse extends APIResponse {
-  data: { predictBookInfo: PredictBookInfo };
+  data: { predictBookInfo: PredictBookInfo } | null;
 }
 
 // history

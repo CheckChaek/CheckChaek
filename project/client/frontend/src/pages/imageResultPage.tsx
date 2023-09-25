@@ -1,20 +1,27 @@
-import React, { useState, useEffect } from 'react';
-
-import { useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import PredictResult from '../components/predict_result/predictResult';
 import Loading from '../components/common/loading';
 import TaConfirm from '../components/predict_result/taConfirm';
+import Modal from '../components/modal/modal';
+import AlertContents from '../components/modal/alertContents';
 import {
   PredictRepository,
   TaConfirmRepository,
 } from '../repository/business/predictRepository';
 import { Book, BookInfo, PredictBookInfo } from '../interface/predictResult';
+import { useModal } from '../components/modal/modalClass';
 
 function ResultPage() {
-  // const location: { bookInformation: BookInfo } = useLocation();
+  // 페이지 띄우는 State
   const [pageState, setPageState] = useState(0);
+  // 중간확인 페이지를 거쳤는가?
   const [isChecked, setIsChecked] = useState(false);
+  // Modal 관련
+  const { modalOpen, openModal, closeModal } = useModal();
+  const modalName = 'predictResult';
+  // 책 정보 기본 값
   const defaultBook: BookInfo = {
     bookId: 0,
     title: 'Book title',
@@ -22,7 +29,6 @@ function ResultPage() {
     publisher: 'Book publisher',
     image: '',
   };
-  const [bookInfo, setBookInfo] = useState(defaultBook);
   const defaultPredict: PredictBookInfo = {
     bookId: 0,
     title: '제목',
@@ -33,7 +39,12 @@ function ResultPage() {
     originalPrice: 0,
     estimatedPrice: 0,
   };
+
+  // 책 정보 State
+  const [bookInfo, setBookInfo] = useState(defaultBook);
   const [predictBookInfo, setPredictBookInfo] = useState(defaultPredict);
+
+  // predict 페이지에서 받아온 이미지 리스트
   const location: { state: File[] } = useLocation();
   const imageList = location.state;
 
@@ -42,19 +53,24 @@ function ResultPage() {
       setPageState(status);
     }
   };
+  // 페이지 이동
+  const navigate = useNavigate();
 
-  let res: BookInfo | undefined;
-  let predictRes: PredictBookInfo | undefined;
+  // API Return 값 저장용
+  let res: BookInfo | undefined | null;
+  let predictRes: PredictBookInfo | undefined | null;
 
+  // TA API 통신 예외처리
   const taApiRequest = async () => {
     res = await TaConfirmRepository({ imageList });
     console.log(res);
-    if (res !== undefined) {
+    if (res) {
       setBookInfo(res);
       pageHandleRegister(1);
     }
   };
 
+  // Predict API 통신 예외처리
   const predictApiRequest = async () => {
     const requestBookInfo: Book = {
       bookId: bookInfo.bookId,
@@ -64,12 +80,18 @@ function ResultPage() {
     };
     predictRes = await PredictRepository({ bookInfo: requestBookInfo });
     console.log(predictRes);
-    if (predictRes !== undefined) {
-      console.log(predictRes);
+    if (predictRes) {
+      // console.log(predictRes);
       setPredictBookInfo(predictRes);
       pageHandleRegister(2);
+    } else if (predictRes === null) {
+      openModal(modalName);
+    } else {
+      navigate('/error');
     }
   };
+
+  // API 통신
 
   useEffect(() => {
     taApiRequest();
@@ -80,6 +102,7 @@ function ResultPage() {
     }
   }, [isChecked]);
 
+  // 페이지 관리
   switch (pageState) {
     case 1:
       return (
@@ -100,7 +123,21 @@ function ResultPage() {
       );
 
     default:
-      return <Loading />;
+      return (
+        <div>
+          <Loading />
+          <Modal
+            closeModal={() => closeModal(modalName)}
+            OpenModal={modalOpen[modalName]}
+            width="w-[400px]"
+            height="h-60">
+            <AlertContents
+              content="책 정보를 찾을 수 없습니다."
+              okAction={() => navigate('/predict')}
+            />
+          </Modal>
+        </div>
+      );
   }
 }
 
