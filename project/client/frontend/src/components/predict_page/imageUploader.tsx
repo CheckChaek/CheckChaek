@@ -4,27 +4,21 @@ import { FileUploader } from 'react-drag-drop-files';
 // icons
 import PhotoIcon from '../../assets/icons/photoIcon';
 import CloseIcon from '../../assets/icons/closeIcon';
-
-interface ImageProps {
-  imageList: File[];
-  isDrag: boolean;
-  imageRegistHandler: (files: File[]) => void;
-  setImageList: React.Dispatch<React.SetStateAction<File[]>>;
-  setCurrentImageIndex: React.Dispatch<React.SetStateAction<number>>;
-  setIsDrag: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { ImageUploadProps } from '../../interface/predict';
 
 const fileTypes = ['JPG', 'PNG', 'GIF'];
 function ImageUploader({
+  currentImageIndex,
   imageList,
   isDrag,
   setImageList,
   setCurrentImageIndex,
   setIsDrag,
   imageRegistHandler,
-}: ImageProps) {
+}: ImageUploadProps) {
   const imageDeleteHandler = (index: number) => {
     setImageList([...imageList].filter((item, idx) => idx !== index));
+    setCurrentImageIndex(currentImageIndex % imageList.length);
   };
 
   return (

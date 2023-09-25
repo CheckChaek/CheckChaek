@@ -67,6 +67,7 @@ function PredictPage() {
           <MemoizmImageUploader
             imageList={imageList}
             setImageList={setImageList}
+            currentImageIndex={currentImageIndex}
             setCurrentImageIndex={setCurrentImageIndex}
             isDrag={isDrag}
             setIsDrag={setIsDrag}
