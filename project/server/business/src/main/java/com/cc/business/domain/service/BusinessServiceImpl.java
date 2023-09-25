@@ -230,7 +230,7 @@ public class BusinessServiceImpl implements BusinessService {
 
         BookEntity result = new BookEntity();
         if(!response.isEmpty()) {
-            AladinResponseDto arDto = new AladinResponseDto();
+            AladinResponseDto arDto;
             ObjectMapper mapper = new ObjectMapper();
             arDto = mapper.convertValue(response.get(0), AladinResponseDto.class);
 

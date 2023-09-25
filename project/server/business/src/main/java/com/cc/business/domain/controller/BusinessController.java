@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Tag(name = "예제 API", description = "Swagger 테스트용 API")
@@ -43,8 +44,10 @@ public class BusinessController {
     }
 
     @GetMapping("/test")
-    public int test(HttpServletRequest request){
-        return isAuthorized(request);
+    public int test() throws Exception {
+        log.info("에러발생");
+        throw new Exception();
+//        return isAuthorized(request);
     }
 
     @PostMapping("/imageinfo")
@@ -68,7 +71,7 @@ public class BusinessController {
         bookInfo.setImage(aladinResponse.getCover());
 
         /* step1. 책 정보 먼저 저장 */
-        int bookId = businessService.saveBookInfo(bookInfo, memberId);
+        int bookId = businessService.saveBookInfo(bookInfo, 8);
         log.info("책 번호: {}", bookId);
         bookInfo.setBookId(bookId);
 
@@ -87,8 +90,8 @@ public class BusinessController {
     @PostMapping("/bookpredict")
     public ResponseEntity<EnvelopeResponse<HashMap<String, BookEntity>>> predictBookInfo(HttpServletRequest request, @RequestBody HashMap<String, BookDto> params) throws Exception {
 
-        int memberId = isAuthorized(request);
-        log.info("{}", memberId);
+//        int memberId = isAuthorized(request);
+//        log.info("{}", memberId);
         log.info("수정된 책 정보 요청값: {}", params.get("bookInfo"));
         BookDto editedBookInfo = params.get("bookInfo");
 
@@ -112,7 +115,7 @@ public class BusinessController {
 
         /* 재검색된 책의 정보 DB에 저장 */
         certainBookInfo.setBookId(editedBookInfo.getBookId());
-        certainBookInfo.setMemberId(memberId);
+        certainBookInfo.setMemberId(8);
         businessService.saveCertainBookInfo(certainBookInfo);
 
         log.info("최종 데이터: {}", certainBookInfo);
