@@ -90,8 +90,8 @@ public class BusinessController {
     @PostMapping("/bookpredict")
     public ResponseEntity<EnvelopeResponse<HashMap<String, BookEntity>>> predictBookInfo(HttpServletRequest request, @RequestBody HashMap<String, BookDto> params) throws Exception {
 
-//        int memberId = isAuthorized(request);
-//        log.info("{}", memberId);
+        int memberId = isAuthorized(request);
+        log.info("{}", memberId);
         log.info("수정된 책 정보 요청값: {}", params.get("bookInfo"));
         BookDto editedBookInfo = params.get("bookInfo");
 
@@ -106,6 +106,10 @@ public class BusinessController {
         /* 수정된 책 정보를 이용하여 다시 알라딘 API 검색 */
         BookEntity certainBookInfo = businessService.searchCertainBookInfo(editedBookInfo);
         log.info("정확한 책 정보: {}", certainBookInfo);
+        if(certainBookInfo == null) {
+            EnvelopeResponse response = new EnvelopeResponse(200, "최종 책의 정보 반환 성공", null);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
         certainBookInfo.setStatus(imageStatus);
 
         /* 책의 상태를 이용하여 재평가된 책의 가격 반환 */
@@ -115,7 +119,7 @@ public class BusinessController {
 
         /* 재검색된 책의 정보 DB에 저장 */
         certainBookInfo.setBookId(editedBookInfo.getBookId());
-        certainBookInfo.setMemberId(8);
+        certainBookInfo.setMemberId(memberId);
         businessService.saveCertainBookInfo(certainBookInfo);
 
         log.info("최종 데이터: {}", certainBookInfo);
