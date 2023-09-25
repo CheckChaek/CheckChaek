@@ -215,16 +215,11 @@ public class BusinessServiceImpl implements BusinessService {
                 .baseUrl(SERVER_URL + ":" + SEARCH_PORT)
                 .build();
 
-//        String keyword = bookInfo.getTitle() + " " + bookInfo.getAuthor() + " " + bookInfo.getPublisher();
-        String keyword = bookInfo.getTitle();
-        HashMap<String, String> request = new HashMap<>();
-        request.put("keyword", keyword);
-
         // api 요청
         AladinResponseDto response = webClient
                 .post()
                 .uri("/search/certainbookinfo")
-                .bodyValue(request)
+                .bodyValue(bookInfo)
                 .retrieve()
                 .bodyToMono(AladinResponseDto.class)
                 .block();
