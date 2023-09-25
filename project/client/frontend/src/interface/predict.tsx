@@ -1,4 +1,4 @@
-interface ImageProps {
+export interface ImageProps {
   imageList: File[];
   isDrag: boolean;
   currentImageIndex: number;
@@ -10,4 +10,6 @@ interface ImageProps {
   setIsDrag: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default ImageProps;
+export interface ImageUploadProps extends ImageProps {
+  setImageList: React.Dispatch<React.SetStateAction<File[]>>;
+}
