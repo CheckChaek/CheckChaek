@@ -59,9 +59,10 @@ public class BusinessServiceImpl implements BusinessService {
         /* 이미지에서 text 추출 */
         List<String> textList = getImageText(imageUrlList);
 
+        if(textList.isEmpty()) return null;
+
         /* 추출된 글자를 이용하여 책 정보 검색 */
         AladinResponseDto result = getBookInfo(textList);
-
         return result;
     }
 
@@ -214,7 +215,8 @@ public class BusinessServiceImpl implements BusinessService {
                 .baseUrl(SERVER_URL + ":" + SEARCH_PORT)
                 .build();
 
-        String keyword = bookInfo.getTitle() + " " + bookInfo.getAuthor() + " " + bookInfo.getPublisher();
+//        String keyword = bookInfo.getTitle() + " " + bookInfo.getAuthor() + " " + bookInfo.getPublisher();
+        String keyword = bookInfo.getTitle();
         HashMap<String, String> request = new HashMap<>();
         request.put("keyword", keyword);
 
