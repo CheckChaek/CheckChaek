@@ -60,7 +60,7 @@ function ImageSlider({
         types={fileTypes}
         multiple
         onDraggingStateChange={(dragging: boolean) => setIsDrag(dragging)}>
-        <div className="flex justify-center w-[100vh] h-full rounded-lg bg-opacity-60 outline-dashed outline-4 outline-BACKGROUND-300 bg-BACKGROUND-100">
+        <div className="flex justify-center w-[80vh] h-full rounded-lg bg-opacity-60 outline-dashed outline-4 outline-BACKGROUND-300 bg-BACKGROUND-100">
           {!isDrag && (
             <div className="text-center text-2xl font-bold self-center">
               Upload

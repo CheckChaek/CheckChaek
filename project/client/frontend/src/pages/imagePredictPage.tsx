@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../components/modal/modal';
 import { useModal } from '../components/modal/modalClass';
 import Card from '../components/common/card';
-import ImageSlider from '../components/predict_page/imageSlider';
+import MemoizmImageSlider from '../components/predict_page/imageSlider';
 import MemoizmImageUploader from '../components/predict_page/imageUploader';
 import PredictBtn from '../components/common/predictBtn';
 import AlertContents from '../components/modal/alertContents';
@@ -16,7 +16,8 @@ function PredictPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isDrag, setIsDrag] = useState(false);
 
-  const modalName = 'imageLimit';
+  const modalName10 = 'imageLimit10';
+  const modalName0 = 'imageLimit0';
   const guideRef = useRef(true);
   const guidemodalName = 'guide';
   const handleGuide = useCallback(() => {
@@ -36,9 +37,16 @@ function PredictPage() {
     const tempImagelist = [...imageList, ...files];
 
     if (tempImagelist.length > 10) {
-      openModal(modalName);
+      openModal(modalName10);
     } else {
       setImageList(tempImagelist);
+    }
+  };
+  const imageButtonHandler = () => {
+    if (imageList.length < 2) {
+      openModal(modalName0);
+    } else {
+      navigate('/result', { state: imageList });
     }
   };
 
@@ -46,7 +54,7 @@ function PredictPage() {
     <div className="Predict">
       <Card width="w-3/4" height="min-h-[80vh]">
         <div className="ImageSlider">
-          <ImageSlider
+          <MemoizmImageSlider
             imageRegistHandler={imageRegistHandler}
             imageList={imageList}
             currentImageIndex={currentImageIndex}
@@ -72,19 +80,29 @@ function PredictPage() {
             defaultColor="bg-BUTTON1-500"
             selectedColor="bg-BUTTON1-900"
             fontColor="text-FONT-50 text-lg"
-            action={() => navigate('/result', { state: imageList })}>
+            action={() => imageButtonHandler()}>
             결과 확인하기
           </PredictBtn>
         </div>
       </Card>
       <Modal
-        closeModal={() => closeModal(modalName)}
-        OpenModal={modalOpen[modalName]}
+        closeModal={() => closeModal(modalName10)}
+        OpenModal={modalOpen[modalName10]}
         width="w-[400px]"
         height="h-60">
         <AlertContents
           content="이미지는 10개까지 입니다."
-          okAction={() => closeModal(modalName)}
+          okAction={() => closeModal(modalName10)}
+        />
+      </Modal>
+      <Modal
+        closeModal={() => closeModal(modalName0)}
+        OpenModal={modalOpen[modalName0]}
+        width="w-[400px]"
+        height="h-60">
+        <AlertContents
+          content="이미지를 2개이상 넣어주세요."
+          okAction={() => closeModal(modalName0)}
         />
       </Modal>
 

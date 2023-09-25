@@ -58,7 +58,7 @@ function ImageUploader({
         </button>
       ))}
       {imageList.length < 10 && (
-        <div className="m-auto p-10">
+        <div className="m-auto py-10">
           <FileUploader
             handleChange={imageRegistHandler}
             name="file"

@@ -10,7 +10,7 @@ export async function TaPredictDataSource(token: string, imageList: File[]) {
   imageList.forEach(image => {
     formData.append('imageList', image);
   });
-  let response: TaResponse | undefined;
+  let response: TaResponse | undefined | null;
   if (token) {
     await axios
       .post(url, formData, {
@@ -31,7 +31,7 @@ export async function TaPredictDataSource(token: string, imageList: File[]) {
 
 export async function PredictApi(token: string, bookInfo: Book) {
   const url = `${BUSINESS_URI}/bookpredict`;
-  let response: PredictResponse | undefined;
+  let response: PredictResponse | undefined | null;
   if (token) {
     console.log({ bookInfo });
     await axios
