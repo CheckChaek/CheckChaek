@@ -67,7 +67,6 @@ function MainPage() {
           </div>
         </div>
       )}
-      <div className="snap-start" />
     </div>
   );
 }

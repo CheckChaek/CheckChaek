@@ -9,7 +9,7 @@ function Login() {
   };
 
   return (
-    <div className="LoginPart h-screen  w-[400px] my-auto bg-BACKGROUND-50 rounded-lg shadow-md">
+    <div className="LoginPart h-[680px] w-[400px] my-auto bg-BACKGROUND-50 rounded-lg shadow-md">
       <div className="LoginTitle h-1/4 ">
         <h2 className="text-center font-bold text-3xl pt-16">시작하기</h2>
       </div>
