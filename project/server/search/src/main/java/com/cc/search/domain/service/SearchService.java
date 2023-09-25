@@ -8,5 +8,5 @@ public interface SearchService {
 
     BookDto getBookInfo(List<String> textList);
 
-    List<BookDto> searchCertainBookInfo(String keyword);
+    BookDto searchCertainBookInfo(String keyword);
 }

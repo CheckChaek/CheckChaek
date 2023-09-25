@@ -61,7 +61,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<BookDto> searchCertainBookInfo(String keyword) {
+    public BookDto searchCertainBookInfo(String keyword) {
         // webClient 기본 설정
         WebClient webClient = WebClient
                 .builder()
@@ -89,9 +89,13 @@ public class SearchServiceImpl implements SearchService {
                 .block();
 
         /* 검색결과 리스트 반환 */
-        List<BookDto> bookList = data.getItem();
-
-        log.info("검색결과: {}", bookList);
-        return bookList;
+        BookDto result;
+        if(data.getItem().isEmpty()) {
+            result = null;
+        } else {
+            result = data.getItem().get(0);
+        }
+        log.info("검색결과: {}", result);
+        return result;
     }
 }

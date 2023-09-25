@@ -30,8 +30,8 @@ public class SearchController {
     }
 
     @PostMapping("/certainbookinfo")
-    public ResponseEntity<List<BookDto>> searchCertainBookInfo(@RequestBody HashMap<String, String> request) {
-        List<BookDto> result = ss.searchCertainBookInfo(request.get("keyword"));
+    public ResponseEntity<BookDto> searchCertainBookInfo(@RequestBody HashMap<String, String> request) {
+        BookDto result = ss.searchCertainBookInfo(request.get("keyword"));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
