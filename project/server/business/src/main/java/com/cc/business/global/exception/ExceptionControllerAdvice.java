@@ -1,6 +1,5 @@
-package com.cc.business.global.advice;
+package com.cc.business.global.exception;
 
-import com.cc.business.domain.controller.BusinessController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
