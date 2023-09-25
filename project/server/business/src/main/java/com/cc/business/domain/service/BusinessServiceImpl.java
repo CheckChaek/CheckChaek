@@ -240,7 +240,7 @@ public class BusinessServiceImpl implements BusinessService {
             result.setCoverImage(arDto.getCover());
             result.setOriginalPrice(arDto.getPriceStandard());
         } else {
-            /* 검색 결과가 없을 때 에러처리 후 코드와 메시지로 반환  */
+            result = null;
         }
         return result;
     }
