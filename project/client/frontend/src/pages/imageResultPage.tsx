@@ -12,6 +12,7 @@ import {
 } from '../repository/business/predictRepository';
 import { Book, BookInfo, PredictBookInfo } from '../interface/predictResult';
 import { useModal } from '../components/modal/modalClass';
+import { BtnInfo } from '../interface/common';
 
 function ResultPage() {
   // 페이지 띄우는 State
@@ -102,6 +103,16 @@ function ResultPage() {
     }
   }, [isChecked]);
 
+  const buttonInfo: BtnInfo = {
+    height: 'h-[3rem]',
+    width: 'w-[15rem]',
+    defaultColor: 'bg-BUTTON1-500',
+    selectedColor: 'bg-BUTTON1-900',
+    fontColor: 'text-FONT-50 text-lg',
+    children: '다시하기',
+    action: () => navigate('/predict'),
+  };
+
   // 페이지 관리
   switch (pageState) {
     case 1:
@@ -118,7 +129,10 @@ function ResultPage() {
     case 2:
       return (
         <div className="PredictResult">
-          <PredictResult predictBookInfo={predictBookInfo} />
+          <PredictResult
+            predictBookInfo={predictBookInfo}
+            buttonInfo={buttonInfo}
+          />
         </div>
       );
 
@@ -133,7 +147,10 @@ function ResultPage() {
             height="h-60">
             <AlertContents
               content="책 정보를 찾을 수 없습니다."
-              okAction={() => navigate('/predict')}
+              okAction={() => {
+                closeModal(modalName);
+                navigate('/predict');
+              }}
             />
           </Modal>
         </div>

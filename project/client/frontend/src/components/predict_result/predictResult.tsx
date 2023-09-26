@@ -8,9 +8,13 @@ import State_medal_medium from '../../assets/images/predict_result/state_medal_m
 import State_medal_low from '../../assets/images/predict_result/state_medal_low.png';
 import PredictBtn from '../common/predictBtn';
 import { PredictBookInfo } from '../../interface/predictResult';
+import { BtnInfo } from '../../interface/common';
 
-function PredictResult(props: { predictBookInfo: PredictBookInfo }) {
-  const { predictBookInfo } = props;
+function PredictResult(props: {
+  predictBookInfo: PredictBookInfo;
+  buttonInfo: BtnInfo;
+}) {
+  const { predictBookInfo, buttonInfo } = props;
   const navigate = useNavigate();
   const bookInfo =
     predictBookInfo === undefined
@@ -51,40 +55,47 @@ function PredictResult(props: { predictBookInfo: PredictBookInfo }) {
   return (
     <Card height="h-[40rem]" width="w-[80rem]">
       <div className="Result flex justify-center align-middle">
-        <div className="ResultImage h-[32rem] w-[24rem] ml-20">
+        <div className="ResultImage h-[32rem] w-[24rem] ml-20 relative">
           <img
             src={bookInfo.coverImage}
             alt="결과 이미지"
-            className="h-full w-full"
+            className="h-full w-full "
           />
-        </div>
-        <div className="ResultContents h-[32rem] w-[32rem] px-10 relative place-items-stretch bg-MAIN-100 ml-10 rounded-2xl p-10">
-          <div className="absolute -right-2 top-0 w-[8rem] h-[10rem]">
+          <div className="absolute -right-6 -top-3 w-[8rem] h-[10rem]">
             <img src={medal} alt="상태 메달" />
           </div>
+        </div>
+        <div className="ResultContents h-[32rem] w-[32rem] px-10 place-items-stretch bg-MAIN-100 ml-10 rounded-2xl p-4">
           <div className="Contents text-2xl p-4 font-bold">
-            <p>제목: {bookInfo.title}</p>
-            <p>저자: {bookInfo.author}</p>
-            <p>출판사: {bookInfo.publisher}</p>
-            <br />
+            <p className=" pb-6">{bookInfo.title}</p>
 
-            <p>상태: {status}</p>
+            <p className="text-lg text-center font-medium pb-3">
+              {bookInfo.author} | {bookInfo.publisher}
+            </p>
 
-            <br />
-            <p>새책 가격: {bookInfo.originalPrice}</p>
-            <p>예상 가격: {bookInfo.estimatedPrice}</p>
+            <div className="flex justify-around pt-4">
+              <div>정상가</div>
+              <div className="text-LOGO-600">예상가</div>
+            </div>
+            <div className="flex justify-around items-center pt-8">
+              <div>{bookInfo.originalPrice} 원</div>
+
+              <div className="text-LOGO-600">
+                {bookInfo.estimatedPrice === 0
+                  ? ' 매입불가'
+                  : ` ${bookInfo.estimatedPrice} 원`}
+              </div>
+            </div>
           </div>
-          <div className="RestartBtn flex justify-center  mt-10">
+          <div className="RestartBtn flex justify-center h-1/4 items-end">
             <PredictBtn
-              height="h-[3rem]"
-              width="w-[15rem]"
-              defaultColor="bg-BUTTON1-500"
-              selectedColor="bg-BUTTON1-900"
-              fontColor="text-FONT-50 text-lg"
-              action={() => {
-                navigate('/predict');
-              }}>
-              다시하기
+              height={buttonInfo.height}
+              width={buttonInfo.width}
+              defaultColor={buttonInfo.defaultColor}
+              selectedColor={buttonInfo.selectedColor}
+              fontColor={buttonInfo.fontColor}
+              action={buttonInfo.action}>
+              {buttonInfo.children}
             </PredictBtn>
           </div>
         </div>
