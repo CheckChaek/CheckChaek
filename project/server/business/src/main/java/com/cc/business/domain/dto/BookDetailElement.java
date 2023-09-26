@@ -8,7 +8,7 @@ import lombok.Getter;
 @Builder
 public class BookDetailElement {
 
-    private int id;
+    private int bookId;
     private String title;
     private String author;
     private String publisher;
@@ -19,7 +19,7 @@ public class BookDetailElement {
 
     public static BookDetailElement of (BookEntity bookEntity){
         return BookDetailElement.builder()
-                .id(bookEntity.getBookId())
+                .bookId(bookEntity.getBookId())
                 .title(bookEntity.getTitle())
                 .author(bookEntity.getAuthor())
                 .publisher(bookEntity.getPublisher())
