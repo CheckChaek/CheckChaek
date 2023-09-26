@@ -4,12 +4,16 @@ import com.cc.business.domain.dto.BookDto;
 import com.cc.business.domain.dto.FindHistroyResponseDto;
 import com.cc.business.domain.entity.BookEntity;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface BusinessService {
     // 이미지 프로세스 전체를 담당
-    AladinResponseDto processImages(List<String> imageUrlList);
+    BookDto processImages(HttpServletRequest request, List<MultipartFile> imageList) throws IOException;
 
     // TA 서버에 이미지 정보를 전송하고
     List<String> getImageText(List<String> imageList);

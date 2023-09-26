@@ -1,20 +1,31 @@
 package com.cc.business.global.exception;
 
+import com.cc.business.global.common.response.EnvelopeResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.*;
 
-//@Slf4j
-//@RestControllerAdvice(annotations = RestController.class)
-//public class ExceptionControllerAdvice {
-//
-//    /* 테스트용 */
-//    @ExceptionHandler(value = {Exception.class})
-//    public ResponseEntity<String> testErrorHandler(Exception e) {
-//        log.info("예외컨트롤러 호출 {}", e.getMessage());
-//        return new ResponseEntity<>("에러 발생 테스트", HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-//}
+import java.util.HashMap;
+
+@Slf4j
+@RestControllerAdvice
+public class ExceptionControllerAdvice {
+
+    /* 사용자 인증 에러 */
+    @ExceptionHandler(value = {AuthException.class})
+    public ResponseEntity<EnvelopeResponse<HashMap<String, Object>>> testErrorHandler(AuthException e) {
+        log.error("사용자 인증 에러 발생");
+        EnvelopeResponse result = new EnvelopeResponse(HttpStatus.UNAUTHORIZED.value(), e.getMessage());
+
+        return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /* TA 에러 */
+
+    /* SEARCH 에러 */
+
+    /* SC 에러 */
+
+    /* ANS 에러 */
+}

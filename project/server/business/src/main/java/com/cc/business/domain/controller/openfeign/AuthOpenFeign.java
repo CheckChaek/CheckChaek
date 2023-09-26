@@ -4,7 +4,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name="AuthOpenFeign", url = "http://j9a606.p.ssafy.io:8081")
+@FeignClient(name="AuthOpenFeign", url = "http://localhost:8080")
 public interface AuthOpenFeign {
 
     @GetMapping("/authorization")

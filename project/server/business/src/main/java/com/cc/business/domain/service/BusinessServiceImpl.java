@@ -1,15 +1,20 @@
 package com.cc.business.domain.service;// BusinessServiceImpl.java
 import com.amazonaws.services.dynamodbv2.xspec.L;
 import com.amazonaws.services.mq.model.UnauthorizedException;
+import com.cc.business.domain.controller.openfeign.AuthOpenFeign;
 import com.cc.business.domain.dto.*;
 import com.cc.business.domain.entity.BookEntity;
 import com.cc.business.domain.entity.BookImageEntity;
 import com.cc.business.domain.repository.BookImageRepository;
 import com.cc.business.domain.repository.BookRepository;
+import com.cc.business.global.exception.AuthException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -19,9 +24,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.awt.print.Book;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,22 +54,65 @@ public class BusinessServiceImpl implements BusinessService {
 
     private BookRepository bookRepository;
     private BookImageRepository bookImageRepository;
+    private AuthOpenFeign authOpenFeign;
+    private S3Service s3Service;
 
-    public BusinessServiceImpl(BookRepository bookRepository, BookImageRepository bookImageRepository) {
+    public BusinessServiceImpl(BookRepository bookRepository, BookImageRepository bookImageRepository, AuthOpenFeign authOpenFeign, S3Service s3Service) {
         this.bookRepository = bookRepository;
         this.bookImageRepository = bookImageRepository;
+        this.authOpenFeign = authOpenFeign;
+        this.s3Service = s3Service;
+    }
+
+    private int isAuthorized(HttpServletRequest request) {
+        String Authorization = request.getHeader("Authorization");
+        String AuthorizationRefresh = request.getHeader("Authorization-refresh");
+        int memberId = 0;
+        try {
+            memberId = authOpenFeign.connectToAuthServer(Authorization,AuthorizationRefresh);
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            throw new AuthException();
+        }
+        return memberId;
     }
 
     @Override
-    public AladinResponseDto processImages(List<String> imageUrlList) {
-        log.info("이미지 처리 실행");
+    @Transactional
+    public BookDto processImages(HttpServletRequest request, List<MultipartFile> imageList) throws IOException {
+
+        BookDto result = new BookDto();
+
+        int memberId = isAuthorized(request);
+        log.info("사용자 ID: {}", memberId);
+
+        log.info("이미지 정보 요청값: {}", imageList);
+        /* S3에 이미지 저장 */
+        List<String> imageUrlList = s3Service.upload(imageList);
+        log.info("S3 이미지 저장 경로 {}", imageUrlList);
+
         /* 이미지에서 text 추출 */
         List<String> textList = getImageText(imageUrlList);
 
-        if(textList.isEmpty()) return null;
-
         /* 추출된 글자를 이용하여 책 정보 검색 */
-        AladinResponseDto result = getBookInfo(textList);
+        AladinResponseDto aladinResponse = getBookInfo(textList);
+        if(aladinResponse == null) {
+            result = null;
+        } else {
+            result.setTitle(aladinResponse.getTitle());
+            result.setAuthor(aladinResponse.getAuthor());
+            result.setPublisher(aladinResponse.getPublisher());
+            result.setImage(aladinResponse.getCover());
+
+        }
+
+        /* step1. 책 정보 먼저 저장 */
+        int bookId = saveBookInfo(result, memberId);
+        log.info("책 번호: {}", bookId);
+        result.setBookId(bookId);
+
+        /* step2. 저장된 책의 id를 가지고 이미지 정보를 저장 */
+        saveS3URL(imageUrlList, bookId);
         return result;
     }
 
