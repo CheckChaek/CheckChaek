@@ -5,6 +5,8 @@ export interface SearchProps {
 }
 
 export interface SearchResultProps {
+  currentPage: number;
+  setCurrentPage: (newPage: number) => void;
   onSearchResults: Book[];
   onDelete: (bookid: number) => void;
 }
