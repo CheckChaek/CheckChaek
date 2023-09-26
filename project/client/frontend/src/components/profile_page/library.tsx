@@ -6,6 +6,7 @@ import RightArrowIcon from '../../assets/icons/rightArrowIcon';
 import { SearchResultProps } from '../../interface/profile';
 import { useModal } from '../modal/modalClass';
 import Modal from '../modal/modal';
+import { Book } from '../../interface/api';
 
 function Library({
   onSearchResults,
@@ -55,8 +56,15 @@ function Library({
     }
   };
 
+  // 모달 관련
   const { modalOpen, openModal, closeModal } = useModal();
   const modalName = 'detail';
+  const [selectBook, SetSelectBook] = useState<Book>();
+
+  const handleContent = (content: Book) => {
+    openModal(modalName);
+    SetSelectBook(content);
+  };
 
   return (
     <Card width="w-3/5" height="min-h-[50vh]">
@@ -73,9 +81,10 @@ function Library({
                     className="relative min-h-[25vh]"
                     role="button"
                     tabIndex={0}
-                    onClick={() => openModal(modalName)}
+                    onClick={() => handleContent(book)}
                     onKeyPress={event => {
                       if (event.key === 'Enter' || event.key === ' ') {
+                        SetSelectBook(book);
                         openModal(modalName);
                       }
                     }}>
@@ -109,8 +118,8 @@ function Library({
                     )}
                   </p>
 
-                  <p>상태 : {book.status || 'Denied'}</p>
-                  <p>가격 : {book.price ? `${book.price}원` : '매입 불가'} </p>
+                  <p>상태 : {book.status || '매입불가'}</p>
+                  <p> {book.price ? `가격 : ${book.price}원` : ''} </p>
                 </div>
               ))}
           </div>
@@ -152,12 +161,21 @@ function Library({
           </div>
         </div>
       )}
+
       <Modal
         closeModal={() => closeModal(modalName)}
         OpenModal={modalOpen[modalName]}
         width="w-[400px]"
         height="h-[680px] ">
-        임의로 넣어봤어요
+        그럴리가있냐
+        {selectBook && (
+          <>
+            <p>{selectBook.id}</p>
+            <p>{selectBook.price}</p>
+            <p>{selectBook.status}</p>
+            <p>{selectBook.title}</p>
+          </>
+        )}
       </Modal>
     </Card>
   );
