@@ -26,7 +26,7 @@ function PrivateLoginRoute() {
 
 function PrivateNotLoginRoute() {
   const token = useAccessToken();
-  if (token) {
+  if (!token) {
     return <Outlet />;
   }
   return <Navigate to="/" />;
