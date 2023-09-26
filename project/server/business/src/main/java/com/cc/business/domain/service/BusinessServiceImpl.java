@@ -1,15 +1,19 @@
 package com.cc.business.domain.service;// BusinessServiceImpl.java
 import com.amazonaws.services.mq.model.NotFoundException;
 import com.amazonaws.services.mq.model.UnauthorizedException;
+import com.cc.business.domain.controller.openfeign.AuthOpenFeign;
 import com.cc.business.domain.dto.*;
 import com.cc.business.domain.entity.BookEntity;
 import com.cc.business.domain.entity.BookImageEntity;
 import com.cc.business.domain.repository.BookImageRepository;
 import com.cc.business.domain.repository.BookRepository;
+import com.cc.business.global.exception.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -19,8 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,22 +53,72 @@ public class BusinessServiceImpl implements BusinessService {
 
     private BookRepository bookRepository;
     private BookImageRepository bookImageRepository;
+    private AuthOpenFeign authOpenFeign;
+    private S3Service s3Service;
 
-    public BusinessServiceImpl(BookRepository bookRepository, BookImageRepository bookImageRepository) {
+    public BusinessServiceImpl(BookRepository bookRepository, BookImageRepository bookImageRepository, AuthOpenFeign authOpenFeign, S3Service s3Service) {
         this.bookRepository = bookRepository;
         this.bookImageRepository = bookImageRepository;
+        this.authOpenFeign = authOpenFeign;
+        this.s3Service = s3Service;
     }
 
     @Override
-    public AladinResponseDto processImages(List<String> imageUrlList) {
-        log.info("이미지 처리 실행");
-        /* 이미지에서 text 추출 */
-        List<String> textList = getImageText(imageUrlList);
+    public int isAuthorized(HttpServletRequest request) {
+        String Authorization = request.getHeader("Authorization");
+        String AuthorizationRefresh = request.getHeader("Authorization-refresh");
+        int memberId = 0;
+        try {
+            memberId = authOpenFeign.connectToAuthServer(Authorization,AuthorizationRefresh);
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            throw new AuthException();
+        }
+        return memberId;
+    }
 
-        if(textList.isEmpty()) return null;
+    @Override
+    @Transactional
+    public BookDto processImages(HttpServletRequest request, List<MultipartFile> imageList) throws IOException {
+
+        BookDto result = new BookDto();
+
+        int memberId = isAuthorized(request);
+        log.info("사용자 ID: {}", memberId);
+
+        log.info("이미지 정보 요청값: {}", imageList);
+        /* S3에 이미지 저장 */
+        List<String> imageUrlList = s3Service.upload(imageList);
+        log.info("S3 이미지 저장 경로 {}", imageUrlList);
+
+        /* 이미지에서 text 추출 */
+        List<String> textList = new ArrayList<>();
+        try {
+            textList = getImageText(imageUrlList);
+        } catch(Exception e) {
+            log.error("글자 추출 시 에러 발생");
+            throw new TAException();
+        }
 
         /* 추출된 글자를 이용하여 책 정보 검색 */
-        AladinResponseDto result = getBookInfo(textList);
+        AladinResponseDto aladinResponse = getBookInfo(textList);
+        if(aladinResponse == null) {
+            result = null;
+        } else {
+            result.setTitle(aladinResponse.getTitle());
+            result.setAuthor(aladinResponse.getAuthor());
+            result.setPublisher(aladinResponse.getPublisher());
+            result.setImage(aladinResponse.getCover());
+
+        }
+
+        /* step1. 책 정보 먼저 저장 */
+        int bookId = saveBookInfo(result, memberId);
+        log.info("책 번호: {}", bookId);
+        result.setBookId(bookId);
+
+        /* step2. 저장된 책의 id를 가지고 이미지 정보를 저장 */
+        saveS3URL(imageUrlList, bookId);
         return result;
     }
 
@@ -114,6 +170,65 @@ public class BusinessServiceImpl implements BusinessService {
                 .block();
         log.info("Search 결과: {}", response);
         return response;
+    }
+
+    @Override
+    @Transactional
+    public BookEntity processPredictBookInfo(HttpServletRequest request, HashMap<String, BookDto> params) throws JsonProcessingException {
+        log.info("책 가격 예측 프로세스 시작");
+        int memberId = isAuthorized(request);
+        log.info("사용자 아이디: {}", memberId);
+        BookDto editedBookInfo = params.get("bookInfo");
+        log.info("수정된 책 정보 요청값: {}", params.get("bookInfo"));
+
+        /* 책ID를 이용하여 S3에 저장된 이미지 리스트 호출  */
+        List<String> imageUrlList = getImageUrlList(editedBookInfo.getBookId());
+        log.info("S3에 저장된 이미지 목록: {}", imageUrlList);
+
+        /* 수정된 책 정보를 이용하여 다시 알라딘 API 검색 */
+        BookEntity certainBookInfo = null;
+        try {
+            certainBookInfo = searchCertainBookInfo(editedBookInfo);
+            log.info("정확한 책 정보: {}", certainBookInfo);
+        } catch(Exception e) {
+            log.error("certainBook 검색 시 에러 발생");
+            throw new SearchException();
+        }
+
+        if(certainBookInfo == null) {
+            /* 책 정보 못찾으면 기존에 저장했던 이미지들 삭제 해야할듯? */
+
+        } else {
+            /* imageUrlList를 이용하여 책의 상태 반환 */
+            String imageStatus = "";
+            try {
+                imageStatus = getImageStatus(imageUrlList);
+                log.info("책의 상태: {}", imageStatus);
+                certainBookInfo.setStatus(imageStatus);
+            } catch(Exception e) {
+                log.error("책의 상태 분류 중 에러 발생");
+                throw new SCException();
+            }
+
+            /* 책의 상태를 이용하여 재평가된 책의 가격 반환 */
+            int bookPrice = 0;
+            try {
+                bookPrice = getBookPrice(certainBookInfo);
+                log.info("재평가된 책의 가격: {}", bookPrice);
+                certainBookInfo.setEstimatedPrice(bookPrice);
+            } catch(Exception e) {
+                log.error("책의 예상 가격 분석 중 에러 발생");
+                throw new AnsException();
+            }
+
+            /* 재검색된 책의 정보 DB에 저장 */
+            certainBookInfo.setBookId(editedBookInfo.getBookId());
+            certainBookInfo.setMemberId(memberId);
+            saveCertainBookInfo(certainBookInfo);
+        }
+
+        log.info("최종 데이터: {}", certainBookInfo);
+        return certainBookInfo;
     }
 
     // sc
