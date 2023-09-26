@@ -15,7 +15,7 @@ function searchBar({ onSearchResults }: SearchProps) {
         }
       })
       .catch(() => {});
-  }, [keyword, SearchResults]);
+  }, [keyword]);
 
   return (
     <div className="w-3/4 h-1/5 m-auto mt-20">

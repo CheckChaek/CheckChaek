@@ -9,15 +9,21 @@ import { HistoryDeleteApirepository } from '../repository/business/historyReposi
 function ProfilePage() {
   const name = useNickname();
   const [search, Setsearch] = useState<Book[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleSearch = (result: Book[]) => {
     Setsearch(result);
+    setCurrentPage(1);
   };
 
   const handleDelete = (bookid: number) => {
     HistoryDeleteApirepository(bookid);
     const updatedSearchResults = search.filter(book => book.id !== bookid);
     Setsearch(updatedSearchResults);
+
+    if (currentPage > Math.ceil(updatedSearchResults.length / 10)) {
+      setCurrentPage(Math.ceil(updatedSearchResults.length / 10));
+    }
   };
 
   return (
@@ -27,7 +33,12 @@ function ProfilePage() {
         <SearchBar onSearchResults={handleSearch} />
       </Card>
       <hr className="mt-5 w-3/5 mx-auto text-FONT-200" />
-      <Library onSearchResults={search} onDelete={handleDelete} />
+      <Library
+        onSearchResults={search}
+        onDelete={handleDelete}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
     </>
   );
 }

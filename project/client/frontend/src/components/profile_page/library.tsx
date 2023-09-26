@@ -1,31 +1,21 @@
 import { useState } from 'react';
 import Card from '../common/card';
-import TrashCan from '../../assets/icons/trashIcon';
 import LeftIcon from '../../assets/icons/lefticon';
 import RightIcon from '../../assets/icons/righticon';
 import RightArrowIcon from '../../assets/icons/rightArrowIcon';
 import { SearchResultProps } from '../../interface/profile';
+import { useModal } from '../modal/modalClass';
+import Modal from '../modal/modal';
 
-function Library({ onSearchResults, onDelete }: SearchResultProps) {
-  const itemsPerPage = 10;
-  const [currentPage, setCurrentPage] = useState(1);
-
+function Library({
+  onSearchResults,
+  currentPage,
+  setCurrentPage,
+  onDelete,
+}: SearchResultProps) {
+  // 페이지네이션
   const totalItems = onSearchResults?.length || 0;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-  const [hoverStates, setHoverStates] = useState<boolean[]>([]);
-
-  const handleMouseEnter = (index: number) => {
-    const newHoverStates = [...hoverStates];
-    newHoverStates[index] = true;
-    setHoverStates(newHoverStates);
-  };
-
-  const handleMouseLeave = (index: number) => {
-    const newHoverStates = [...hoverStates];
-    newHoverStates[index] = false;
-    setHoverStates(newHoverStates);
-  };
+  const totalPages = Math.ceil(totalItems / 10);
 
   const next = () => {
     if (currentPage === totalPages) return;
@@ -50,8 +40,23 @@ function Library({ onSearchResults, onDelete }: SearchResultProps) {
     return pageNumbers;
   };
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+  const startIndex = (currentPage - 1) * 10;
+  const endIndex = Math.min(startIndex + 10, totalItems);
+
+  // 더보기 기능
+  const [bookname, setBookname] = useState<string[]>([]);
+  const handleReadMore = (bookId: number) => {
+    if (!bookname.includes(String(bookId))) {
+      setBookname(prevExpanded => [...prevExpanded, String(bookId)]);
+    } else {
+      setBookname(prevExpanded =>
+        prevExpanded.filter(id => id !== String(bookId)),
+      );
+    }
+  };
+
+  const { modalOpen, openModal, closeModal } = useModal();
+  const modalName = 'detail';
 
   return (
     <Card width="w-3/5" height="min-h-[50vh]">
@@ -62,30 +67,50 @@ function Library({ onSearchResults, onDelete }: SearchResultProps) {
         <div>
           <div className="grid grid-cols-5 gap-2 ">
             {onSearchResults &&
-              onSearchResults.slice(startIndex, endIndex).map((book, index) => (
-                <div
-                  className="m-3"
-                  key={book.id}
-                  onMouseEnter={() => handleMouseEnter(index + startIndex)}
-                  onMouseLeave={() => handleMouseLeave(index + startIndex)}>
-                  <div className="relative min-h-[25vh]">
+              onSearchResults.slice(startIndex, endIndex).map(book => (
+                <div className="m-3" key={book.id}>
+                  <div
+                    className="relative min-h-[25vh]"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => openModal(modalName)}
+                    onKeyPress={event => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        openModal(modalName);
+                      }
+                    }}>
                     <img
                       src={book.url}
-                      alt="asdasd"
+                      alt={book.title}
                       className=" min-h-[25vh]"
                     />
-                    {hoverStates[index + startIndex] && (
-                      <TrashCan
-                        styleString="min-h-[25vh] w-1/3 h-1/4 cursor-pointer"
-                        action={() => {
-                          onDelete(book.id);
-                        }}
-                      />
-                    )}
                   </div>
-                  <p>책 제목 : {book.title}</p>
-                  <p>상태 : {book.status || '상태'}</p>
-                  <p>가격 : {book.price}원</p>
+                  <p>
+                    책 제목 :{' '}
+                    {book.title.length > 10 &&
+                    !bookname.includes(String(book.id)) ? (
+                      <>
+                        {book.title.slice(0, 10)}...
+                        <span
+                          role="button"
+                          tabIndex={0}
+                          className="text-BUTTON2-300"
+                          onClick={() => handleReadMore(book.id)}
+                          onKeyPress={event => {
+                            if (event.key === 'Enter' || event.key === ' ') {
+                              handleReadMore(book.id);
+                            }
+                          }}>
+                          더 보기
+                        </span>
+                      </>
+                    ) : (
+                      book.title
+                    )}
+                  </p>
+
+                  <p>상태 : {book.status || 'Denied'}</p>
+                  <p>가격 : {book.price ? `${book.price}원` : '매입 불가'} </p>
                 </div>
               ))}
           </div>
@@ -127,6 +152,13 @@ function Library({ onSearchResults, onDelete }: SearchResultProps) {
           </div>
         </div>
       )}
+      <Modal
+        closeModal={() => closeModal(modalName)}
+        OpenModal={modalOpen[modalName]}
+        width="w-[400px]"
+        height="h-[680px] ">
+        임의로 넣어봤어요
+      </Modal>
     </Card>
   );
 }
