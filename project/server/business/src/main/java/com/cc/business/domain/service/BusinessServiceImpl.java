@@ -1,5 +1,5 @@
 package com.cc.business.domain.service;// BusinessServiceImpl.java
-import com.amazonaws.services.dynamodbv2.xspec.L;
+import com.amazonaws.services.mq.model.NotFoundException;
 import com.amazonaws.services.mq.model.UnauthorizedException;
 import com.cc.business.domain.dto.*;
 import com.cc.business.domain.entity.BookEntity;
@@ -21,10 +21,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -243,15 +243,23 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public FindHistroyResponseDto findHistory(int memberId) {
+    public FindHistoriesResponseDto findHistories(int memberId) {
         List<BookEntity> books = bookRepository.findAllByMemberId(memberId);
-        return FindHistroyResponseDto.of(books);
+        return FindHistoriesResponseDto.of(books);
     }
 
     @Override
-    public FindHistroyResponseDto searchHistory(int memberId, String keyword) {
+    public FindHistoryResponseDto findHistory(int memberId, Long bookId) {
+        Optional<BookEntity> bookEntityOptional = bookRepository.findById(bookId);
+        BookEntity book  = bookEntityOptional.orElseThrow(()-> new NotFoundException("해당 책이 없습니다."));
+
+        return FindHistoryResponseDto.of(book);
+    }
+
+    @Override
+    public FindHistoriesResponseDto searchHistory(int memberId, String keyword) {
         List<BookEntity> books = bookRepository.searchAllByMemberId(memberId, keyword);
-        return FindHistroyResponseDto.of(books);
+        return FindHistoriesResponseDto.of(books);
     }
 
     public void saveCertainBookInfo(BookEntity certainBookInfo) {
