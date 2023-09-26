@@ -14,7 +14,7 @@ public class BookDetailElement {
     private String publisher;
     private String coverImage;
     private String status;
-    private int originalprice;
+    private int originalPrice;
     private int estimatedPrice;
 
     public static BookDetailElement of (BookEntity bookEntity){
@@ -25,7 +25,7 @@ public class BookDetailElement {
                 .publisher(bookEntity.getPublisher())
                 .coverImage(bookEntity.getCoverImage())
                 .status(bookEntity.getStatus())
-                .originalprice(bookEntity.getOriginalPrice())
+                .originalPrice(bookEntity.getOriginalPrice())
                 .estimatedPrice(bookEntity.getEstimatedPrice())
                 .build();
     }
