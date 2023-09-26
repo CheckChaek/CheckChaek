@@ -76,8 +76,6 @@ public class SearchServiceImpl implements SearchService {
                                 .queryParam("ttbkey", TTBKEY)
                                 .queryParam("Query", request.get("title"))
                                 .queryParam("QueryType", "Title")
-                                .queryParam("QueryType", "Author")
-                                .queryParam("QueryType", "Publisher")
                                 .queryParam("Output", "JS")
                                 .queryParam("Version", "20131101")
                                 .queryParam("MaxResults", 50) // 최대 50개 까지만 검색가능
@@ -90,14 +88,37 @@ public class SearchServiceImpl implements SearchService {
 
         /* 검색결과 리스트 반환 */
         BookDto result = null;
-        if(!data.getItem().isEmpty()) {
+        if(data.getItem() != null) {
             log.info("책 목록: {}", data.getItem());
-            for(BookDto elem : data.getItem()) {
-                if(elem.getAuthor().contains((CharSequence) request.get("author")) && elem.getPublisher().contains((CharSequence) request.get("publisher"))) {
-                    result = elem;
-                    break;
+            if(!request.get("author").equals("") && request.get("publisher").equals("")) { // 작가 value만 존재할 경우
+                log.info("작가만 존재");
+                for(BookDto elem : data.getItem()) {
+                    if(elem.getAuthor().contains((CharSequence) request.get("author"))) {
+                        result = elem;
+                        break;
+                    }
                 }
+            } else if(request.get("author").equals("") && !request.get("publisher").equals("")) { // 출판사 value만 있을 경우
+                log.info("출판사만 존재");
+                for(BookDto elem : data.getItem()) {
+                    if(elem.getPublisher().contains((CharSequence) request.get("publisher"))) {
+                        result = elem;
+                        break;
+                    }
+                }
+            } else if(!request.get("author").equals("") && !request.get("publisher").equals("")) { // 작가, 출판사 value가 있을 경우
+                log.info("작가, 출판사 둘 다 존재함");
+                for(BookDto elem : data.getItem()) {
+                    if(elem.getAuthor().contains((CharSequence) request.get("author")) && elem.getPublisher().contains((CharSequence) request.get("publisher"))) {
+                        result = elem;
+                        break;
+                    }
+                }
+            } else { // 작가, 출판사 value 둘 다 없을 경우
+                log.info("작가, 출판사 둘 다 존재하지 않음");
+                result = data.getItem().get(0);
             }
+
         }
         log.info("검색결과: {}", result);
         return result;
