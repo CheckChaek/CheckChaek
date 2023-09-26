@@ -9,10 +9,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 public interface BusinessService {
-    // 이미지 프로세스 전체를 담당
+    // 회원 인증
+    int isAuthorized(HttpServletRequest request);
+
+    // 이미지 프로세스(TA, SEARCH) 전체를 담당
     BookDto processImages(HttpServletRequest request, List<MultipartFile> imageList) throws IOException;
 
     // TA 서버에 이미지 정보를 전송하고
@@ -20,6 +24,9 @@ public interface BusinessService {
 
     // search 서버에 텍스트를 입력하면 검색 결과를 반환
     AladinResponseDto getBookInfo(List<String> imageList);
+
+    // 책 예상 가격 프로세스(SC, ANS) 전체를 담당
+    BookEntity processPredictBookInfo(HttpServletRequest request, HashMap<String, BookDto> params) throws JsonProcessingException;
 
     // sc 서버에 이미지 정보를 전송하면 상태 반환
     String getImageStatus(List<String> imageUrlList) throws JsonProcessingException;

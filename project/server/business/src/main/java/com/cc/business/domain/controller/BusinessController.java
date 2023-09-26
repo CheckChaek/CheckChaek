@@ -31,10 +31,13 @@ import java.util.NoSuchElementException;
 @Slf4j
 @Tag(name = "예제 API", description = "Swagger 테스트용 API")
 @RestController
-@RequiredArgsConstructor
 public class BusinessController {
 
     private final BusinessService businessService;
+
+    public BusinessController(BusinessService businessService) {
+        this.businessService = businessService;
+    }
 
     @GetMapping("/test")
     public int test() throws Exception {
@@ -48,9 +51,12 @@ public class BusinessController {
         log.info("이미지 검색 컨트롤러 호출");
         BookDto bookInfo = businessService.processImages(request, imageList);
         String msg = "";
+        HttpStatus status = null;
         if(bookInfo == null) {
+            status = HttpStatus.NOT_FOUND;
             msg = "검색 결과가 없습니다.";
         } else {
+            status = HttpStatus.OK;
             msg = "이미지 검색 성공";
         }
 
@@ -58,76 +64,51 @@ public class BusinessController {
         data.put("bookInfo", bookInfo);
         log.info("최종 데이터: {}", data);
 
-        EnvelopeResponse<HashMap<String, Object>> result = new EnvelopeResponse(200, msg, data);
+        EnvelopeResponse<HashMap<String, Object>> result = new EnvelopeResponse(status.value(), msg, data);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-//    @PostMapping("/bookpredict")
-//    public ResponseEntity<EnvelopeResponse<HashMap<String, BookEntity>>> predictBookInfo(HttpServletRequest request, HttpServletResponse response, @RequestBody HashMap<String, BookDto> params) throws Exception {
-//
-//        int memberId = isAuthorized(request, response);
-//        log.info("사용자 아이디: {}", memberId);
-//        log.info("수정된 책 정보 요청값: {}", params.get("bookInfo"));
-//        BookDto editedBookInfo = params.get("bookInfo");
-//
-//        /* 수정된 책 정보를 이용하여 다시 알라딘 API 검색 */
-//        BookEntity certainBookInfo = businessService.searchCertainBookInfo(editedBookInfo);
-//        log.info("정확한 책 정보: {}", certainBookInfo);
-//        String msg;
-//
-//        /* 책ID를 이용하여 S3에 저장된 이미지 리스트 호출  */
-//        List<String> imageUrlList = businessService.getImageUrlList(editedBookInfo.getBookId());
-//        log.info("S3에 저장된 이미지 목록: {}", imageUrlList);
-//
-//        if(certainBookInfo == null) {
-//            msg = "검색한 책 정보가 없습니다.";
-//            /* 책 정보 못찾으면 기존에 저장했던 이미지들 삭제 해야할듯? */
-//
-//        } else {
-//            /* imageUrlList를 이용하여 책의 상태 반환 */
-//            String imageStatus = businessService.getImageStatus(imageUrlList);
-//            log.info("책의 상태: {}", imageStatus);
-//            certainBookInfo.setStatus(imageStatus);
-//
-//            /* 책의 상태를 이용하여 재평가된 책의 가격 반환 */
-//            int bookPrice = businessService.getBookPrice(certainBookInfo);
-//            log.info("재평가된 책의 가격: {}", bookPrice);
-//            certainBookInfo.setEstimatedPrice(bookPrice);
-//
-//            /* 재검색된 책의 정보 DB에 저장 */
-//            certainBookInfo.setBookId(editedBookInfo.getBookId());
-//            certainBookInfo.setMemberId(memberId);
-//            businessService.saveCertainBookInfo(certainBookInfo);
-//
-//            log.info("최종 데이터: {}", certainBookInfo);
-//            msg = "책 검색에 성공했습니다.";
-//        }
-//
-//        HashMap<String, BookEntity> data = new HashMap<>();
-//        data.put("predictBookInfo", certainBookInfo);
-//
-//        EnvelopeResponse result = new EnvelopeResponse(200, msg, data);
-//        return new ResponseEntity<>(result, HttpStatus.OK);
-//    }
+    @PostMapping("/bookpredict")
+    public ResponseEntity<EnvelopeResponse<HashMap<String, BookEntity>>> predictBookInfo(HttpServletRequest request, @RequestBody HashMap<String, BookDto> params) throws Exception {
 
-//    @GetMapping("/history/all")
-//    public ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>> findHistrory(HttpServletRequest request){
-//
-//        int memberId = isAuthorized(request);
-//        return new ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "회원검색이력목록", businessService.findHistory(memberId)), HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/history/search")
-//    public ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>> SearchHistory(HttpServletRequest request, @RequestParam String keyword){
-//
-//        int memberId = isAuthorized(request);
-//        return new ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "회원검색이력목록", businessService.searchHistory(memberId, keyword)), HttpStatus.OK);
-//    };
-//
-//    @DeleteMapping("/history/{bookId}")
-//    public ResponseEntity<EnvelopeResponse<Long>> DeleteHistory(HttpServletRequest request, @PathVariable Long bookId){
-//
-//        int memberId = isAuthorized(request);
-//        return new ResponseEntity<EnvelopeResponse<Long>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "삭제완료", businessService.deleteHistory(memberId, bookId)), HttpStatus.OK);
-//    }
+        BookEntity certainBookInfo = businessService.processPredictBookInfo(request, params);
+        log.info("정확한 책 정보: {}", certainBookInfo);
+
+        String msg = "";
+        HttpStatus status = null;
+        if(certainBookInfo == null) {
+            status = HttpStatus.NOT_FOUND;
+            msg = "검색 결과가 없습니다.";
+        } else {
+            status = HttpStatus.OK;
+            msg = "책 예상 가격 분석 성공";
+        }
+
+        HashMap<String, BookEntity> data = new HashMap<>();
+        data.put("predictBookInfo", certainBookInfo);
+
+        EnvelopeResponse result = new EnvelopeResponse(status.value(), msg, data);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/history/all")
+    public ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>> findHistrory(HttpServletRequest request){
+
+        int memberId = businessService.isAuthorized(request);
+        return new ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "회원검색이력목록", businessService.findHistory(memberId)), HttpStatus.OK);
+    }
+
+    @GetMapping("/history/search")
+    public ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>> SearchHistory(HttpServletRequest request, @RequestParam String keyword){
+
+        int memberId = businessService.isAuthorized(request);
+        return new ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "회원검색이력목록", businessService.searchHistory(memberId, keyword)), HttpStatus.OK);
+    };
+
+    @DeleteMapping("/history/{bookId}")
+    public ResponseEntity<EnvelopeResponse<Long>> DeleteHistory(HttpServletRequest request, @PathVariable Long bookId){
+
+        int memberId = businessService.isAuthorized(request);
+        return new ResponseEntity<EnvelopeResponse<Long>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "삭제완료", businessService.deleteHistory(memberId, bookId)), HttpStatus.OK);
+    }
 }

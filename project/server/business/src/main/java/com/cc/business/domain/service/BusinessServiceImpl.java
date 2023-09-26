@@ -7,7 +7,7 @@ import com.cc.business.domain.entity.BookEntity;
 import com.cc.business.domain.entity.BookImageEntity;
 import com.cc.business.domain.repository.BookImageRepository;
 import com.cc.business.domain.repository.BookRepository;
-import com.cc.business.global.exception.AuthException;
+import com.cc.business.global.exception.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -64,7 +64,8 @@ public class BusinessServiceImpl implements BusinessService {
         this.s3Service = s3Service;
     }
 
-    private int isAuthorized(HttpServletRequest request) {
+    @Override
+    public int isAuthorized(HttpServletRequest request) {
         String Authorization = request.getHeader("Authorization");
         String AuthorizationRefresh = request.getHeader("Authorization-refresh");
         int memberId = 0;
@@ -92,7 +93,13 @@ public class BusinessServiceImpl implements BusinessService {
         log.info("S3 이미지 저장 경로 {}", imageUrlList);
 
         /* 이미지에서 text 추출 */
-        List<String> textList = getImageText(imageUrlList);
+        List<String> textList = new ArrayList<>();
+        try {
+            textList = getImageText(imageUrlList);
+        } catch(Exception e) {
+            log.error("글자 추출 시 에러 발생");
+            throw new TAException();
+        }
 
         /* 추출된 글자를 이용하여 책 정보 검색 */
         AladinResponseDto aladinResponse = getBookInfo(textList);
@@ -164,6 +171,65 @@ public class BusinessServiceImpl implements BusinessService {
                 .block();
         log.info("Search 결과: {}", response);
         return response;
+    }
+
+    @Override
+    @Transactional
+    public BookEntity processPredictBookInfo(HttpServletRequest request, HashMap<String, BookDto> params) throws JsonProcessingException {
+        log.info("책 가격 예측 프로세스 시작");
+        int memberId = isAuthorized(request);
+        log.info("사용자 아이디: {}", memberId);
+        BookDto editedBookInfo = params.get("bookInfo");
+        log.info("수정된 책 정보 요청값: {}", params.get("bookInfo"));
+
+        /* 책ID를 이용하여 S3에 저장된 이미지 리스트 호출  */
+        List<String> imageUrlList = getImageUrlList(editedBookInfo.getBookId());
+        log.info("S3에 저장된 이미지 목록: {}", imageUrlList);
+
+        /* 수정된 책 정보를 이용하여 다시 알라딘 API 검색 */
+        BookEntity certainBookInfo = null;
+        try {
+            certainBookInfo = searchCertainBookInfo(editedBookInfo);
+            log.info("정확한 책 정보: {}", certainBookInfo);
+        } catch(Exception e) {
+            log.error("certainBook 검색 시 에러 발생");
+            throw new SearchException();
+        }
+
+        if(certainBookInfo == null) {
+            /* 책 정보 못찾으면 기존에 저장했던 이미지들 삭제 해야할듯? */
+
+        } else {
+            /* imageUrlList를 이용하여 책의 상태 반환 */
+            String imageStatus = "";
+            try {
+                imageStatus = getImageStatus(imageUrlList);
+                log.info("책의 상태: {}", imageStatus);
+                certainBookInfo.setStatus(imageStatus);
+            } catch(Exception e) {
+                log.error("책의 상태 분류 중 에러 발생");
+                throw new SCException();
+            }
+
+            /* 책의 상태를 이용하여 재평가된 책의 가격 반환 */
+            int bookPrice = 0;
+            try {
+                bookPrice = getBookPrice(certainBookInfo);
+                log.info("재평가된 책의 가격: {}", bookPrice);
+                certainBookInfo.setEstimatedPrice(bookPrice);
+            } catch(Exception e) {
+                log.error("책의 예상 가격 분석 중 에러 발생");
+                throw new AnsException();
+            }
+
+            /* 재검색된 책의 정보 DB에 저장 */
+            certainBookInfo.setBookId(editedBookInfo.getBookId());
+            certainBookInfo.setMemberId(memberId);
+            saveCertainBookInfo(certainBookInfo);
+        }
+
+        log.info("최종 데이터: {}", certainBookInfo);
+        return certainBookInfo;
     }
 
     // sc
