@@ -34,3 +34,22 @@ export interface HistoriesResponse {
   message: string;
   data: { history: Book[] };
 }
+
+export interface BooksInfo {
+  bookId: number;
+  title: string;
+  author: string;
+  publisher: string;
+  coverImage: string;
+  status: string;
+  originalPrice: number;
+  estimatedPrice: number;
+}
+
+export interface DetailResponse {
+  code: string;
+  message: string;
+  data: {
+    bookInfo: BooksInfo;
+  };
+}

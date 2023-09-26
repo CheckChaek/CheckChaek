@@ -6,7 +6,9 @@ import RightArrowIcon from '../../assets/icons/rightArrowIcon';
 import { SearchResultProps } from '../../interface/profile';
 import { useModal } from '../modal/modalClass';
 import Modal from '../modal/modal';
-import { Book } from '../../interface/api';
+import { BooksInfo } from '../../interface/api';
+import PredictResult from '../predict_result/predictResult';
+import { HistoryDetailApirepository } from '../../repository/business/historyRepository';
 
 function Library({
   onSearchResults,
@@ -59,11 +61,16 @@ function Library({
   // 모달 관련
   const { modalOpen, openModal, closeModal } = useModal();
   const modalName = 'detail';
-  const [selectBook, SetSelectBook] = useState<Book>();
+  const [selectBook, SetSelectBook] = useState<BooksInfo>();
 
-  const handleContent = (content: Book) => {
+  const handleContent = async (bookid: number) => {
     openModal(modalName);
-    SetSelectBook(content);
+    try {
+      const data = (await HistoryDetailApirepository(bookid)) as BooksInfo;
+      SetSelectBook(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -81,10 +88,13 @@ function Library({
                     className="relative min-h-[25vh]"
                     role="button"
                     tabIndex={0}
-                    onClick={() => handleContent(book)}
+                    onClick={() => {
+                      (async () => {
+                        await handleContent(book.id);
+                      })();
+                    }}
                     onKeyPress={event => {
                       if (event.key === 'Enter' || event.key === ' ') {
-                        SetSelectBook(book);
                         openModal(modalName);
                       }
                     }}>
@@ -165,17 +175,9 @@ function Library({
       <Modal
         closeModal={() => closeModal(modalName)}
         OpenModal={modalOpen[modalName]}
-        width="w-[400px]"
-        height="h-[680px] ">
-        그럴리가있냐
-        {selectBook && (
-          <>
-            <p>{selectBook.id}</p>
-            <p>{selectBook.price}</p>
-            <p>{selectBook.status}</p>
-            <p>{selectBook.title}</p>
-          </>
-        )}
+        width="w-[60%] bg-MAIN-50"
+        height="h-full ">
+        {selectBook && <PredictResult predictBookInfo={selectBook} />}
       </Modal>
     </Card>
   );

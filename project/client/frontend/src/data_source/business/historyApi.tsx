@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { APIResponse, HistoriesResponse } from '../../interface/api';
+import { HistoriesResponse, DetailResponse } from '../../interface/api';
 import { BUSINESS_URI } from '../apiInfo';
 
 const historyUri = `${BUSINESS_URI}/history`;
@@ -24,26 +24,26 @@ function HistoryAllApi(token: string) {
   return null;
 }
 
-function HistoryDetailApi(token: string, bookId: number) {
+async function HistoryDetailApi(token: string, bookId: number) {
   const url = `${historyUri}/${bookId}`;
   if (token) {
-    axios
-      .get(url, {
+    try {
+      const response = await axios.get<DetailResponse>(url, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-      })
-      .then(res => {
-        if (res.status === 200) {
-          return res.data as APIResponse;
-        }
-        return res.statusText;
-      })
-      .catch(() => {});
+      });
+      if (response.status === 200) {
+        return response.data.data.bookInfo;
+      }
+      return response.statusText;
+    } catch {
+      window.location.href = '/error';
+    }
   }
-  return null;
 }
+
 async function HistorySearchApi(token: string, keyword: string) {
   const url = `${historyUri}/search?keyword=${encodeURIComponent(keyword)}`;
   if (token) {
