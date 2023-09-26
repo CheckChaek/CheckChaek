@@ -20,7 +20,7 @@ function Navbar() {
   };
   return (
     <>
-      <nav className="flex justify-around items-center py-4 px-6 text-xl shadow-md w-screen">
+      <nav className="flex justify-around items-center py-4 px-6 text-xl shadow-md w-full">
         <a href="/">
           <img
             src={CheckChaek}
