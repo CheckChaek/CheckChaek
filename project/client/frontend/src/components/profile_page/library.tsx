@@ -1,31 +1,25 @@
 import { useState } from 'react';
 import Card from '../common/card';
-import TrashCan from '../../assets/icons/trashIcon';
 import LeftIcon from '../../assets/icons/lefticon';
 import RightIcon from '../../assets/icons/righticon';
 import RightArrowIcon from '../../assets/icons/rightArrowIcon';
 import { SearchResultProps } from '../../interface/profile';
+import { useModal } from '../modal/modalClass';
+import Modal from '../modal/modal';
+import { BooksInfo } from '../../interface/api';
+import PredictResult from '../predict_result/predictResult';
+import { HistoryDetailApirepository } from '../../repository/business/historyRepository';
+import CloseIcon from '../../assets/icons/closeIcon';
 
-function Library({ onSearchResults, onDelete }: SearchResultProps) {
-  const itemsPerPage = 10;
-  const [currentPage, setCurrentPage] = useState(1);
-
+function Library({
+  onSearchResults,
+  currentPage,
+  setCurrentPage,
+  onDelete,
+}: SearchResultProps) {
+  // 페이지네이션
   const totalItems = onSearchResults?.length || 0;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-  const [hoverStates, setHoverStates] = useState<boolean[]>([]);
-
-  const handleMouseEnter = (index: number) => {
-    const newHoverStates = [...hoverStates];
-    newHoverStates[index] = true;
-    setHoverStates(newHoverStates);
-  };
-
-  const handleMouseLeave = (index: number) => {
-    const newHoverStates = [...hoverStates];
-    newHoverStates[index] = false;
-    setHoverStates(newHoverStates);
-  };
+  const totalPages = Math.ceil(totalItems / 10);
 
   const next = () => {
     if (currentPage === totalPages) return;
@@ -50,8 +44,40 @@ function Library({ onSearchResults, onDelete }: SearchResultProps) {
     return pageNumbers;
   };
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+  const startIndex = (currentPage - 1) * 10;
+  const endIndex = Math.min(startIndex + 10, totalItems);
+
+  // 더보기 기능
+  const [bookname, setBookname] = useState<string[]>([]);
+  const handleReadMore = (bookId: number) => {
+    if (!bookname.includes(String(bookId))) {
+      setBookname(prevExpanded => [...prevExpanded, String(bookId)]);
+    } else {
+      setBookname(prevExpanded =>
+        prevExpanded.filter(id => id !== String(bookId)),
+      );
+    }
+  };
+
+  // 모달 관련
+  const { modalOpen, openModal, closeModal } = useModal();
+  const modalName = 'detail';
+  const [selectBook, SetSelectBook] = useState<BooksInfo>();
+
+  const handleContent = async (bookid: number) => {
+    openModal(modalName);
+    try {
+      const data = (await HistoryDetailApirepository(bookid)) as BooksInfo;
+      SetSelectBook(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDelete = (id: number) => {
+    onDelete(id);
+    closeModal(modalName);
+  };
 
   return (
     <Card width="w-3/5" height="min-h-[50vh]">
@@ -62,30 +88,54 @@ function Library({ onSearchResults, onDelete }: SearchResultProps) {
         <div>
           <div className="grid grid-cols-5 gap-2 ">
             {onSearchResults &&
-              onSearchResults.slice(startIndex, endIndex).map((book, index) => (
-                <div
-                  className="m-3"
-                  key={book.id}
-                  onMouseEnter={() => handleMouseEnter(index + startIndex)}
-                  onMouseLeave={() => handleMouseLeave(index + startIndex)}>
-                  <div className="relative min-h-[25vh]">
+              onSearchResults.slice(startIndex, endIndex).map(book => (
+                <div className="m-3" key={book.id}>
+                  <div
+                    className="relative min-h-[25vh]"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => {
+                      (async () => {
+                        await handleContent(book.id);
+                      })();
+                    }}
+                    onKeyPress={event => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        openModal(modalName);
+                      }
+                    }}>
                     <img
                       src={book.url}
-                      alt="asdasd"
+                      alt={book.title}
                       className=" min-h-[25vh]"
                     />
-                    {hoverStates[index + startIndex] && (
-                      <TrashCan
-                        styleString="min-h-[25vh] w-1/3 h-1/4 cursor-pointer"
-                        action={() => {
-                          onDelete(book.id);
-                        }}
-                      />
-                    )}
                   </div>
-                  <p>책 제목 : {book.title}</p>
-                  <p>상태 : {book.status || '상태'}</p>
-                  <p>가격 : {book.price}원</p>
+                  <p>
+                    책 제목 :{' '}
+                    {book.title.length > 10 &&
+                    !bookname.includes(String(book.id)) ? (
+                      <>
+                        {book.title.slice(0, 10)}...
+                        <span
+                          role="button"
+                          tabIndex={0}
+                          className="text-BUTTON2-300"
+                          onClick={() => handleReadMore(book.id)}
+                          onKeyPress={event => {
+                            if (event.key === 'Enter' || event.key === ' ') {
+                              handleReadMore(book.id);
+                            }
+                          }}>
+                          더 보기
+                        </span>
+                      </>
+                    ) : (
+                      book.title
+                    )}
+                  </p>
+
+                  <p>상태 : {book.status || '매입불가'}</p>
+                  <p> {book.price ? `가격 : ${book.price}원` : ''} </p>
                 </div>
               ))}
           </div>
@@ -127,6 +177,32 @@ function Library({ onSearchResults, onDelete }: SearchResultProps) {
           </div>
         </div>
       )}
+
+      <Modal
+        closeModal={() => closeModal(modalName)}
+        OpenModal={modalOpen[modalName]}
+        width="w-[60%] bg-MAIN-50"
+        height="h-full ">
+        <CloseIcon
+          styleString="absolute right-3 cursor-pointer top-3 w-10 h-10"
+          clickMethod={() => closeModal(modalName)}
+          index={1}
+        />
+        {selectBook && selectBook.bookId && (
+          <PredictResult
+            predictBookInfo={selectBook}
+            buttonInfo={{
+              height: 'h-[3rem]',
+              width: 'w-[10rem]',
+              defaultColor: 'bg-BUTTON1-500',
+              selectedColor: 'bg-BUTTON1-900',
+              fontColor: 'text-FONT-50 text-lg',
+              children: '삭제하기',
+              action: () => handleDelete(selectBook.bookId),
+            }}
+          />
+        )}
+      </Modal>
     </Card>
   );
 }

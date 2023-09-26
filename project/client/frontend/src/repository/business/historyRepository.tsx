@@ -13,11 +13,12 @@ export function HistoryAllapirepository(): void {
   }
 }
 
-export function HistoryDetailApirepository(bookId: number): void {
+export function HistoryDetailApirepository(bookId: number) {
   const accessToken = useAccessToken();
   if (accessToken) {
-    HistoryDetailApi(accessToken, bookId);
+    return HistoryDetailApi(accessToken, bookId);
   }
+  return Promise.reject(new Error('No access token'));
 }
 
 export function HistorySearchApirepository(keyword: string) {
