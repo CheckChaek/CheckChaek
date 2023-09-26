@@ -8,13 +8,13 @@ import java.util.List;
 
 @Getter
 @Builder
-public class FindHistroyResponseDto {
+public class FindHistoriesResponseDto {
 
     private List<BookElement> history;
 
-    public static FindHistroyResponseDto of(List<BookEntity> books){
+    public static FindHistoriesResponseDto of(List<BookEntity> books){
 
-        return FindHistroyResponseDto.builder()
+        return FindHistoriesResponseDto.builder()
                 .history(books.stream()
                         .map(BookElement::of).toList())
                 .build();
