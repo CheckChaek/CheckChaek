@@ -9,6 +9,7 @@ import Modal from '../modal/modal';
 import { BooksInfo } from '../../interface/api';
 import PredictResult from '../predict_result/predictResult';
 import { HistoryDetailApirepository } from '../../repository/business/historyRepository';
+import CloseIcon from '../../assets/icons/closeIcon';
 
 function Library({
   onSearchResults,
@@ -71,6 +72,11 @@ function Library({
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleDelete = (id: number) => {
+    onDelete(id);
+    closeModal(modalName);
   };
 
   return (
@@ -177,7 +183,25 @@ function Library({
         OpenModal={modalOpen[modalName]}
         width="w-[60%] bg-MAIN-50"
         height="h-full ">
-        {selectBook && <PredictResult predictBookInfo={selectBook} />}
+        <CloseIcon
+          styleString="absolute right-3 cursor-pointer top-3 w-10 h-10"
+          clickMethod={() => closeModal(modalName)}
+          index={1}
+        />
+        {selectBook && selectBook.bookId && (
+          <PredictResult
+            predictBookInfo={selectBook}
+            buttonInfo={{
+              height: 'h-[3rem]',
+              width: 'w-[10rem]',
+              defaultColor: 'bg-BUTTON1-500',
+              selectedColor: 'bg-BUTTON1-900',
+              fontColor: 'text-FONT-50 text-lg',
+              children: '삭제하기',
+              action: () => handleDelete(selectBook.bookId),
+            }}
+          />
+        )}
       </Modal>
     </Card>
   );
