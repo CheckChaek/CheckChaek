@@ -22,8 +22,8 @@ public class ExceptionControllerAdvice {
     }
 
     /* TA 에러 */
-    @ExceptionHandler(value = {SearchException.class})
-    public ResponseEntity<EnvelopeResponse<HashMap<String, Object>>> TAErrorHandler(SearchException e) {
+    @ExceptionHandler(value = {TAException.class})
+    public ResponseEntity<EnvelopeResponse<HashMap<String, Object>>> TAErrorHandler(TAException e) {
         log.error("TA API 에러 발생");
         EnvelopeResponse result = new EnvelopeResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
 
@@ -40,8 +40,8 @@ public class ExceptionControllerAdvice {
     }
 
     /* SC 에러 */
-    @ExceptionHandler(value = {SearchException.class})
-    public ResponseEntity<EnvelopeResponse<HashMap<String, Object>>> SCErrorHandler(SearchException e) {
+    @ExceptionHandler(value = {SCException.class})
+    public ResponseEntity<EnvelopeResponse<HashMap<String, Object>>> SCErrorHandler(SCException e) {
         log.error("SC API 에러 발생");
         EnvelopeResponse result = new EnvelopeResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
 
@@ -49,4 +49,11 @@ public class ExceptionControllerAdvice {
     }
 
     /* ANS 에러 */
+    @ExceptionHandler(value = {AnsException.class})
+    public ResponseEntity<EnvelopeResponse<HashMap<String, Object>>> AnsErrorHandler(AnsException e) {
+        log.error("ANS API 에러 발생");
+        EnvelopeResponse result = new EnvelopeResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+
+        return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

@@ -1,7 +1,8 @@
 package com.cc.business.domain.service;// BusinessService.java
 import com.cc.business.domain.dto.AladinResponseDto;
 import com.cc.business.domain.dto.BookDto;
-import com.cc.business.domain.dto.FindHistroyResponseDto;
+import com.cc.business.domain.dto.FindHistoriesResponseDto;
+import com.cc.business.domain.dto.FindHistoryResponseDto;
 import com.cc.business.domain.entity.BookEntity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,9 +47,10 @@ public interface BusinessService {
     // 정확한 책 제목, 저자, 출판사를 이용하여 알라딘 검색 API 호출
     BookEntity searchCertainBookInfo(BookDto bookInfo);
 
-    FindHistroyResponseDto findHistory(int memberId);
+    FindHistoriesResponseDto findHistories(int memberId);
+    FindHistoryResponseDto findHistory(int memberId, Long bookId);
 
-    FindHistroyResponseDto searchHistory(int memberId, String keyword);
+    FindHistoriesResponseDto searchHistory(int memberId, String keyword);
 
     // 정확하게 검색된 책의 정보를 DB에 저장
     void saveCertainBookInfo(BookEntity certainBookInfo);

@@ -1,22 +1,14 @@
 package com.cc.business.domain.controller;// BusinessController.java
-import com.cc.business.domain.controller.openfeign.AuthOpenFeign;
-import com.cc.business.domain.dto.AladinResponseDto;
 import com.cc.business.domain.dto.BookDto;
-import com.cc.business.domain.dto.FindHistroyResponseDto;
+import com.cc.business.domain.dto.FindHistoriesResponseDto;
+import com.cc.business.domain.dto.FindHistoryResponseDto;
 import com.cc.business.domain.entity.BookEntity;
 import com.cc.business.domain.service.BusinessService;
-import com.cc.business.domain.service.ImageService;
-import com.cc.business.domain.service.S3Service;
 import com.cc.business.global.common.response.EnvelopeResponse;
 
-import com.cc.business.global.exception.AuthException;
-import feign.FeignException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import jakarta.servlet.http.HttpServletRequest;;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Slf4j
 @Tag(name = "예제 API", description = "Swagger 테스트용 API")
@@ -92,18 +83,24 @@ public class BusinessController {
     }
 
     @GetMapping("/history/all")
-    public ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>> findHistrory(HttpServletRequest request){
+    public ResponseEntity<EnvelopeResponse<FindHistoriesResponseDto>> findHistrories(HttpServletRequest request){
 
         int memberId = businessService.isAuthorized(request);
-        return new ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "회원검색이력목록", businessService.findHistory(memberId)), HttpStatus.OK);
+        return new ResponseEntity<EnvelopeResponse<FindHistoriesResponseDto>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "회원검색이력목록", businessService.findHistories(memberId)), HttpStatus.OK);
     }
 
     @GetMapping("/history/search")
-    public ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>> SearchHistory(HttpServletRequest request, @RequestParam String keyword){
+    public ResponseEntity<EnvelopeResponse<FindHistoriesResponseDto>> SearchHistory(HttpServletRequest request, @RequestParam String keyword){
 
         int memberId = businessService.isAuthorized(request);
-        return new ResponseEntity<EnvelopeResponse<FindHistroyResponseDto>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "회원검색이력목록", businessService.searchHistory(memberId, keyword)), HttpStatus.OK);
+        return new ResponseEntity<EnvelopeResponse<FindHistoriesResponseDto>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "회원검색이력목록", businessService.searchHistory(memberId, keyword)), HttpStatus.OK);
     };
+
+    @GetMapping("/history/{bookId}")
+    public ResponseEntity<EnvelopeResponse<FindHistoryResponseDto>> findHistory(HttpServletRequest request, @PathVariable Long bookId){
+        int memberId = businessService.isAuthorized(request);
+        return new ResponseEntity<EnvelopeResponse<FindHistoryResponseDto>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "책 정보 검색 완료", businessService.findHistory(memberId, bookId)), HttpStatus.OK);
+    }
 
     @DeleteMapping("/history/{bookId}")
     public ResponseEntity<EnvelopeResponse<Long>> DeleteHistory(HttpServletRequest request, @PathVariable Long bookId){
