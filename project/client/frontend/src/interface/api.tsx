@@ -1,7 +1,7 @@
 import { BookInfo, PredictBookInfo, ScoreInfo } from './predictResult';
 
 export interface AuthRequset {
-  dispatch: () => void;
+  dispatch: Function;
 }
 
 // predict
