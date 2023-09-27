@@ -128,12 +128,10 @@ function ResultPage() {
 
     case 2:
       return (
-        <div className="PredictResult">
-          <PredictResult
-            predictBookInfo={predictBookInfo}
-            buttonInfo={buttonInfo}
-          />
-        </div>
+        <PredictResult
+          predictBookInfo={predictBookInfo}
+          buttonInfo={buttonInfo}
+        />
       );
 
     default:

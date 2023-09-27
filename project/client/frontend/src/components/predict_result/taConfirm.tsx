@@ -1,25 +1,19 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 
+import Modal from '../modal/modal';
+import AlertContents from '../modal/alertContents';
 import Card from '../common/card';
 import PredictBtn from '../common/predictBtn';
 import { BookInfo } from '../../interface/predictResult';
+import { useModal } from '../modal/modalClass';
 
 function TaConfirm(props: {
   bookInfo: BookInfo;
-  // bookImage: string | undefined;
   pageHandleRegister: (num: number) => void;
-  // setPageState: Dispatch<SetStateAction<number>>;
   setBookInfo: Dispatch<SetStateAction<BookInfo>>;
   setIsChecked: Dispatch<SetStateAction<boolean>>;
 }) {
-  const {
-    bookInfo,
-    // bookImage,
-    pageHandleRegister,
-    // setPageState,
-    setBookInfo,
-    setIsChecked,
-  } = props;
+  const { bookInfo, pageHandleRegister, setBookInfo, setIsChecked } = props;
   const book =
     bookInfo === undefined
       ? {
@@ -33,17 +27,16 @@ function TaConfirm(props: {
   const [bookTitle, setBookTitle] = useState(book.title);
   const [bookAuthor, setBookAuthor] = useState(book.author);
   const [bookPublisher, setBookPublisher] = useState(book.publisher);
-
-  // const pageHandleRegister = (status: number) => {
-  //   if (status >= 0 && status < 3) {
-  //     setPageState(status);
-  //   }
-  // };
+  const { openModal, closeModal, modalOpen } = useModal();
+  const modalName = 'titleAlert';
 
   const bookTitlehandler = (newTitle: React.ChangeEvent<HTMLInputElement>) => {
-    if (newTitle.target.value) {
-      setBookTitle(newTitle.target.value);
-    }
+    // if (newTitle.target.value) {
+    console.log(newTitle.target.value);
+    setBookTitle(newTitle.target.value);
+    // } else {
+    //   openModal(modalName);
+    // }
   };
   const bookAuthorhandler = (
     newAuthor: React.ChangeEvent<HTMLInputElement>,
@@ -124,7 +117,6 @@ function TaConfirm(props: {
                     onChange={bookPublisherhandler}
                   />
                 </label>
-                {/* </div> */}
                 <div className="RestartBtn flex justify-center ">
                   <PredictBtn
                     height="h-[3rem] absolute bottom-3"
@@ -133,9 +125,13 @@ function TaConfirm(props: {
                     selectedColor="bg-BUTTON1-900"
                     fontColor="text-FONT-50 text-lg"
                     action={() => {
-                      bookInfoHandler();
-                      pageHandleRegister(0);
-                      isCheckedHandler();
+                      if (bookTitle) {
+                        bookInfoHandler();
+                        pageHandleRegister(0);
+                        isCheckedHandler();
+                      } else {
+                        openModal(modalName);
+                      }
                     }}>
                     계속하기
                   </PredictBtn>
@@ -145,6 +141,16 @@ function TaConfirm(props: {
           </div>
         </div>
       </Card>
+      <Modal
+        closeModal={() => closeModal(modalName)}
+        OpenModal={modalOpen[modalName]}
+        width="w-[400px]"
+        height="h-60">
+        <AlertContents
+          content="책 제목은 필수입니다."
+          okAction={() => closeModal(modalName)}
+        />
+      </Modal>
     </div>
   );
 }
