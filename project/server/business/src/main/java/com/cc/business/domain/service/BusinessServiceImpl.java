@@ -129,7 +129,8 @@ public class BusinessServiceImpl implements BusinessService {
         // webClient 기본 설정
         WebClient webClient = WebClient
                 .builder()
-                .baseUrl(SERVER_URL + ":" + TA_PORT)
+//                .baseUrl(SERVER_URL + ":" + TA_PORT)
+                .baseUrl(SERVER_URL)
                 .build();
 
         HashMap<String, String> request = new HashMap<>();
@@ -234,7 +235,8 @@ public class BusinessServiceImpl implements BusinessService {
     // sc
     @Override
     public String getImageStatus(List<String> imageUrlList) throws JsonProcessingException {
-        String url = "http://j9a606.p.ssafy.io:8085/sc/bookstatus";
+//        String url = "http://j9a606.p.ssafy.io:8085/sc/bookstatus";
+        String url = "https://j9a606.p.ssafy.io/sc/bookstatus";
 
         // restTemplete 생성
         RestTemplate restTemplate = new RestTemplate();
@@ -266,7 +268,8 @@ public class BusinessServiceImpl implements BusinessService {
         // webClient 기본 설정
         WebClient webClient = WebClient
                 .builder()
-                .baseUrl(SERVER_URL + ":" + ANS_PORT)
+//                .baseUrl(SERVER_URL + ":" + ANS_PORT)
+                .baseUrl(SERVER_URL)
                 .build();
 
         HashMap<String, Object> request = new HashMap<>();
@@ -327,7 +330,8 @@ public class BusinessServiceImpl implements BusinessService {
         // webClient 기본 설정
         WebClient webClient = WebClient
                 .builder()
-                .baseUrl(SERVER_URL + ":" + SEARCH_PORT)
+//                .baseUrl(SERVER_URL + ":" + SEARCH_PORT)
+                .baseUrl(SERVER_URL)
                 .build();
 
         // api 요청
