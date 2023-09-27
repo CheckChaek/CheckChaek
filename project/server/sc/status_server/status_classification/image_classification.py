@@ -4,6 +4,7 @@ from torchvision import datasets, models, transforms
 from collections import deque
 import requests
 from io import BytesIO
+import torch.nn.functional as F
 
 # device 설정
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -67,25 +68,50 @@ def image_to_tensor(image_url):
 
     else:
         return False
-
+    image_origin = Image.open(image_url)
+    
     # 이미지 사이즈에 따라서 축소값 변경
-    data_size = 600
-    image_size = 0.1
-
-    data_transforms = transforms.Compose([
-        ResizeToFraction(image_size), # 이미지 크기 축소
-        PadToFixedSize((data_size, data_size)), # 이미지 패딩
+    transforms_test = transforms.Compose([
+        ResizeToFraction(0.1), # 이미지 크기 축소
+        PadToFixedSize((600, 600)), # 이미지 패딩
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
     
-    image = data_transforms(image).unsqueeze(0).to(device)
+    image = transforms_test(image_origin).unsqueeze(0).to(device)
 
     return image
 
-# 텐서를 받아서 예측
-def image_predict(image):
+# 텐서를 받아서 예측, image_to_tensor의 리턴값이 인풋으로 들어가야함.
+# 백 커버 사이드 예측
+def clf_predict(image):
+    with torch.no_grad():
+    # 이미지 예측
+        outputs = model_clf(image)
+        _, preds = torch.max(outputs, 1)
     
+    class_names = ['back','cover','side']
+    return class_names[preds]
+
+# 백 커버 사이드가 들어오면 이미지 한 장의 상태값을 반환
+def status_predict(status, image):
+    # class_names = ['best','high','low','medium']
+    if status == 'back':
+        model = model_back
+    elif status == 'cover':
+        model = model_cover
+    elif status == 'side':
+        model = model_side
+    
+    with torch.no_grad():
+    # 이미지 예측
+        outputs = model(image)
+        logits = outputs[0]
+        probabilities = F.softmax(logits, dim=0)
+    original_list = probabilities.tolist()
+    rounded_list = [round(x, 4) for x in original_list]
+    return status, rounded_list
+
 
 # 이미지 리스트를 받아 예측 후 back, cover, side, all의 예측상태값 반환
 def get_image_status_by_image_list():
