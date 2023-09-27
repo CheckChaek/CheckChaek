@@ -137,8 +137,18 @@ function Library({
                     )}
                   </p>
 
-                  <p>상태 : {book.status || '매입불가'}</p>
-                  <p> {book.price ? `가격 : ${book.price}원` : ''} </p>
+                  <p>
+                    상태 :{' '}
+                    {book.status && book.status === 'low'
+                      ? '매입불가'
+                      : book.status || ''}
+                  </p>
+                  <p>
+                    {' '}
+                    {book.price && book.price === '0'
+                      ? `가격 : ${book.price}원`
+                      : ''}{' '}
+                  </p>
                 </div>
               ))}
           </div>
