@@ -1,4 +1,4 @@
-import AlertIcon from '../../assets/icons/alertIcon';
+import TrashCan from '../../assets/icons/trashIcon';
 
 interface Content {
   content: string;
@@ -8,8 +8,8 @@ interface Content {
 
 function ConfirmContents({ content, okAction, cancelAction }: Content) {
   return (
-    <div className="h-full p-5 bg-BACKGROUND-50 rounded shadow-md flex flex-col justify-center items-center">
-      <AlertIcon styleString="w-[10vh]" />
+    <div className="h-full p-5 bg-BACKGROUND-50 rounded-2xl shadow-md flex flex-col justify-center items-center">
+      <TrashCan styleString="w-[80px]" />
       <p className="text-xl text-gray-500 my-2">{content}</p>
       <div className="flex justify-center mt-3 w-[90%] ">
         <button

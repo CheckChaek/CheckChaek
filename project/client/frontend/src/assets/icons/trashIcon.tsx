@@ -1,13 +1,8 @@
-import { TrashcanIconInterface } from '../../interface/common';
+import { IconInterface } from '../../interface/common';
 
-function TrashCan({ styleString, action }: TrashcanIconInterface) {
+function TrashCan({ styleString }: IconInterface) {
   return (
-    <div
-      className="absolute top-[0] flex justify-center items-center align-middle"
-      onClick={action}
-      onKeyPress={action}
-      role="button"
-      tabIndex={0}>
+    <div className="top-[0] flex justify-center items-center align-middle">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
