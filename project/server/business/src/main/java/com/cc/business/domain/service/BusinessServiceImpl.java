@@ -180,7 +180,8 @@ public class BusinessServiceImpl implements BusinessService {
         // webClient 기본 설정
         WebClient webClient = WebClient
                 .builder()
-                .baseUrl(SERVER_URL + ":" + SEARCH_PORT)
+//                .baseUrl(SERVER_URL + ":" + SEARCH_PORT)
+                .baseUrl(SERVER_URL)
                 .build();
 
         HashMap<String, List<String>> request = new HashMap<>();
