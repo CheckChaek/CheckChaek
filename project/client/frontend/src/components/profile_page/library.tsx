@@ -10,6 +10,7 @@ import { BooksInfo } from '../../interface/api';
 import PredictResult from '../predict_result/predictResult';
 import { HistoryDetailApirepository } from '../../repository/business/historyRepository';
 import CloseIcon from '../../assets/icons/closeIcon';
+import ConfirmContents from '../modal/confirmContents';
 
 function Library({
   onSearchResults,
@@ -61,22 +62,24 @@ function Library({
 
   // 모달 관련
   const { modalOpen, openModal, closeModal } = useModal();
-  const modalName = 'detail';
   const [selectBook, SetSelectBook] = useState<BooksInfo>();
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const modalName = 'detail';
+  const alertsModal = 'alert';
 
   const handleContent = async (bookid: number) => {
     openModal(modalName);
     try {
       const data = (await HistoryDetailApirepository(bookid)) as BooksInfo;
       SetSelectBook(data);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch {}
   };
 
   const handleDelete = (id: number) => {
     onDelete(id);
+    closeModal(alertsModal);
     closeModal(modalName);
+    setIsAlertModalOpen(false);
   };
 
   return (
@@ -179,7 +182,7 @@ function Library({
       )}
 
       <Modal
-        closeModal={() => closeModal(modalName)}
+        closeModal={() => !isAlertModalOpen && closeModal(modalName)}
         OpenModal={modalOpen[modalName]}
         width="w-[60%] bg-MAIN-50"
         height="h-full ">
@@ -188,7 +191,7 @@ function Library({
           clickMethod={() => closeModal(modalName)}
           index={1}
         />
-        {selectBook && selectBook.bookId && (
+        {selectBook && (
           <PredictResult
             predictBookInfo={selectBook}
             buttonInfo={{
@@ -198,7 +201,32 @@ function Library({
               selectedColor: 'bg-BUTTON1-900',
               fontColor: 'text-FONT-50 text-lg',
               children: '삭제하기',
-              action: () => handleDelete(selectBook.bookId),
+              action: () => {
+                openModal(alertsModal);
+                setIsAlertModalOpen(true);
+              },
+            }}
+          />
+        )}
+      </Modal>
+
+      <Modal
+        closeModal={() => {
+          closeModal(alertsModal);
+          setIsAlertModalOpen(false);
+        }}
+        OpenModal={modalOpen[alertsModal]}
+        width="w-[20%] bg-MAIN-50"
+        height="">
+        {selectBook && selectBook.bookId && (
+          <ConfirmContents
+            content="정말로 삭제하시겠습니까?"
+            okAction={() => {
+              handleDelete(selectBook.bookId);
+            }}
+            cancelAction={() => {
+              closeModal(alertsModal);
+              setIsAlertModalOpen(false);
             }}
           />
         )}
