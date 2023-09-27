@@ -5,14 +5,58 @@ from collections import deque
 import requests
 from io import BytesIO
 
-# 모델 불러오기
-model_load = torch.load('./models/model_ft_v1.pth')
-
-# url = "../data/book_data/test/best/cm1_best (3).jpg"
-
+# device 설정
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-def image_classification(image_url):
+# 모델 불러오기
+model_clf = torch.load('./models/model_clf.pth', map_location=device)
+model_back = torch.load('./models/model_back.pth', map_location=device)
+model_cover = torch.load('./models/model_cover.pth', map_location=device)
+model_side = torch.load('./models/model_side.pth', map_location=device)
+
+
+# 이미지를 1/10 크기로 축소하는 변환기 정의
+class ResizeToFraction:
+    def __init__(self, scale_factor):
+        self.scale_factor = scale_factor
+
+    def __call__(self, image):
+        w, h = image.size
+        new_w = int(w * self.scale_factor)
+        new_h = int(h * self.scale_factor)
+        return image.resize((new_w, new_h), Image.BILINEAR)
+
+# 이미지 데이터 패딩
+class PadToFixedSize:
+    def __init__(self, output_size, padding_value=0):
+        assert isinstance(output_size, (int, tuple))
+        if isinstance(output_size, int):
+            self.output_size = (output_size, output_size)
+        else:
+            self.output_size = output_size
+        self.padding_value = padding_value
+
+    def __call__(self, image):
+        w, h = image.size
+
+        # 원하는 출력 크기와 이미지 크기 간의 차이 계산
+        delta_w = max(0, self.output_size[0] - w)
+        delta_h = max(0, self.output_size[1] - h)
+
+        # 패딩을 좌우, 상하에 반으로 분배
+        pad_left = delta_w // 2
+        pad_right = delta_w - pad_left
+        pad_top = delta_h // 2
+        pad_bottom = delta_h - pad_top
+
+        # 패딩 적용
+        padding = (pad_left, pad_top, pad_right, pad_bottom)
+        image = transforms.functional.pad(image, padding, fill=self.padding_value)
+
+        return image
+
+# 이미지 url을 가져와서 텐서로 변환
+def image_to_tensor(image_url):
     response = requests.get(image_url)
     if response.status_code == 200:
         # 이미지 데이터를 BytesIO 객체로 읽기
@@ -22,47 +66,32 @@ def image_classification(image_url):
         image = Image.open(image_data)
 
     else:
-        print("Failed to retrieve image from S3")
-    
-    transforms_test = transforms.Compose([
-        transforms.Resize((224, 224)),
+        return False
+
+    # 이미지 사이즈에 따라서 축소값 변경
+    data_size = 600
+    image_size = 0.1
+
+    data_transforms = transforms.Compose([
+        ResizeToFraction(image_size), # 이미지 크기 축소
+        PadToFixedSize((data_size, data_size)), # 이미지 패딩
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
-
-    image = transforms_test(image).unsqueeze(0).to(device)
-
-    with torch.no_grad():
-        outputs = model_load(image)
-        _, preds = torch.max(outputs, 1)
-    # class_names -> best,high,medium, low 임
-
-    class_names = ['best', 'high', 'low', 'medium']
-    return class_names[preds[0]]
-
-def get_image_status_by_image_list(image_list):
-    class_names = ['low', 'medium','high' ,'best']
-
-    image_status = deque()
     
-    for image_url in image_list:
-        image_status.append(image_classification(image_url))
+    image = data_transforms(image).unsqueeze(0).to(device)
+
+    return image
+
+# 텐서를 받아서 예측
+def image_predict(image):
     
-    status_degree = 0
 
-    print(image_status)
+# 이미지 리스트를 받아 예측 후 back, cover, side, all의 예측상태값 반환
+def get_image_status_by_image_list():
+    pass
 
-    for status in image_status:
-        if status == 'best':
-            status_degree += 3
-        elif status == 'high':
-            status_degree += 2
-        elif status == 'medium':
-            status_degree += 1
-
-    status_degree = status_degree / len(image_list)
-
-    print(status_degree)
-    print(int(status_degree))
-    
-    return class_names[int(status_degree)]
+# 할일
+# 1. 여기 코드 작성
+# 2. 리턴값 확인, swagger로 확인해서 잘 넘어가는지
+# 3. ans까지 마무리.
