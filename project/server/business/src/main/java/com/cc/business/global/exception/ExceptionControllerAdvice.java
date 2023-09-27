@@ -1,6 +1,7 @@
 package com.cc.business.global.exception;
 
 import com.cc.business.global.common.response.EnvelopeResponse;
+import com.cc.business.global.exception.auth.AuthException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +15,18 @@ public class ExceptionControllerAdvice {
 
     /* 사용자 인증 에러 */
     @ExceptionHandler(value = {AuthException.class})
-    public ResponseEntity<EnvelopeResponse<HashMap<String, Object>>> authErrorHandler(AuthException e) {
+    public ResponseEntity<EnvelopeResponse<Object>> authErrorHandler(AuthException e) {
         log.error("사용자 인증 에러 발생");
-        EnvelopeResponse result = new EnvelopeResponse(HttpStatus.UNAUTHORIZED.value(), e.getMessage());
+        e.printStackTrace();
 
-        return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
+        return ResponseEntity
+                .status(e.getErrorCode().getHttpStatus())
+                .body(EnvelopeResponse.builder()
+                        .code(e.getErrorCode().getHttpStatus().value())
+                        .message(e.getErrorCode().getMessage())
+                        .build());
     }
+
 
     /* TA 에러 */
     @ExceptionHandler(value = {TAException.class})
