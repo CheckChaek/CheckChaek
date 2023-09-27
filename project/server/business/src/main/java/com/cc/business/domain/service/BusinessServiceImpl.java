@@ -1,4 +1,5 @@
 package com.cc.business.domain.service;// BusinessServiceImpl.java
+import com.amazonaws.services.mq.model.InternalServerErrorException;
 import com.amazonaws.services.mq.model.NotFoundException;
 import com.amazonaws.services.mq.model.UnauthorizedException;
 import com.cc.business.domain.controller.openfeign.AuthOpenFeign;
@@ -8,8 +9,11 @@ import com.cc.business.domain.entity.BookImageEntity;
 import com.cc.business.domain.repository.BookImageRepository;
 import com.cc.business.domain.repository.BookRepository;
 import com.cc.business.global.exception.*;
+import com.cc.business.global.exception.auth.AuthErrorCode;
+import com.cc.business.global.exception.auth.AuthException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,10 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -70,11 +71,35 @@ public class BusinessServiceImpl implements BusinessService {
         int memberId = 0;
         try {
             memberId = authOpenFeign.connectToAuthServer(Authorization,AuthorizationRefresh);
+            return memberId;
         } catch(Exception e) {
-            System.out.println(e.getMessage());
-            throw new AuthException();
+            List<String> parts = List.of(e.getMessage().split("]: "));
+            String message = getCodeFromAuthResponse(parts.get(1));
+            System.out.println(message);
+            if (message.equals("올바른 형태의 토큰이 아닙니다.")){
+                throw new AuthException(AuthErrorCode.NOT_PROPER_TOKEN);
+            } else if (message.equals("만료된 토큰입니다.")) {
+                throw new AuthException(AuthErrorCode.EXPIRED_TOKEN);
+            } else if (message.equals("일치하는 회원이 없습니다.")){
+                throw new AuthException(AuthErrorCode.NOT_FOUND_USER);
+            } else {
+                throw new AuthException(AuthErrorCode.INTERNAL_AUTH_SERVER_ERROR);
+            }
         }
-        return memberId;
+    }
+
+    @Override
+    public String getCodeFromAuthResponse(String jsonResponse) {
+        try{
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(jsonResponse);
+//            int code = jsonNode.get(0).get("code").asInt();
+            String message = jsonNode.get(0).get("message").asText();
+
+            return message;
+        }catch(JsonProcessingException e){
+            return "error";
+        }
     }
 
     @Override

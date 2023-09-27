@@ -17,6 +17,8 @@ public interface BusinessService {
     // 회원 인증
     int isAuthorized(HttpServletRequest request);
 
+    String getCodeFromAuthResponse(String jsonResponse);
+
     // 이미지 프로세스(TA, SEARCH) 전체를 담당
     BookDto processImages(HttpServletRequest request, List<MultipartFile> imageList) throws IOException;
 
