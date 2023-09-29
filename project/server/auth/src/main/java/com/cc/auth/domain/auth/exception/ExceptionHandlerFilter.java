@@ -31,6 +31,8 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             System.out.println(e);
             System.out.println(e.getMessage());
             setErrorResponse(response, AuthErrorCode.NOT_FOUND_USER);
+        } catch (AuthException e){
+            setErrorResponse(response, AuthErrorCode.NOT_FOUND_USER_REFRESH);
         }
     }
 
