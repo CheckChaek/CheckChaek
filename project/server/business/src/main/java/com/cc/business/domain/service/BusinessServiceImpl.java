@@ -227,11 +227,11 @@ public class BusinessServiceImpl implements BusinessService {
 
         } else {
             /* imageUrlList를 이용하여 책의 상태 반환 */
-            String imageStatus = "";
+            SCDto scDto = null;
             try {
-                imageStatus = getImageStatus(imageUrlList);
-                log.info("책의 상태: {}", imageStatus);
-                certainBookInfo.setStatus(imageStatus);
+                scDto = getImageStatus(imageUrlList);
+                log.info("책의 상태: {}", scDto);
+                certainBookInfo.setStatus(scDto.getStatus());
             } catch(Exception e) {
                 log.error("책의 상태 분류 중 에러 발생");
                 throw new SCException();
@@ -240,7 +240,7 @@ public class BusinessServiceImpl implements BusinessService {
             /* 책의 상태를 이용하여 재평가된 책의 가격 반환 */
             int bookPrice = 0;
             try {
-                bookPrice = getBookPrice(certainBookInfo);
+                bookPrice = getBookPrice(certainBookInfo, scDto);
                 log.info("재평가된 책의 가격: {}", bookPrice);
                 certainBookInfo.setEstimatedPrice(bookPrice);
             } catch(Exception e) {
@@ -260,9 +260,9 @@ public class BusinessServiceImpl implements BusinessService {
 
     // sc
     @Override
-    public String getImageStatus(List<String> imageUrlList) throws JsonProcessingException {
-        String url = "http://j9a606.p.ssafy.io:8085/sc/bookstatus"; // 이것만 webclient 호출 방식이 아니라 그런지 https 방식 호환이 안됨
-//        String url = "https://j9a606.p.ssafy.io/sc/bookstatus";
+    public SCDto getImageStatus(List<String> imageUrlList) throws JsonProcessingException {
+//        String url = "http://j9a606.p.ssafy.io:8085/sc/bookstatus";
+        String url = "https://j9a606.p.ssafy.io/sc/bookstatus";
 
         // restTemplete 생성
         RestTemplate restTemplate = new RestTemplate();
@@ -283,14 +283,14 @@ public class BusinessServiceImpl implements BusinessService {
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
-        String status = objectMapper.readValue(response.getBody(), String.class);
+        SCDto status = objectMapper.readValue(response.getBody(), SCDto.class);
 
         return status;
     }
 
     // ans
     @Override
-    public int getBookPrice(BookEntity certainBookInfo) {
+    public int getBookPrice(BookEntity certainBookInfo, SCDto scDto) {
         // webClient 기본 설정
         WebClient webClient = WebClient
                 .builder()
@@ -299,11 +299,12 @@ public class BusinessServiceImpl implements BusinessService {
                 .build();
 
         HashMap<String, Object> request = new HashMap<>();
-        request.put("image_status", certainBookInfo.getStatus());
-        request.put("image_title", certainBookInfo.getTitle());
-        request.put("image_publisher", certainBookInfo.getPublisher());
-        request.put("image_author", certainBookInfo.getAuthor());
-        request.put("image_price", certainBookInfo.getOriginalPrice());
+        request.put("publish_year", certainBookInfo.getPubDate());
+        request.put("origin_price", certainBookInfo.getOriginalPrice());
+        request.put("all_data", scDto.getAll());
+        request.put("back_data", scDto.getBack());
+        request.put("cover_data", scDto.getCover());
+        request.put("side_data", scDto.getSide());
 
         // api 요청
         int response = webClient
@@ -383,6 +384,7 @@ public class BusinessServiceImpl implements BusinessService {
             result.setPublisher(arDto.getPublisher());
             result.setCoverImage(arDto.getCover());
             result.setOriginalPrice(arDto.getPriceStandard());
+            result.setPubDate(arDto.getPubDate().substring(0,4));
         }
         return result;
     }

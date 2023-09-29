@@ -3,6 +3,8 @@ package com.cc.business.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Year;
+
 @Entity(name = "book")
 @Builder
 @Getter
@@ -31,4 +33,6 @@ public class BookEntity {
     int originalPrice;
     @Column(name = "estimated_price")
     int estimatedPrice;
+    @Column(name = "pub_date")
+    String pubDate;
 }
