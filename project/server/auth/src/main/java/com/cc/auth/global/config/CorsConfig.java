@@ -26,8 +26,7 @@ public class CorsConfig {
       config.addAllowedMethod("*");
       config.addExposedHeader(accessHeader);
       config.addExposedHeader(refreshHeader);
-      config.addExposedHeader("authorization");
-      config.addExposedHeader("Authorization");
+
       source.registerCorsConfiguration("/**", config);
 
       // FilterRegistrationBean<CorsFilter> filterBean = new FilterRegistrationBean<>(new CorsFilter(source));
