@@ -24,7 +24,9 @@ schema_view_v1 = get_schema_view(
 
 urlpatterns = [
     path('sc/bookstatus', status_classification, name='status_classification'),
-    path('sc/test', test_api, name='test_api'),
+    path('sc/test/clf', test_clf, name='test_clf'),
+    path('sc/test/bcs', test_bcs, name='test_bcs'), 
+    path('sc/test/avg', test_avg, name='test_bcs'), 
 
     # swagger
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view_v1.without_ui(cache_timeout=0), name='schema-json'),
