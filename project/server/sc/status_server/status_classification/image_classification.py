@@ -64,11 +64,10 @@ def image_to_tensor(image_url):
         image_data = BytesIO(response.content)
 
         # BytesIO에서 이미지 열기
-        image = Image.open(image_data)
+        image_origin = Image.open(image_data)
 
     else:
         return False
-    image_origin = Image.open(image_url)
     
     # 이미지 사이즈에 따라서 축소값 변경
     transforms_test = transforms.Compose([
@@ -77,10 +76,11 @@ def image_to_tensor(image_url):
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
-    
+    print(image_origin)
     image = transforms_test(image_origin).unsqueeze(0).to(device)
 
     return image
+
 
 # 텐서를 받아서 예측, image_to_tensor의 리턴값이 인풋으로 들어가야함.
 # 백 커버 사이드 예측
@@ -162,8 +162,3 @@ def get_image_status_by_image_list(image_url_list):
             'cover':cover,
             'side':side}
     
-
-# 할일
-# 1. 여기 코드 작성
-# 2. 리턴값 확인, swagger로 확인해서 잘 넘어가는지
-# 3. ans까지 마무리.
