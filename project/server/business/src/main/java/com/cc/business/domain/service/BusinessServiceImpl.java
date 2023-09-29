@@ -261,8 +261,8 @@ public class BusinessServiceImpl implements BusinessService {
     // sc
     @Override
     public String getImageStatus(List<String> imageUrlList) throws JsonProcessingException {
-//        String url = "http://j9a606.p.ssafy.io:8085/sc/bookstatus";
-        String url = "https://j9a606.p.ssafy.io/sc/bookstatus";
+        String url = "http://j9a606.p.ssafy.io:8085/sc/bookstatus"; // 이것만 webclient 호출 방식이 아니라 그런지 https 방식 호환이 안됨
+//        String url = "https://j9a606.p.ssafy.io/sc/bookstatus";
 
         // restTemplete 생성
         RestTemplate restTemplate = new RestTemplate();
