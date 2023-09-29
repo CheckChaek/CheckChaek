@@ -114,6 +114,7 @@ def status_predict(status, image):
 
 # 리스트의 요소들을 다 더한 후 평균내기
 def list_avg(prob_list):
+    len_list = len(prob_list)
     sum_list = [0,0,0,0]
 
     for prob in prob_list:
@@ -121,7 +122,7 @@ def list_avg(prob_list):
             sum_list[i] += prob[i]
     
     for i in range(4):
-        sum_list[i] = round(sum_list[i]/4,4)
+        sum_list[i] = round(sum_list[i]/len_list,4)
     
     return sum_list
 
@@ -148,13 +149,35 @@ def get_image_status_by_image_list(image_url_list):
             cover_list.append(prob_list)
         elif bcs_clf == 'side':
             side_list.append(prob_list)
+    
+    try:
+        back = list_avg(back_list)
+    except:
+        back = [0]
 
-    back = list_avg(back_list)
-    cover = list_avg(cover_list)
-    side = list_avg(side_list)
-    all = list_avg([back,side,cover])
+    try:
+        cover = list_avg(cover_list)
+    except:
+        cover = [0]
 
-    status = all.index(max(all))
+    try:
+        side = list_avg(side_list)
+    except:
+        side = [0]
+
+    all_list = []
+    if sum(back) == 1:
+        all_list.append(back)
+    if sum(cover) == 1:
+        all_list.append(cover)
+    if sum(side) == 1:
+        all_list.append(side)
+
+    all = list_avg(all_list)
+
+    status_idx = all.index(max(all))
+    class_names = ['best','high','low','medium']
+    status = class_names[status_idx]
 
     return {'status':status,
             'all':all,
@@ -162,3 +185,42 @@ def get_image_status_by_image_list(image_url_list):
             'cover':cover,
             'side':side}
     
+
+def test_test(list_test):
+    back_list = list_test[0]
+    cover_list = list_test[1]
+    side_list = list_test[2]
+
+    try:
+        back = list_avg(back_list)
+    except:
+        back = [0]
+
+    try:
+        cover = list_avg(cover_list)
+    except:
+        cover = [0]
+
+    try:
+        side = list_avg(side_list)
+    except:
+        side = [0]
+
+    all_list = []
+    if sum(back) == 1:
+        all_list.append(back)
+    if sum(cover) == 1:
+        all_list.append(cover)
+    if sum(side) == 1:
+        all_list.append(side)
+
+    all = list_avg(all_list)
+
+    status_idx = all.index(max(all))
+    class_names = ['best','high','low','medium']
+    status = class_names[status_idx]
+    return {'status':status,
+            'all':all,
+            'back':back,
+            'cover':cover,
+            'side':side}
