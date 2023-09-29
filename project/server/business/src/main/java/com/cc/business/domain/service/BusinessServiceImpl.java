@@ -201,7 +201,7 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Override
     @Transactional
-    public BookEntity processPredictBookInfo(HttpServletRequest request, HashMap<String, BookDto> params) throws JsonProcessingException {
+    public HashMap<String, Object> processPredictBookInfo(HttpServletRequest request, HashMap<String, BookDto> params) throws JsonProcessingException {
         log.info("책 가격 예측 프로세스 시작");
         int memberId = isAuthorized(request);
         log.info("사용자 아이디: {}", memberId);
@@ -222,12 +222,13 @@ public class BusinessServiceImpl implements BusinessService {
             throw new SearchException();
         }
 
+
+        SCDto scDto = null;
         if(certainBookInfo == null) {
             /* 책 정보 못찾으면 기존에 저장했던 이미지들 삭제 해야할듯? */
 
         } else {
             /* imageUrlList를 이용하여 책의 상태 반환 */
-            SCDto scDto = null;
             try {
                 scDto = getImageStatus(imageUrlList);
                 log.info("책의 상태: {}", scDto);
@@ -254,8 +255,12 @@ public class BusinessServiceImpl implements BusinessService {
             saveCertainBookInfo(certainBookInfo);
         }
 
-        log.info("최종 데이터: {}", certainBookInfo);
-        return certainBookInfo;
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("certainBookInfo", certainBookInfo);
+        data.put("scInfo", scDto);
+
+        log.info("최종 데이터: {}", data);
+        return data;
     }
 
     // sc

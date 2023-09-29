@@ -27,7 +27,7 @@ public interface BusinessService {
     AladinResponseDto getBookInfo(List<String> imageList);
 
     // 책 예상 가격 프로세스(SC, ANS) 전체를 담당
-    BookEntity processPredictBookInfo(HttpServletRequest request, HashMap<String, BookDto> params) throws JsonProcessingException;
+    HashMap<String, Object> processPredictBookInfo(HttpServletRequest request, HashMap<String, BookDto> params) throws JsonProcessingException;
 
     // sc 서버에 이미지 정보를 전송하면 상태 반환
     SCDto getImageStatus(List<String> imageUrlList) throws JsonProcessingException;
