@@ -36,19 +36,23 @@ function LogoutAPI(token: string, { dispatch }: AuthRequset): void {
               {},
               {
                 headers: {
-                  'Authorization-refresh': `Bearer ${refreshToken}`,
+                  Authorization_refresh: `Bearer ${refreshToken}`,
                   Authorization: `Bearer ${token}`,
                 },
               },
             )
             .then(response => {
               console.log(response);
-              const Rtoken = response.config.headers.Authorization as string;
-              const newAccessToken = Rtoken.split(' ')[1];
-              const nickname = '허재';
-              if (newAccessToken && nickname && refreshToken) {
-                dispatch(setTokens(newAccessToken, refreshToken, nickname));
-                console.log(newAccessToken);
+              const newRefreshToken = (
+                response.headers as { authorization_refresh: string }
+              ).authorization_refresh;
+              const newAccessToken = (
+                response.headers as { authorization: string }
+              ).authorization;
+              const nickname = useNickname();
+              console.log(newAccessToken);
+              if (newAccessToken && nickname && newRefreshToken) {
+                dispatch(setTokens(newAccessToken, newRefreshToken, nickname));
                 axios
                   .post(
                     `${AUTH_URI}/auth/logout`,
@@ -65,10 +69,14 @@ function LogoutAPI(token: string, { dispatch }: AuthRequset): void {
                       window.location.href = '/';
                     }, 100);
                   })
-                  .catch(() => {});
+                  .catch(e => {
+                    console.log(e);
+                  });
               }
             })
-            .catch(() => {});
+            .catch(err => {
+              console.log(err);
+            });
         }
       });
   }
