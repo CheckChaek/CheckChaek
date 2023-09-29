@@ -62,12 +62,12 @@ public class BusinessController {
     @PostMapping("/bookpredict")
     public ResponseEntity<EnvelopeResponse<HashMap<String, BookEntity>>> predictBookInfo(HttpServletRequest request, @RequestBody HashMap<String, BookDto> params) throws Exception {
 
-        BookEntity certainBookInfo = businessService.processPredictBookInfo(request, params);
-        log.info("정확한 책 정보: {}", certainBookInfo);
+        HashMap<String, Object> bookInfo = businessService.processPredictBookInfo(request, params);
+        log.info("정확한 책 정보: {}", bookInfo.get("certainBookInfo"));
 
         String msg = "";
         HttpStatus status = null;
-        if(certainBookInfo == null) {
+        if(bookInfo.get("certainBookInfo") == null) {
             status = HttpStatus.NOT_FOUND;
             msg = "검색 결과가 없습니다.";
         } else {
@@ -75,8 +75,9 @@ public class BusinessController {
             msg = "책 예상 가격 분석 성공";
         }
 
-        HashMap<String, BookEntity> data = new HashMap<>();
-        data.put("predictBookInfo", certainBookInfo);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("predictBookInfo", bookInfo.get("certainBookInfo"));
+        data.put("scInfo", bookInfo.get("scInfo"));
 
         EnvelopeResponse result = new EnvelopeResponse(status.value(), msg, data);
         return new ResponseEntity<>(result, HttpStatus.OK);

@@ -1,14 +1,12 @@
 package com.cc.business.domain.service;// BusinessService.java
-import com.cc.business.domain.dto.AladinResponseDto;
-import com.cc.business.domain.dto.BookDto;
-import com.cc.business.domain.dto.FindHistoriesResponseDto;
-import com.cc.business.domain.dto.FindHistoryResponseDto;
+import com.cc.business.domain.dto.*;
 import com.cc.business.domain.entity.BookEntity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.print.Book;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -29,13 +27,13 @@ public interface BusinessService {
     AladinResponseDto getBookInfo(List<String> imageList);
 
     // 책 예상 가격 프로세스(SC, ANS) 전체를 담당
-    BookEntity processPredictBookInfo(HttpServletRequest request, HashMap<String, BookDto> params) throws JsonProcessingException;
+    HashMap<String, Object> processPredictBookInfo(HttpServletRequest request, HashMap<String, BookDto> params) throws JsonProcessingException;
 
     // sc 서버에 이미지 정보를 전송하면 상태 반환
-    String getImageStatus(List<String> imageUrlList) throws JsonProcessingException;
+    SCDto getImageStatus(List<String> imageUrlList) throws JsonProcessingException;
 
     // ans 서버에 상태와 가격을 전송하면 가격 결과 반환;
-    int getBookPrice(BookEntity certainBookInfo);
+    int getBookPrice(BookEntity certainBookInfo, SCDto scDto);
 
     // 책 정보 DB에 저장
     int saveBookInfo(BookDto bookInfo, int memberId);
