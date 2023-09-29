@@ -1,13 +1,7 @@
-from django.core import serializers
 from rest_framework import serializers
-from .models import *
+from .models import Book  # 모델을 import 해야 합니다.
 
-class status_serializer(serializers.ModelSerializer):
+class BookSerializer(serializers.ModelSerializer):
     class Meta:
-        model = image_status
-        fields = ['image_status','image_title','image_publisher','image_author','image_price']
-    image_status = serializers.CharField(max_length=10)
-    image_title = serializers.CharField(max_length=100)
-    image_publisher = serializers.CharField(max_length=100)
-    image_author = serializers.CharField(max_length=100)
-    image_price = serializers.IntegerField()
+        model = Book
+        fields = '__all__'  # 모든 필드를 시리얼라이즈하도록 지정합니다.

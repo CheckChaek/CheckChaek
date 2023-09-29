@@ -1,15 +1,18 @@
 def price_prediction(image_status):
-    status = image_status['image_status']
+    best_status_num = 0.7
+    high_status_num = 0.6
+    medium_status_num = 0.5
+    low_status_num = 0.4
 
-    if status == 'best':
-        status_percent = 0.8
-    elif status == 'high':
-        status_percent = 0.6
-    elif status == 'medium':
-        status_percent = 0.4
-    else:
-        status_percent = 0
-    
-    price = status_percent * image_status['image_price'] * 0.8
+    print(image_status['origin_price'])
+    origin_pirce = image_status['origin_price']
+    probs = image_status['all_data']
 
-    return price
+    all_price = []
+    all_price.append(origin_pirce * probs[0] * best_status_num)
+    all_price.append(origin_pirce * probs[1] * high_status_num)
+    all_price.append(origin_pirce * probs[2] * medium_status_num)
+    all_price.append(origin_pirce * probs[3] * low_status_num)
+
+
+    return sum(all_price)

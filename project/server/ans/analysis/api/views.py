@@ -9,11 +9,11 @@ from .serializers import *
 
 from price_prediction import price_prediction
 
-@swagger_auto_schema(method='post', request_body=status_serializer)  # 요청 스키마 설정
+@swagger_auto_schema(method='post', request_body=BookSerializer)  # 요청 스키마 설정
 @api_view(['POST'])
 def predict_book_price(request):
     if request.method == 'POST':
-        serializer = status_serializer(data=request.data)
+        serializer = BookSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             image_status = serializer.data
