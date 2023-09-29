@@ -110,12 +110,58 @@ def status_predict(status, image):
         probabilities = F.softmax(logits, dim=0)
     original_list = probabilities.tolist()
     rounded_list = [round(x, 4) for x in original_list]
-    return status, rounded_list
+    return rounded_list
 
+# 리스트의 요소들을 다 더한 후 평균내기
+def list_avg(prob_list):
+    sum_list = [0,0,0,0]
+
+    for prob in prob_list:
+        for i in range(4):
+            sum_list[i] += prob[i]
+    
+    for i in range(4):
+        sum_list[i] = round(sum_list[i]/4,4)
+    
+    return sum_list
 
 # 이미지 리스트를 받아 예측 후 back, cover, side, all의 예측상태값 반환
-def get_image_status_by_image_list():
-    pass
+def get_image_status_by_image_list(image_url_list):
+    # back, cover, side의 데이터를 저장할 리스트
+    back_list = []
+    cover_list = []
+    side_list = []
+
+    # 각 url 하나씩 돌리기
+    for image_url in image_url_list:
+        # 이미지 텐서로 변환
+        image = image_to_tensor(image_url)
+        # 상태 추출
+        bcs_clf = clf_predict(image)
+        # 추출된 상태로 라벨별 확률 구하기
+        prob_list = status_predict(status=bcs_clf, image= image)
+
+        # 상태별로 리스트에 저장
+        if bcs_clf == 'back':
+            back_list.append(prob_list)
+        elif bcs_clf == 'cover':
+            cover_list.append(prob_list)
+        elif bcs_clf == 'side':
+            side_list.append(prob_list)
+
+    back = list_avg(back_list)
+    cover = list_avg(cover_list)
+    side = list_avg(side_list)
+    all = list_avg([back,side,cover])
+
+    status = all.index(max(all))
+
+    return {'status':status,
+            'all':all,
+            'back':back,
+            'cover':cover,
+            'side':side}
+    
 
 # 할일
 # 1. 여기 코드 작성
