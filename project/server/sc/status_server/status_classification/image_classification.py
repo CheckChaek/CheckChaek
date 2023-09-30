@@ -117,6 +117,9 @@ def list_avg(prob_list):
     len_list = len(prob_list)
     sum_list = [0,0,0,0]
 
+    if len_list == 0:
+        return sum_list
+
     for prob in prob_list:
         for i in range(4):
             sum_list[i] += prob[i]
