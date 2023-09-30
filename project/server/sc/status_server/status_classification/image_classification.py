@@ -170,11 +170,11 @@ def get_image_status_by_image_list(image_url_list):
         side = [0]
 
     all_list = []
-    if sum(back) == 1:
+    if sum(back) > 0:
         all_list.append(back)
-    if sum(cover) == 1:
+    if sum(cover) > 0:
         all_list.append(cover)
-    if sum(side) == 1:
+    if sum(side) > 0:
         all_list.append(side)
 
     all = list_avg(all_list)
