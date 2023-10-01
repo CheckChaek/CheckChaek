@@ -31,10 +31,15 @@ function useRefreshToken(): string | null {
 }
 
 function useNickname(): string | null {
-  const token: string | null = useSelector(
-    (state: RootState) => state.auth.nickname,
-  );
-  return token;
+  const storageValue = sessionStorage.getItem('persist:root') as string;
+  if (storageValue) {
+    const storageObject = JSON.parse(storageValue) as object;
+    const authString = (storageObject as { auth: string }).auth;
+    const authObject = JSON.parse(authString) as object;
+    const name = (authObject as { nickname: string }).nickname;
+    return name;
+  }
+  return null;
 }
 
 export { BUSINESS_URI, AUTH_URI, useAccessToken, useRefreshToken, useNickname };

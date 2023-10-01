@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { HistoriesResponse, DetailResponse } from '../../interface/api';
 import { BUSINESS_URI } from '../apiInfo';
+import instance from '../../repository/auth/instanceRepository';
 
 const historyUri = `${BUSINESS_URI}/history`;
 function HistoryAllApi(token: string) {
@@ -28,7 +29,7 @@ async function HistoryDetailApi(token: string, bookId: number) {
   const url = `${historyUri}/${bookId}`;
   if (token) {
     try {
-      const response = await axios.get<DetailResponse>(url, {
+      const response = await instance.get<DetailResponse>(url, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -39,7 +40,7 @@ async function HistoryDetailApi(token: string, bookId: number) {
       }
       return response.statusText;
     } catch {
-      window.location.href = '/error';
+      // window.location.href = '/error';
     }
   }
 }
@@ -48,7 +49,7 @@ async function HistorySearchApi(token: string, keyword: string) {
   const url = `${historyUri}/search?keyword=${encodeURIComponent(keyword)}`;
   if (token) {
     try {
-      const response = await axios.get<HistoriesResponse>(url, {
+      const response = await instance.get<HistoriesResponse>(url, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -60,7 +61,7 @@ async function HistorySearchApi(token: string, keyword: string) {
       }
       return response.statusText;
     } catch {
-      window.location.href = '/error';
+      // window.location.href = '/error';
     }
   }
 }
