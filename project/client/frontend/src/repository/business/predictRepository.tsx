@@ -27,7 +27,7 @@ async function PredictRepository(props: { bookInfo: Book }) {
     const response = await PredictApi(accessToken, bookInfo);
     if (response?.data) {
       console.log(response);
-      return response.data.predictBookInfo;
+      return response.data;
     }
     return null;
   }

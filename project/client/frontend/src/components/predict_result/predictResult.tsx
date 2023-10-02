@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 import Card from '../common/card';
 // medals
 import State_medal_best from '../../assets/images/predict_result/state_medal_best.png';
@@ -15,7 +13,6 @@ function PredictResult(props: {
   buttonInfo: BtnInfo;
 }) {
   const { predictBookInfo, buttonInfo } = props;
-  const navigate = useNavigate();
   const bookInfo =
     predictBookInfo === undefined
       ? {
@@ -29,27 +26,21 @@ function PredictResult(props: {
         }
       : predictBookInfo;
   let medal;
-  let status: string;
   switch (bookInfo.status) {
     case 'best':
       medal = State_medal_best;
-      status = '최상';
       break;
     case 'high':
       medal = State_medal_high;
-      status = '상';
       break;
     case 'medium':
       medal = State_medal_medium;
-      status = '중';
       break;
     case 'low':
       medal = State_medal_low;
-      status = '매입불가';
       break;
     default:
       medal = '';
-      status = '';
       break;
   }
   return (

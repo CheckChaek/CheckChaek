@@ -15,3 +15,11 @@ export interface PredictBookInfo extends Book {
   originalPrice: number;
   estimatedPrice: number;
 }
+
+export interface ScoreInfo {
+  status: string;
+  all: number[];
+  back: number[];
+  cover: number[];
+  side: number[];
+}
