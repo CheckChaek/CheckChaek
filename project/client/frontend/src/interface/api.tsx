@@ -1,4 +1,4 @@
-import { BookInfo, PredictBookInfo } from './predictResult';
+import { BookInfo, PredictBookInfo, ScoreInfo } from './predictResult';
 
 export interface AuthRequset {
   dispatch: () => void;
@@ -16,7 +16,10 @@ export interface TaResponse extends APIResponse {
 }
 
 export interface PredictResponse extends APIResponse {
-  data: { predictBookInfo: PredictBookInfo } | null;
+  data: {
+    predictBookInfo: PredictBookInfo;
+    scInfo: ScoreInfo;
+  } | null;
 }
 
 // history

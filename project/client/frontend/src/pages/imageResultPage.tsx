@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import PredictResult from '../components/predict_result/predictResult';
+// import PredictResult from '../components/predict_result/predictResult';
 import Loading from '../components/common/loading';
 import TaConfirm from '../components/predict_result/taConfirm';
 import Modal from '../components/modal/modal';
@@ -10,9 +10,15 @@ import {
   PredictRepository,
   TaConfirmRepository,
 } from '../repository/business/predictRepository';
-import { Book, BookInfo, PredictBookInfo } from '../interface/predictResult';
+import {
+  Book,
+  BookInfo,
+  PredictBookInfo,
+  ScoreInfo,
+} from '../interface/predictResult';
 import { useModal } from '../components/modal/modalClass';
 import { BtnInfo } from '../interface/common';
+import ResultFinal from '../components/predict_result/resultFinal';
 
 function ResultPage() {
   // 페이지 띄우는 State
@@ -41,10 +47,18 @@ function ResultPage() {
     estimatedPrice: 0,
   };
 
+  const defaultScore: ScoreInfo = {
+    all: [0, 0, 0, 0],
+    back: [0, 0, 0, 0],
+    cover: [0, 0, 0, 0],
+    side: [0, 0, 0, 0],
+    status: '',
+  };
+
   // 책 정보 State
   const [bookInfo, setBookInfo] = useState(defaultBook);
   const [predictBookInfo, setPredictBookInfo] = useState(defaultPredict);
-
+  const [scoreInfo, setScoreInfo] = useState(defaultScore);
   // predict 페이지에서 받아온 이미지 리스트
   const location: { state: File[] } = useLocation();
   const imageList = location.state;
@@ -60,7 +74,7 @@ function ResultPage() {
   // API Return 값 저장용
   let res: BookInfo | undefined | null;
   let predictRes: PredictBookInfo | undefined | null;
-
+  let scoreInfoRes: ScoreInfo | undefined | null;
   // TA API 통신 예외처리
   const taApiRequest = async () => {
     res = await TaConfirmRepository({ imageList });
@@ -79,11 +93,14 @@ function ResultPage() {
       author: bookInfo.author,
       publisher: bookInfo.publisher,
     };
-    predictRes = await PredictRepository({ bookInfo: requestBookInfo });
-    console.log(predictRes);
-    if (predictRes) {
+    const responseData = await PredictRepository({ bookInfo: requestBookInfo });
+    console.log(responseData);
+    if (responseData) {
       // console.log(predictRes);
+      predictRes = responseData.predictBookInfo;
+      scoreInfoRes = responseData.scInfo;
       setPredictBookInfo(predictRes);
+      setScoreInfo(scoreInfoRes);
       pageHandleRegister(2);
     } else if (predictRes === null) {
       openModal(modalName);
@@ -128,9 +145,10 @@ function ResultPage() {
 
     case 2:
       return (
-        <PredictResult
+        <ResultFinal
           predictBookInfo={predictBookInfo}
           buttonInfo={buttonInfo}
+          scoreInfo={scoreInfo}
         />
       );
 
@@ -139,7 +157,7 @@ function ResultPage() {
         <div>
           <Loading />
           <Modal
-            closeModal={() => closeModal(modalName)}
+            closeModal={() => {}}
             OpenModal={modalOpen[modalName]}
             width="w-[400px]"
             height="h-60">
