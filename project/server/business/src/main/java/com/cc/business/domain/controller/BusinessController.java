@@ -4,6 +4,7 @@ import com.cc.business.domain.dto.FindHistoriesResponseDto;
 import com.cc.business.domain.dto.FindHistoryResponseDto;
 import com.cc.business.domain.entity.BookEntity;
 import com.cc.business.domain.service.BusinessService;
+import com.cc.business.global.common.request.CustomHttpServletRequestWrapper;
 import com.cc.business.global.common.response.EnvelopeResponse;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,7 +41,9 @@ public class BusinessController {
     @PostMapping("/imageinfo")
     public ResponseEntity<EnvelopeResponse<HashMap<String, Object>>> getImageInfo(HttpServletRequest request, @RequestBody List<MultipartFile> imageList) throws IOException {
         log.info("이미지 검색 컨트롤러 호출");
-        BookDto bookInfo = businessService.processImages(request, imageList);
+        int memberId = ((CustomHttpServletRequestWrapper) request).getMemberId();
+
+        BookDto bookInfo = businessService.processImages(request, imageList, memberId);
         String msg = "";
         HttpStatus status = null;
         if(bookInfo == null) {
@@ -62,7 +65,9 @@ public class BusinessController {
     @PostMapping("/bookpredict")
     public ResponseEntity<EnvelopeResponse<HashMap<String, BookEntity>>> predictBookInfo(HttpServletRequest request, @RequestBody HashMap<String, BookDto> params) throws Exception {
 
-        HashMap<String, Object> bookInfo = businessService.processPredictBookInfo(request, params);
+        int memberId = ((CustomHttpServletRequestWrapper) request).getMemberId();
+
+        HashMap<String, Object> bookInfo = businessService.processPredictBookInfo(request, params, memberId);
         log.info("정확한 책 정보: {}", bookInfo.get("certainBookInfo"));
 
         String msg = "";
@@ -86,27 +91,28 @@ public class BusinessController {
     @GetMapping("/history/all")
     public ResponseEntity<EnvelopeResponse<FindHistoriesResponseDto>> findHistrories(HttpServletRequest request){
 
-        int memberId = businessService.isAuthorized(request);
+        int memberId = ((CustomHttpServletRequestWrapper) request).getMemberId();
         return new ResponseEntity<EnvelopeResponse<FindHistoriesResponseDto>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "회원검색이력목록", businessService.findHistories(memberId)), HttpStatus.OK);
     }
 
     @GetMapping("/history/search")
     public ResponseEntity<EnvelopeResponse<FindHistoriesResponseDto>> SearchHistory(HttpServletRequest request, @RequestParam String keyword){
 
-        int memberId = businessService.isAuthorized(request);
+        int memberId = ((CustomHttpServletRequestWrapper) request).getMemberId();
         return new ResponseEntity<EnvelopeResponse<FindHistoriesResponseDto>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "회원검색이력목록", businessService.searchHistory(memberId, keyword)), HttpStatus.OK);
     };
 
     @GetMapping("/history/{bookId}")
     public ResponseEntity<EnvelopeResponse<FindHistoryResponseDto>> findHistory(HttpServletRequest request, @PathVariable Long bookId){
-        int memberId = businessService.isAuthorized(request);
+
+        int memberId = ((CustomHttpServletRequestWrapper) request).getMemberId();
         return new ResponseEntity<EnvelopeResponse<FindHistoryResponseDto>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "책 정보 검색 완료", businessService.findHistory(memberId, bookId)), HttpStatus.OK);
     }
 
     @DeleteMapping("/history/{bookId}")
     public ResponseEntity<EnvelopeResponse<Long>> DeleteHistory(HttpServletRequest request, @PathVariable Long bookId){
 
-        int memberId = businessService.isAuthorized(request);
+        int memberId = ((CustomHttpServletRequestWrapper) request).getMemberId();
         return new ResponseEntity<EnvelopeResponse<Long>>(new EnvelopeResponse<>(HttpStatus.OK.value(), "삭제완료", businessService.deleteHistory(memberId, bookId)), HttpStatus.OK);
     }
 }
