@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { HistoriesResponse, DetailResponse } from '../../interface/api';
-import { BUSINESS_URI } from '../apiInfo';
+import { BUSINESS_URI, useAccessToken } from '../apiInfo';
 import instance from '../../repository/auth/instanceRepository';
 
 const historyUri = `${BUSINESS_URI}/history`;
@@ -60,7 +60,23 @@ async function HistorySearchApi(token: string, keyword: string) {
         return response.data.data.history;
       }
       return response.statusText;
-    } catch {
+    } catch (errors) {
+      const accessToken = useAccessToken();
+      const error = errors as AxiosError;
+      if (error.config && accessToken) {
+        const newConfig = {
+          ...error.config,
+          headers: {
+            ...error.config.headers,
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${accessToken}`,
+          },
+        };
+        const response = await axios.request<HistoriesResponse>(newConfig);
+        if (response.status === 200) {
+          return response.data.data.history;
+        }
+      }
       // window.location.href = '/error';
     }
   }
