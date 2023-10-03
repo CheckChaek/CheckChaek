@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { ReactNode, useEffect } from 'react';
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import {
   useAccessToken,
   useRefreshToken,
@@ -14,22 +14,33 @@ const instance = axios.create({
   headers: {
     'Content-Type': 'application/json',
     authorization: '',
-    authorization_refresh: '',
   },
 });
 
 const AxiosInterceptor = ({ children }: { children: ReactNode }) => {
+  // let newAccessToken = '';
+  // let newRefreshToken = '';
+  const nickname = useNickname();
+  const accessToken = useAccessToken();
+  const refreshToken = useRefreshToken();
+
   const dispatch = useDispatch();
+  const handleResponse = (response: AxiosResponse) => {
+    const newAccessToken = response.headers.authorization;
+    const newRefreshToken = response.headers.authorization_refresh;
+    dispatch(setTokens(newAccessToken, newRefreshToken, nickname as string));
+  };
+
   useEffect(() => {
     instance.interceptors.request.use(
       config => {
         const accessToken = useAccessToken();
-        const refreshToken = useRefreshToken();
+        // const refreshToken = useRefreshToken();
 
         config.headers.authorization = `Bearer ${accessToken as string}`;
-        config.headers.authorization_refresh = `Bearer ${
-          refreshToken as string
-        }`;
+        // config.headers.authorization_refresh = `Bearer ${
+        //   refreshToken as string
+        // }`;
 
         return config;
       },
@@ -47,33 +58,30 @@ const AxiosInterceptor = ({ children }: { children: ReactNode }) => {
           window.location.href = '/error';
         }
         if (error.response?.status === 401 && error.config) {
-          console.log(error);
-          //   const accessToken = useAccessToken();
-          //   const refreshToken = useRefreshToken();
-          const nickname = useNickname();
-          //   //   console.log(accessToken);
-          //   //   console.log(refreshToken);
-          //   //   console.log(nickname);
-          const newConfig = {
-            ...error.config,
-            headers: {
-              ...error.config.headers,
-              // 'Content-Type': 'application/json',
-              // Authorization: `Bearer ${accessToken as string}`,
-              // Authorization_refresh: `Bearer ${refreshToken as string}`,
-            },
+          const { method, url: endPoint } = error.config;
+          const headers = {
+            Authorization: `Bearer ${accessToken as string}`,
+            Authorization_refresh: `Bearer ${refreshToken as string}`,
           };
 
-          dispatch(
-            setTokens(
-              newConfig.headers.authorization.split(' ')[1],
-              newConfig.headers.authorization_refresh.split(' ')[1],
-              nickname as string,
-            ),
-          );
-          const response = await axios.request(newConfig);
-
-          return response;
+          if (method === 'get') {
+            axios[method](endPoint as string, { headers })
+              .then(response => {
+                handleResponse(response);
+              })
+              .catch(e => {
+                console.log(e);
+              });
+          } else if (method === 'post') {
+            axios[method](endPoint as string, {}, { headers })
+              .then(response => {
+                handleResponse(response);
+              })
+              .catch(e => {
+                console.log(e);
+              });
+          }
+          return error;
         }
         return Promise.reject(error);
       },
