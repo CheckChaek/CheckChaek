@@ -1,19 +1,15 @@
 package com.cc.business.domain.service;// BusinessServiceImpl.java
-import com.amazonaws.services.mq.model.InternalServerErrorException;
 import com.amazonaws.services.mq.model.NotFoundException;
 import com.amazonaws.services.mq.model.UnauthorizedException;
-import com.cc.business.domain.controller.openfeign.AuthOpenFeign;
+import com.cc.business.global.config.filter.openfeign.AuthOpenFeign;
 import com.cc.business.domain.dto.*;
 import com.cc.business.domain.entity.BookEntity;
 import com.cc.business.domain.entity.BookImageEntity;
 import com.cc.business.domain.repository.BookImageRepository;
 import com.cc.business.domain.repository.BookRepository;
 import com.cc.business.global.exception.*;
-import com.cc.business.global.exception.auth.AuthErrorCode;
-import com.cc.business.global.exception.auth.AuthException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -65,50 +61,11 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public int isAuthorized(HttpServletRequest request) {
-        String Authorization = request.getHeader("Authorization");
-        String AuthorizationRefresh = request.getHeader("Authorization-refresh");
-        int memberId = 0;
-        try {
-            memberId = authOpenFeign.connectToAuthServer(Authorization,AuthorizationRefresh);
-            return memberId;
-        } catch(Exception e) {
-            List<String> parts = List.of(e.getMessage().split("]: "));
-            String message = getCodeFromAuthResponse(parts.get(1));
-            System.out.println(message);
-            if (message.equals("올바른 형태의 토큰이 아닙니다.")){
-                throw new AuthException(AuthErrorCode.NOT_PROPER_TOKEN);
-            } else if (message.equals("만료된 토큰입니다.")) {
-                throw new AuthException(AuthErrorCode.EXPIRED_TOKEN);
-            } else if (message.equals("일치하는 회원이 없습니다.")){
-                throw new AuthException(AuthErrorCode.NOT_FOUND_USER);
-            } else {
-                throw new AuthException(AuthErrorCode.INTERNAL_AUTH_SERVER_ERROR);
-            }
-        }
-    }
-
-    @Override
-    public String getCodeFromAuthResponse(String jsonResponse) {
-        try{
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(jsonResponse);
-//            int code = jsonNode.get(0).get("code").asInt();
-            String message = jsonNode.get(0).get("message").asText();
-
-            return message;
-        }catch(JsonProcessingException e){
-            return "error";
-        }
-    }
-
-    @Override
     @Transactional
-    public BookDto processImages(HttpServletRequest request, List<MultipartFile> imageList) throws IOException {
+    public BookDto processImages(HttpServletRequest request, List<MultipartFile> imageList, int memberId) throws IOException {
 
         BookDto result = new BookDto();
 
-        int memberId = isAuthorized(request);
         log.info("사용자 ID: {}", memberId);
 
         log.info("이미지 정보 요청값: {}", imageList);
@@ -201,9 +158,8 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Override
     @Transactional
-    public HashMap<String, Object> processPredictBookInfo(HttpServletRequest request, HashMap<String, BookDto> params) throws JsonProcessingException {
+    public HashMap<String, Object> processPredictBookInfo(HttpServletRequest request, HashMap<String, BookDto> params, int memberId) throws JsonProcessingException {
         log.info("책 가격 예측 프로세스 시작");
-        int memberId = isAuthorized(request);
         log.info("사용자 아이디: {}", memberId);
         BookDto editedBookInfo = params.get("bookInfo");
         log.info("수정된 책 정보 요청값: {}", params.get("bookInfo"));
