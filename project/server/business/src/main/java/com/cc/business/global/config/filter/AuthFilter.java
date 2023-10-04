@@ -34,6 +34,11 @@ public class AuthFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;  // downCasting
         String Authorization = request.getHeader("Authorization");
         String Authorization_refresh = request.getHeader("Authorization_refresh");
+        System.out.println("ㅅㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄ");
+
+        System.out.println(" =============입력받은 리프레쉬 ============== : " + Authorization_refresh);
+        System.out.println("-=============입력받은 액세스============== : " + Authorization);
+
         ResponseEntity<Integer> responseEntity;
 
         try{
