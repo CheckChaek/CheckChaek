@@ -15,6 +15,7 @@ import ErrorPage from './pages/errorPage';
 // 나브바 & 바텀시트
 import Navbar from './components/common/navbar';
 import { useAccessToken } from './data_source/apiInfo';
+import { AxiosInterceptor } from './repository/auth/instanceRepository';
 
 function PrivateLoginRoute() {
   const token = useAccessToken();
@@ -35,22 +36,24 @@ function PrivateNotLoginRoute() {
 function App() {
   return (
     <div className="App h-screen snap-y snap-mandatory overflow-scroll scrollbar-hidden">
-      <Router>
-        <Routes>
-          <Route path="/" element={<Navbar />}>
-            <Route path="" element={<MainPage />} />
-            <Route element={<PrivateLoginRoute />}>
-              <Route path="result" element={<ResultPage />} />
-              <Route path="predict" element={<PredictPage />} />
-              <Route path="history" element={<ProfilePage />} />
+      <AxiosInterceptor>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Navbar />}>
+              <Route path="" element={<MainPage />} />
+              <Route element={<PrivateLoginRoute />}>
+                <Route path="result" element={<ResultPage />} />
+                <Route path="predict" element={<PredictPage />} />
+                <Route path="history" element={<ProfilePage />} />
+              </Route>
+              <Route element={<PrivateNotLoginRoute />}>
+                <Route path="login/redirect" element={<SocialLogin />} />
+              </Route>
             </Route>
-            <Route element={<PrivateNotLoginRoute />}>
-              <Route path="login/redirect" element={<SocialLogin />} />
-            </Route>
-          </Route>
-          <Route path="*" element={<ErrorPage />} />
-        </Routes>
-      </Router>
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
+        </Router>
+      </AxiosInterceptor>
     </div>
   );
 }

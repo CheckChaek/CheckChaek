@@ -25,7 +25,7 @@ function ErrorPage() {
       <button
         type="button"
         className="absolute left-[42%] top-[67%] w-[20rem] h-[4.5rem] font-do-hyeon text-2xl hover:bg-BUTTON1-400 hover:shadow-none bg-BUTTON1-200  rounded-2xl shadow-xl shadow-BACKGROUND-600 border-4 border-BUTTON1-300"
-        onClick={() => navigate('/predict')}>
+        onClick={() => navigate('/')}>
         메인으로 돌아가기
       </button>
 
@@ -34,7 +34,7 @@ function ErrorPage() {
           <p>문제를 해결해주세요!</p>
           <p>I need any help!</p>
         </div>
-        <button type="button" onClick={() => navigate('/predict')}>
+        <button type="button" onClick={() => navigate('/')}>
           <DoubleRightIcon styleString="h-14 w-16 mt-2 ml-3 text-SECONDARY-400 animate-pulse" />
         </button>
       </div>

@@ -1,13 +1,14 @@
-import axios from 'axios';
 import { AUTH_URI } from '../apiInfo';
 import { AuthRequset } from '../../interface/api';
+import { logout } from '../../store/actions/authActions';
+import instance from '../../repository/auth/instanceRepository';
 
 function LogoutAPI(token: string, { dispatch }: AuthRequset): void {
+  const logoutURI = `${AUTH_URI}/auth/logout`;
   if (token) {
-    console.log(token);
-    axios
+    instance
       .post(
-        `${AUTH_URI}/auth/logout`,
+        logoutURI,
         {},
         {
           headers: {
@@ -16,14 +17,12 @@ function LogoutAPI(token: string, { dispatch }: AuthRequset): void {
         },
       )
       .then(() => {
-        dispatch();
+        dispatch(logout());
         setTimeout(() => {
           window.location.href = '/';
         }, 100);
       })
-      .catch(error => {
-        console.log(error);
-      });
+      .catch(() => {});
   }
 }
 

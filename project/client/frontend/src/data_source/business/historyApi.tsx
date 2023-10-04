@@ -1,12 +1,12 @@
-import axios from 'axios';
 import { HistoriesResponse, DetailResponse } from '../../interface/api';
 import { BUSINESS_URI } from '../apiInfo';
+import instance from '../../repository/auth/instanceRepository';
 
 const historyUri = `${BUSINESS_URI}/history`;
 function HistoryAllApi(token: string) {
   const url = `${historyUri}/all`;
   if (token) {
-    axios
+    instance
       .get<HistoriesResponse>(url, {
         headers: {
           'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ async function HistoryDetailApi(token: string, bookId: number) {
   const url = `${historyUri}/${bookId}`;
   if (token) {
     try {
-      const response = await axios.get<DetailResponse>(url, {
+      const response = await instance.get<DetailResponse>(url, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -38,9 +38,7 @@ async function HistoryDetailApi(token: string, bookId: number) {
         return response.data.data.bookInfo;
       }
       return response.statusText;
-    } catch {
-      window.location.href = '/error';
-    }
+    } catch {}
   }
 }
 
@@ -48,7 +46,7 @@ async function HistorySearchApi(token: string, keyword: string) {
   const url = `${historyUri}/search?keyword=${encodeURIComponent(keyword)}`;
   if (token) {
     try {
-      const response = await axios.get<HistoriesResponse>(url, {
+      const response = await instance.get<HistoriesResponse>(url, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -59,16 +57,14 @@ async function HistorySearchApi(token: string, keyword: string) {
         return response.data.data.history;
       }
       return response.statusText;
-    } catch {
-      window.location.href = '/error';
-    }
+    } catch {}
   }
 }
 
 function HistoryDeleteApi(token: string, bookid: number) {
   const url = `${historyUri}/${bookid}`;
   if (token) {
-    axios
+    instance
       .delete(url, {
         headers: {
           'Content-Type': 'application/json',

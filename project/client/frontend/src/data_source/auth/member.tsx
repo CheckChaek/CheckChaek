@@ -1,11 +1,12 @@
-import axios from 'axios';
 import { AUTH_URI } from '../apiInfo';
 import { AuthRequset } from '../../interface/api';
+import instance from '../../repository/auth/instanceRepository';
 
 function SignoutAPI(token: string, { dispatch }: AuthRequset): void {
+  const SignoutURI = `${AUTH_URI}/member`;
   if (token) {
-    axios
-      .delete(`${AUTH_URI}/member`, {
+    instance
+      .delete(SignoutURI, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

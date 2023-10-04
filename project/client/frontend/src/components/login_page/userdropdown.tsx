@@ -5,15 +5,15 @@ import UserIcon from '../../assets/icons/usericon';
 import Logoutrepository from '../../repository/auth/authRepository';
 import Signoutrepository from '../../repository/auth/memberRepository';
 import { useNickname } from '../../data_source/apiInfo';
-import { logout } from '../../store/actions/authActions';
+// import { logout } from '../../store/actions/authActions';
 
 function UserDropdown() {
   const name = useNickname();
   const dispatch = useDispatch();
 
-  const handleLogout = () => {
-    dispatch(logout());
-  };
+  // const handleLogout = () => {
+  //   dispatch(logout());
+  // };
 
   return (
     <Menu as="div" className="relative w-28 inline-block text-left">
@@ -38,7 +38,7 @@ function UserDropdown() {
               <button
                 type="button"
                 className="w-full bg-gray-100 text-gray-900 block px-4 py-2 text-sm hover:bg-SECONDARY-100"
-                onClick={() => Logoutrepository({ dispatch: handleLogout })}>
+                onClick={() => Logoutrepository({ dispatch })}>
                 로그아웃
               </button>
             </Menu.Item>
@@ -46,7 +46,7 @@ function UserDropdown() {
               <button
                 type="button"
                 className="w-full bg-gray-100 text-gray-900 block px-4 py-2 text-sm hover:bg-SECONDARY-100"
-                onClick={() => Signoutrepository({ dispatch: handleLogout })}>
+                onClick={() => Signoutrepository({ dispatch })}>
                 회원탈퇴
               </button>
             </Menu.Item>
