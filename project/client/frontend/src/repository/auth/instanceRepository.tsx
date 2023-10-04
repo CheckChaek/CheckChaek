@@ -51,6 +51,7 @@ function AxiosInterceptor({ children }: { children: ReactNode }) {
     },
     async (error: AxiosError) => {
       if (error.response?.status === 404) {
+        console.log(404);
         window.location.href = '/error';
       }
       if (error.response?.status === 401 && error.config) {
