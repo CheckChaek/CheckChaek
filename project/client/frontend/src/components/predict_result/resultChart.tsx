@@ -14,28 +14,22 @@ ChartJS.register(ArcElement, Tooltip);
 function ResultChart(props: { scoreInfo: ScoreInfo }) {
   const { scoreInfo } = props;
 
-  let status: string;
   let medal;
   switch (scoreInfo.status) {
     case 'best':
       medal = State_medal_best;
-      status = '최상';
       break;
     case 'high':
       medal = State_medal_high;
-      status = '상';
       break;
     case 'medium':
       medal = State_medal_medium;
-      status = '중';
       break;
     case 'low':
       medal = State_medal_low;
-      status = '매입불가';
       break;
     default:
       medal = '';
-      status = '';
   }
 
   const backgroundColor = [
