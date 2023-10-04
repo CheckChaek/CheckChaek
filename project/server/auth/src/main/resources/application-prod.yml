@@ -77,7 +77,7 @@ jwt:
   secretKey: checkchaeck
 
   access:
-    expiration: 15000
+    expiration: 10800000
     # expiration: 3600000 # 1시간(60분) (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h))
     header: Authorization
 
