@@ -29,6 +29,8 @@ public class CorsConfig {
         FilterRegistrationBean<CorsFilter> registrationBean =
                 new FilterRegistrationBean<>(corsFilter());
         registrationBean.setOrder(0); // CorsFilter를 가장 먼저 실행하도록 설정
+        registrationBean.addUrlPatterns("/*");
+
         return registrationBean;
     }
 }
