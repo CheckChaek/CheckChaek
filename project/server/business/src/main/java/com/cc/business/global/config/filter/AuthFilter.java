@@ -9,12 +9,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 public class AuthFilter implements Filter {
 
     private final AuthOpenFeign authOpenFeign;
@@ -69,6 +71,7 @@ public class AuthFilter implements Filter {
             response.setStatus(HttpServletResponse.SC_OK);
         } else {
             int memberId = responseEntity.getBody();
+            log.info("memberId : " + memberId);
             CustomHttpServletRequestWrapper customRequest = new CustomHttpServletRequestWrapper(request, memberId);
             chain.doFilter(customRequest, res);
         }
