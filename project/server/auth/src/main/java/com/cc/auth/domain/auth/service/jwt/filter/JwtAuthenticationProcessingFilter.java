@@ -54,7 +54,7 @@ public class JwtAuthenticationProcessingFilter extends BasicAuthenticationFilter
                 .orElse(null);
         if(refreshToken != null){
             System.out.println("==== REFRESH ====== : ");
-            System.out.println("==== REFRESH ====== : " + refresh);
+            System.out.println("==== REFRESH ====== : " + refreshToken);
             checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
             return;
         }
