@@ -21,7 +21,12 @@ public class CorsConfig {
         config.addAllowedOrigin("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
+
+        config.addExposedHeader("Authorization");
+        config.addExposedHeader("Authorization_refresh");
+
         source.registerCorsConfiguration("/**", config);
+
         return new CorsFilter(source);
     }
     @Bean
