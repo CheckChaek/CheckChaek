@@ -48,6 +48,14 @@ public class JwtAuthenticationProcessingFilter extends BasicAuthenticationFilter
             filterChain.doFilter(request, response);
             return;
         }
+
+        System.out.println("1111111111111111111111");
+        String refresh = jwtProvider.extractRefreshToken(request).get();
+        System.out.println("2222222222222222222222");
+        System.out.println("==== REFRESH ====== : " + refresh);
+
+
+
         String refreshToken = jwtProvider.extractRefreshToken(request)
                 .filter(jwtProvider::isTokenValid)
                 .orElse(null);
