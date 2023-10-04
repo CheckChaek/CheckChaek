@@ -1,6 +1,7 @@
 package com.cc.business.global.config.filter;
 
 import com.cc.business.global.common.request.CustomHttpServletRequestWrapper;
+import com.cc.business.global.common.request.CustomMultipartFileRequest;
 import com.cc.business.global.config.filter.openfeign.AuthOpenFeign;
 import com.cc.business.global.exception.auth.AuthErrorCode;
 import com.cc.business.global.exception.auth.AuthException;
@@ -33,13 +34,15 @@ public class AuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 
+        String contentType = req.getContentType();
+        log.info("contentType : "+ contentType);
+
         HttpServletRequest request = (HttpServletRequest) req;  // downCasting
         String Authorization = request.getHeader("Authorization");
         String Authorization_refresh = request.getHeader("Authorization_refresh");
-        System.out.println("ㅅㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄㅄ");
 
-        System.out.println(" =============입력받은 리프레쉬 ============== : " + Authorization_refresh);
-        System.out.println("-=============입력받은 액세스============== : " + Authorization);
+        log.info("Authorization : "+Authorization);
+        log.info("Authorization_refresh : "+Authorization_refresh);
 
         ResponseEntity<Integer> responseEntity;
 
@@ -72,8 +75,14 @@ public class AuthFilter implements Filter {
         } else {
             int memberId = responseEntity.getBody();
             log.info("memberId : " + memberId);
-            CustomHttpServletRequestWrapper customRequest = new CustomHttpServletRequestWrapper(request, memberId);
-            chain.doFilter(customRequest, res);
+
+            if (contentType != null && contentType.startsWith("multipart")){
+                CustomMultipartFileRequest custommultiRequest = new CustomMultipartFileRequest(request, memberId);
+                chain.doFilter(custommultiRequest, res);
+            } else {
+                CustomHttpServletRequestWrapper customRequest = new CustomHttpServletRequestWrapper(request, memberId);
+                chain.doFilter(customRequest, res);
+            }
         }
     }
 

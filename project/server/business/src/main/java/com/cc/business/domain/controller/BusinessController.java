@@ -5,6 +5,7 @@ import com.cc.business.domain.dto.FindHistoryResponseDto;
 import com.cc.business.domain.entity.BookEntity;
 import com.cc.business.domain.service.BusinessService;
 import com.cc.business.global.common.request.CustomHttpServletRequestWrapper;
+import com.cc.business.global.common.request.CustomMultipartFileRequest;
 import com.cc.business.global.common.response.EnvelopeResponse;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,7 +42,7 @@ public class BusinessController {
     @PostMapping("/imageinfo")
     public ResponseEntity<EnvelopeResponse<HashMap<String, Object>>> getImageInfo(HttpServletRequest request, @RequestBody List<MultipartFile> imageList) throws IOException {
         log.info("이미지 검색 컨트롤러 호출");
-        int memberId = ((CustomHttpServletRequestWrapper) request).getMemberId();
+        int memberId = ((CustomMultipartFileRequest) request).getMemberId();
 
         BookDto bookInfo = businessService.processImages(request, imageList, memberId);
         String msg = "";
