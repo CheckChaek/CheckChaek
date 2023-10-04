@@ -1,13 +1,12 @@
-import axios, { AxiosError } from 'axios';
 import { HistoriesResponse, DetailResponse } from '../../interface/api';
-import { BUSINESS_URI, useAccessToken } from '../apiInfo';
+import { BUSINESS_URI } from '../apiInfo';
 import instance from '../../repository/auth/instanceRepository';
 
 const historyUri = `${BUSINESS_URI}/history`;
 function HistoryAllApi(token: string) {
   const url = `${historyUri}/all`;
   if (token) {
-    axios
+    instance
       .get<HistoriesResponse>(url, {
         headers: {
           'Content-Type': 'application/json',
@@ -39,9 +38,7 @@ async function HistoryDetailApi(token: string, bookId: number) {
         return response.data.data.bookInfo;
       }
       return response.statusText;
-    } catch {
-      // window.location.href = '/error';
-    }
+    } catch {}
   }
 }
 
@@ -60,32 +57,14 @@ async function HistorySearchApi(token: string, keyword: string) {
         return response.data.data.history;
       }
       return response.statusText;
-    } catch (errors) {
-      const accessToken = useAccessToken();
-      const error = errors as AxiosError;
-      if (error.config && accessToken) {
-        const newConfig = {
-          ...error.config,
-          headers: {
-            ...error.config.headers,
-            'Content-Type': 'application/json',
-            authorization: `Bearer ${accessToken}`,
-          },
-        };
-        const response = await axios.request<HistoriesResponse>(newConfig);
-        if (response.status === 200) {
-          return response.data.data.history;
-        }
-      }
-      // window.location.href = '/error';
-    }
+    } catch {}
   }
 }
 
 function HistoryDeleteApi(token: string, bookid: number) {
   const url = `${historyUri}/${bookid}`;
   if (token) {
-    axios
+    instance
       .delete(url, {
         headers: {
           'Content-Type': 'application/json',

@@ -1,7 +1,4 @@
-import { useSelector } from 'react-redux';
-import { RootState } from '../store/store';
-
-const BASE_URI = 'https://j9a606.p.ssafy.io';
+const BASE_URI = 'http://j9a606.p.ssafy.io';
 
 const BUSINESS_URI = `${BASE_URI}/business`;
 const AUTH_URI = `${BASE_URI}`;
