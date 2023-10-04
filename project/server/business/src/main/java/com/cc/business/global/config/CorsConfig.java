@@ -23,12 +23,6 @@ public class CorsConfig {
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
-        config.addAllowedMethod(HttpMethod.POST);
-        config.addAllowedMethod(HttpMethod.GET);
-        config.addAllowedMethod(HttpMethod.DELETE);
-        config.addAllowedMethod(HttpMethod.OPTIONS);
-        config.addAllowedMethod(HttpMethod.PUT);
-
         config.addExposedHeader("Authorization");
         config.addExposedHeader("Authorization_refresh");
 
