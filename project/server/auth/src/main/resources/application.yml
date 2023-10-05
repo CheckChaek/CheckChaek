@@ -41,6 +41,7 @@ spring:
   security:
     oauth2:
       redirectUrl: http://localhost:8080/login/redirect
+      redirectUrl_local: http://localhost:8080/login/redirect
       client:
         registration:
           kakao:
