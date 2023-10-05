@@ -15,13 +15,13 @@ async function TaConfirmRepository(props: { imageList: File[] }) {
   const { imageList } = props;
   if (accessToken) {
     const res = await TaPredictDataSource(accessToken, imageList);
-    console.log(res);
+    // console.log(res);
     if (res?.data) {
       return res.data.bookInfo;
     }
     return null;
   }
-  console.log('Error : repository token is not existed');
+  // console.log('Error : repository token is not existed');
 }
 
 async function PredictRepository(props: { bookInfo: Book }) {
@@ -30,14 +30,14 @@ async function PredictRepository(props: { bookInfo: Book }) {
   if (accessToken) {
     const response = await PredictApi(accessToken, bookInfo);
     if (response?.data) {
-      console.log(response);
+      // console.log(response);
       if (response.code === 200) {
         return response.data;
       }
     }
     return null;
   }
-  console.log('Error : repository token is not existed');
+  // console.log('Error : repository token is not existed');
 }
 
 export { PredictRepository, TaConfirmRepository };

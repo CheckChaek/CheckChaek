@@ -5,7 +5,6 @@ import {
   Outlet,
   Navigate,
 } from 'react-router-dom';
-import ScrollToTop from './components/common/scrollToTop';
 
 // 페이지
 import MainPage from './pages/mainPage';
@@ -40,7 +39,6 @@ function App() {
     <div className="App h-screen snap-y snap-mandatory overflow-scroll scrollbar-hidden">
       <AxiosInterceptor>
         <Router>
-          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Navbar />}>
               <Route path="" element={<MainPage />} />

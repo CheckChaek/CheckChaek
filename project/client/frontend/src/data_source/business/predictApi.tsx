@@ -22,11 +22,12 @@ export async function TaPredictDataSource(token: string, imageList: File[]) {
         },
       })
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
 
         response = res.data as TaResponse;
       })
-      .catch(e => console.log(e));
+      // .catch(e => console.log(e));
+      .catch(() => {});
   }
   return response;
 }
@@ -35,7 +36,7 @@ export async function PredictApi(token: string, bookInfo: Book) {
   const url = `${BUSINESS_URI}/bookpredict`;
   let response: PredictResponse | undefined | null;
   if (token) {
-    console.log({ bookInfo });
+    // console.log({ bookInfo });
     await axios
       .post(
         url,
@@ -48,10 +49,11 @@ export async function PredictApi(token: string, bookInfo: Book) {
         },
       )
       .then(res => {
-        console.log(res);
+        // console.log(res);
         response = res.data as PredictResponse;
       })
-      .catch(e => console.log(e));
+      // .catch(e => console.log(e));
+      .catch(() => {});
   }
   return response;
 }
