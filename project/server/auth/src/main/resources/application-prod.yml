@@ -41,7 +41,7 @@ spring:
   security:
     oauth2:
       redirectUrl: https://j9a606.p.ssafy.io/login/redirect
-      # redirectUrl: http://localhost:3000/login/redirect
+      redirectUrl_local: http://localhost:3000/login/redirect
       client:
         registration:
           kakao:
