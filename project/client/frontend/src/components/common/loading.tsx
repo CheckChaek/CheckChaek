@@ -1,3 +1,4 @@
+// icons
 import LoadingBook from '../../assets/icons/loading';
 
 function Loading() {

@@ -1,3 +1,4 @@
+// interface
 import { BtnInfo } from '../../interface/common';
 
 function PredictBtn({

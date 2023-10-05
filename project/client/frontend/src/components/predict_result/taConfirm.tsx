@@ -1,11 +1,17 @@
+// Hooks
 import { Dispatch, SetStateAction, useState } from 'react';
 
+// Modal Utils
 import Modal from '../modal/modal';
 import AlertContents from '../modal/alertContents';
+import { useModal } from '../modal/modalClass';
+
+// components
 import Card from '../common/card';
 import PredictBtn from '../common/predictBtn';
+
+// interfaces
 import { BookInfo } from '../../interface/predictResult';
-import { useModal } from '../modal/modalClass';
 
 function TaConfirm(props: {
   bookInfo: BookInfo;
@@ -41,16 +47,12 @@ function TaConfirm(props: {
   const bookAuthorhandler = (
     newAuthor: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    if (newAuthor.target.value) {
-      setBookAuthor(newAuthor.target.value);
-    }
+    setBookAuthor(newAuthor.target.value);
   };
   const bookPublisherhandler = (
     newPublisher: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    if (newPublisher.target.value) {
-      setBookPublisher(newPublisher.target.value);
-    }
+    setBookPublisher(newPublisher.target.value);
   };
 
   const bookInfoHandler = () => {
