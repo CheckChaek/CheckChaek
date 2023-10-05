@@ -13,10 +13,10 @@ export default function ChartPart({
   chartData,
 }: DoughnutProps) {
   const backgroundColor = [
-    'rgba(54, 162, 235, 0.2)',
-    'rgba(75, 192, 192, 0.2)',
-    'rgba(255, 99, 132, 0.2)',
-    'rgba(255, 206, 86, 0.2)',
+    'rgba(54, 162, 235, 1)',
+    'rgba(75, 192, 192,1)',
+    'rgba(255, 99, 132, 1)',
+    'rgba(255, 206, 86, 1)',
   ];
   const borderColor = [
     'rgba(54, 162, 235, 1)',
@@ -26,7 +26,7 @@ export default function ChartPart({
   ];
   const isNone = chartData.reduce((sum, curr) => sum + curr, 0) > 0;
   const data = {
-    labels: [],
+    labels: ['최상', '상', '매입 불가', '중'],
     datasets: [
       {
         label,
