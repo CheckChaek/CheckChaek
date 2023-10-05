@@ -85,7 +85,7 @@ function ResultPage() {
   // TA API 통신 예외처리
   const taApiRequest = async () => {
     res = await TaConfirmRepository({ imageList });
-    console.log(res);
+    // console.log(res);
     if (res) {
       setBookInfo(res);
       pageHandleRegister(1);
