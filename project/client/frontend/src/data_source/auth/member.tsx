@@ -1,6 +1,7 @@
 import { AUTH_URI } from '../apiInfo';
 import { AuthRequset } from '../../interface/api';
 import instance from '../../repository/auth/instanceRepository';
+import { logout } from '../../store/actions/authActions';
 
 function SignoutAPI(token: string, { dispatch }: AuthRequset): void {
   const SignoutURI = `${AUTH_URI}/member`;
@@ -12,7 +13,7 @@ function SignoutAPI(token: string, { dispatch }: AuthRequset): void {
         },
       })
       .then(() => {
-        dispatch();
+        dispatch(logout());
         setTimeout(() => {
           window.location.href = '/';
         }, 100);
