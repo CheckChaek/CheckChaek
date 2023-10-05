@@ -57,6 +57,7 @@ spring:
           google:
             client-id: 195520493714-ichavs28t68gacsli4hal2t8lsl7s1q4.apps.googleusercontent.com
             client-secret: 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
+            redirect-uri: http://j9a606.p.ssafy.io:8081/login/oauth2/code/google
             scope:
               - profile
               - email
