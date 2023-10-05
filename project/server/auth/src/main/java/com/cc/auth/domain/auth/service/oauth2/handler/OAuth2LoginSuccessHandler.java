@@ -62,7 +62,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         return token;
     }
 
-    private String getRedirectUrl(TokenMapping token, String nickname, , OauthType oauthType) throws UnsupportedEncodingException {
+    private String getRedirectUrl(TokenMapping token, String nickname, OauthType oauthType) throws UnsupportedEncodingException {
 
         String encodedNickname = URLEncoder.encode(nickname, "UTF-8");
         String redirect_url = null;
