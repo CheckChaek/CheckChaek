@@ -4,6 +4,7 @@ import com.cc.auth.domain.auth.dto.PrincipalDetails;
 import com.cc.auth.domain.auth.dto.TokenMapping;
 import com.cc.auth.domain.auth.service.jwt.JwtProvider.JwtProvider;
 import com.cc.auth.domain.member.domain.Member;
+import com.cc.auth.domain.member.domain.OauthType;
 import com.cc.auth.domain.member.repository.MemberRepository;
 
 import jakarta.servlet.ServletException;
@@ -30,6 +31,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Value("${spring.security.oauth2.redirectUrl}")
     private String REDIRECT_URL;
 
+    @Value("${spring.security.oauth2.redirectUrl_local}")
+    private String REDIRECT_URL_LOCAL;
+
     private final JwtProvider jwtProvider;
     private final MemberRepository memberRepository;
 
@@ -41,10 +45,11 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         TokenMapping tokenMapping = saveUser(authentication);
 
         PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+        OauthType oauthType = principal.getMember().getOauthType();
+        
         String nickname = principal.getMember().getNickname();
 
-        System.out.println("===============================");
-        response.sendRedirect(getRedirectUrl(tokenMapping, nickname));
+        response.sendRedirect(getRedirectUrl(tokenMapping, nickname, oauthType));
     }
 
     private TokenMapping saveUser(Authentication authentication){
@@ -57,11 +62,16 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         return token;
     }
 
-    private String getRedirectUrl(TokenMapping token, String nickname) throws UnsupportedEncodingException {
+    private String getRedirectUrl(TokenMapping token, String nickname, , OauthType oauthType) throws UnsupportedEncodingException {
 
         String encodedNickname = URLEncoder.encode(nickname, "UTF-8");
-
-        return UriComponentsBuilder.fromUriString(REDIRECT_URL)
+        String redirect_url = null;
+        if(oauthType.equals(OauthType.GOOGLE)){
+            redirect_url = REDIRECT_URL;
+        }else if (oauthType.equals(OauthType.KAKAO)){
+            redirect_url = REDIRECT_URL_LOCAL;
+        }
+        return UriComponentsBuilder.fromUriString(redirect_url)
                 .queryParam("nickname", encodedNickname)
                 .queryParam(TOKEN, token.getAccessToken())
                 .queryParam(REFRESH_TOKEN, token.getRefreshToken())
