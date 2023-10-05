@@ -1,4 +1,7 @@
+// file uploader
 import { FileUploader } from 'react-drag-drop-files';
+
+// util & Hook
 import React, { useEffect } from 'react';
 
 // interface

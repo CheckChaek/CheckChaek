@@ -1,5 +1,8 @@
+// components
 import PredictResult from './predictResult';
-import ResultChart from './resultChart';
+import ResultChart from './chart/resultChart';
+
+// interfaces
 import { PredictBookInfo, ScoreInfo } from '../../interface/predictResult';
 import { BtnInfo } from '../../interface/common';
 

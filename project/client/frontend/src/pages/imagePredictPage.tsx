@@ -1,14 +1,18 @@
+// Router & Hooks
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// Modals
 import Modal from '../components/modal/modal';
 import { useModal } from '../components/modal/modalClass';
+import AlertContents from '../components/modal/alertContents';
+import Guide from '../components/modal/guide';
+
+// Components
 import Card from '../components/common/card';
 import MemoizmImageSlider from '../components/predict_page/imageSlider';
 import MemoizmImageUploader from '../components/predict_page/imageUploader';
 import PredictBtn from '../components/common/predictBtn';
-import AlertContents from '../components/modal/alertContents';
-import Guide from '../components/modal/guide';
 
 function PredictPage() {
   const { modalOpen, openModal, closeModal } = useModal();
@@ -18,8 +22,8 @@ function PredictPage() {
 
   const modalName10 = 'imageLimit10';
   const modalName0 = 'imageLimit0';
-  const guideRef = useRef(true);
   const guidemodalName = 'guide';
+  const guideRef = useRef(true);
   const handleGuide = useCallback(() => {
     if (guideRef.current) {
       openModal(guidemodalName);

@@ -1,10 +1,13 @@
-import Card from '../common/card';
 // medals
 import State_medal_best from '../../assets/images/predict_result/state_medal_best.png';
 import State_medal_high from '../../assets/images/predict_result/state_medal_high.png';
 import State_medal_medium from '../../assets/images/predict_result/state_medal_medium.png';
 import State_medal_low from '../../assets/images/predict_result/state_medal_low.png';
+// component
+import Card from '../common/card';
 import PredictBtn from '../common/predictBtn';
+
+// interface
 import { PredictBookInfo } from '../../interface/predictResult';
 import { BtnInfo } from '../../interface/common';
 
@@ -13,18 +16,15 @@ function PredictResult(props: {
   buttonInfo: BtnInfo;
 }) {
   const { predictBookInfo, buttonInfo } = props;
-  const bookInfo =
-    predictBookInfo === undefined
-      ? {
-          title: '제목',
-          author: '저자',
-          publisher: '출판사',
-          status: '알 수 없음',
-          originalPrice: '알 수 없음',
-          estimatedPrice: '알 수 없음',
-          coverImage: '알 수 없음',
-        }
-      : predictBookInfo;
+  const bookInfo = predictBookInfo || {
+    title: '제목',
+    author: '저자',
+    publisher: '출판사',
+    status: '알 수 없음',
+    originalPrice: '알 수 없음',
+    estimatedPrice: '알 수 없음',
+    coverImage: '알 수 없음',
+  };
   let medal;
   switch (bookInfo.status) {
     case 'best':

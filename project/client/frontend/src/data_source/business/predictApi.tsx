@@ -1,8 +1,10 @@
+// Utils
 import axios from 'axios';
-import { BUSINESS_URI } from '../apiInfo';
 
-import { TaResponse, PredictResponse } from '../../interface/api';
+import { BUSINESS_URI } from '../apiInfo';
+// interface
 import { Book } from '../../interface/predictResult';
+import { TaResponse, PredictResponse } from '../../interface/api';
 
 export async function TaPredictDataSource(token: string, imageList: File[]) {
   const url = `${BUSINESS_URI}/imageinfo`;

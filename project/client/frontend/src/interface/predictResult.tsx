@@ -23,3 +23,9 @@ export interface ScoreInfo {
   cover: number[];
   side: number[];
 }
+
+export interface DoughnutProps {
+  styleString: string;
+  label: string;
+  chartData: number[];
+}

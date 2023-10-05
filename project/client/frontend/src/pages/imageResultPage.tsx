@@ -1,24 +1,31 @@
+// Router & Hooks
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-// import PredictResult from '../components/predict_result/predictResult';
+// component
 import Loading from '../components/common/loading';
 import TaConfirm from '../components/predict_result/taConfirm';
 import Modal from '../components/modal/modal';
 import AlertContents from '../components/modal/alertContents';
+import ResultFinal from '../components/predict_result/resultFinal';
+
+// API
 import {
   PredictRepository,
   TaConfirmRepository,
 } from '../repository/business/predictRepository';
+
+// interface
 import {
   Book,
   BookInfo,
   PredictBookInfo,
   ScoreInfo,
 } from '../interface/predictResult';
-import { useModal } from '../components/modal/modalClass';
 import { BtnInfo } from '../interface/common';
-import ResultFinal from '../components/predict_result/resultFinal';
+
+// Modal
+import { useModal } from '../components/modal/modalClass';
 
 function ResultPage() {
   // 페이지 띄우는 State
@@ -52,7 +59,7 @@ function ResultPage() {
     back: [0, 0, 0, 0],
     cover: [0, 0, 0, 0],
     side: [0, 0, 0, 0],
-    status: '',
+    status: '알 수 없음',
   };
 
   // 책 정보 State
@@ -94,7 +101,6 @@ function ResultPage() {
       publisher: bookInfo.publisher,
     };
     const responseData = await PredictRepository({ bookInfo: requestBookInfo });
-    console.log(responseData);
     if (responseData) {
       // console.log(predictRes);
       predictRes = responseData.predictBookInfo;

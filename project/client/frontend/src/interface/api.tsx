@@ -7,7 +7,7 @@ export interface AuthRequset {
 // predict
 
 export interface APIResponse {
-  code: string;
+  code: number;
   message: string;
 }
 
