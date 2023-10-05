@@ -37,12 +37,7 @@ function TaConfirm(props: {
   const modalName = 'titleAlert';
 
   const bookTitlehandler = (newTitle: React.ChangeEvent<HTMLInputElement>) => {
-    // if (newTitle.target.value) {
-    // console.log(newTitle.target.value);
     setBookTitle(newTitle.target.value);
-    // } else {
-    //   openModal(modalName);
-    // }
   };
   const bookAuthorhandler = (
     newAuthor: React.ChangeEvent<HTMLInputElement>,

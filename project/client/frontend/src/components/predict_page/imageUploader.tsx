@@ -23,7 +23,7 @@ function ImageUploader({
 
   return (
     // 렌더링 파트
-    <ul className="w-100 h-100 grid grid-cols-5 mt-8 place-content-center ">
+    <ul className="w-100 h-100 grid grid-cols-5 place-content-center ">
       {imageList.map((image, index) => (
         <button
           key={Math.random()}

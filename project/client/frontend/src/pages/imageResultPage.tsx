@@ -89,6 +89,8 @@ function ResultPage() {
     if (res) {
       setBookInfo(res);
       pageHandleRegister(1);
+    } else {
+      openModal(modalName);
     }
   };
 
@@ -108,10 +110,8 @@ function ResultPage() {
       setPredictBookInfo(predictRes);
       setScoreInfo(scoreInfoRes);
       pageHandleRegister(2);
-    } else if (predictRes === null) {
-      openModal(modalName);
     } else {
-      navigate('/error');
+      openModal(modalName);
     }
   };
 

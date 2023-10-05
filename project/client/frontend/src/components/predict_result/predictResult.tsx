@@ -58,7 +58,11 @@ function PredictResult(props: {
         </div>
         <div className="ResultContents h-[32rem] w-[32rem] px-10 place-items-stretch bg-MAIN-100 ml-10 rounded-2xl p-4">
           <div className="Contents text-2xl p-4 font-bold">
-            <p className=" pb-6">{bookInfo.title}</p>
+            <p className=" pb-6">
+              {bookInfo.title.length > 45
+                ? `${bookInfo.title.substring(0, 45)}...`
+                : bookInfo.title}
+            </p>
 
             <p className="text-lg text-center font-medium pb-3">
               {bookInfo.author} | {bookInfo.publisher}

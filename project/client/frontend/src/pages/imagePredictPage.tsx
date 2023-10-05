@@ -67,6 +67,10 @@ function PredictPage() {
             setIsDrag={setIsDrag}
           />
         </div>
+        <div className="mt-10  text-lg text-center">
+          * 제목이 잘보이는 사진을 제일 앞에 넣어주세요!
+        </div>
+
         <div className="ImageUploader">
           <MemoizmImageUploader
             imageList={imageList}
