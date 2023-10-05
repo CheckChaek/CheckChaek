@@ -8,11 +8,14 @@ def price_prediction(image_status):
     origin_pirce = image_status['origin_price']
     probs = image_status['all_data']
 
+    if probs.index(max(probs)) == 2:
+        return 0
+    
     all_price = []
     all_price.append(origin_pirce * probs[0] * best_status_num)
     all_price.append(origin_pirce * probs[1] * high_status_num)
-    all_price.append(origin_pirce * probs[2] * medium_status_num)
-    all_price.append(origin_pirce * probs[3] * low_status_num)
+    all_price.append(origin_pirce * probs[2] * low_status_num)
+    all_price.append(origin_pirce * probs[3] * medium_status_num)
 
 
     return sum(all_price)
