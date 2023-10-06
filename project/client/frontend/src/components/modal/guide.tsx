@@ -83,7 +83,7 @@ function Guide({ okAction }: Content) {
           </div>
           <div className="flex text-lg">
             <span> - </span>
-            <p>책 옆이 과하게 펼쳐진 사진</p>
+            <p>책 옆이 과하게 펼쳐지지 않은 사진</p>
           </div>
         </div>
         <img

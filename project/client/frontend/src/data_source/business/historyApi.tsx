@@ -54,7 +54,7 @@ async function HistorySearchApi(token: string, keyword: string) {
       });
 
       if (response.status === 200) {
-        return response.data.data.history;
+        return response.data.data.history.reverse();
       }
       return response.statusText;
     } catch {}
