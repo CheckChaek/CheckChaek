@@ -47,7 +47,21 @@ function Library({
 
   const startIndex = (currentPage - 1) * 10;
   const endIndex = Math.min(startIndex + 10, totalItems);
-
+  // 변수명 처리
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'low':
+        return '매입불가';
+      case 'medium':
+        return '중';
+      case 'high':
+        return '상';
+      case 'best':
+        return '최상';
+      default:
+        return '';
+    }
+  };
   // 더보기 기능
   const [bookname, setBookname] = useState<string[]>([]);
   const handleReadMore = (bookId: number) => {
@@ -137,12 +151,8 @@ function Library({
                     )}
                   </p>
 
-                  <p>
-                    상태 :{' '}
-                    {book.status && book.status === 'low'
-                      ? '매입불가'
-                      : book.status || ''}
-                  </p>
+                  <p>상태 : {getStatusText(book.status as string)}</p>
+
                   <p>
                     {' '}
                     {book.price && book.price === '0'
