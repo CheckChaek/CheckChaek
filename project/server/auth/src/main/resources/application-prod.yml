@@ -1,11 +1,49 @@
+<<<<<<< HEAD:project/server/business/src/main/resources/application-prod.yml
+# 프로젝트 서버 URL
+server.url: https://j9a606.p.ssafy.io
+
+# 서버 설정
+server:
+  port: 8082
+  servlet:
+    context-path: /business
+=======
 server:
   port: 8081
   servlet:
+>>>>>>> cd5e4feb64111f9252e36f68a97a905549467398:project/server/auth/src/main/resources/application-prod.yml
     encoding:
       charset: UTF-8
       enabled: true
       force: true
 
+<<<<<<< HEAD:project/server/business/src/main/resources/application-prod.yml
+# S3 설정
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIATAEGQITM4DIXMJIL
+      secretKey: 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
+    s3:
+      bucket: imagebucket606
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
+
+# DB 설정
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver  # Database를 MariaDB로 사용하겠다.
+    url: jdbc:mariadb://j9a606.p.ssafy.io/checkchaeck  # MariaDB로 접속 정보
+    username: root  # MariaDB로 접속 시 입력할 username 정보 (원하는 것으로 입력)
+    password: ash0906! # MariaDB로 접속 시 입력할 password 정보 (원하는 것으로 입력)
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+=======
 spring:
 #   H2 Setting Info (H2 Console에 접속하기 위한 설정정보 입력)
   # h2:
@@ -30,6 +68,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+>>>>>>> cd5e4feb64111f9252e36f68a97a905549467398:project/server/auth/src/main/resources/application-prod.yml
     properties:
       hibernate:
         format_sql: true
@@ -38,6 +77,23 @@ spring:
         default_batch_fetch_size: 1000
     show-sql: true
 
+<<<<<<< HEAD:project/server/business/src/main/resources/application-prod.yml
+    servlet:
+      multipart:
+        max-file-size: 100MB
+        max-request-size: 100MB
+
+# Swagger 설정
+springdoc:
+  packages-to-scan: com.cc.domain.business.controllers
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha
+=======
   security:
     oauth2:
       redirectUrl: https://j9a606.p.ssafy.io/login/redirect
@@ -87,3 +143,4 @@ jwt:
     expiration: 1209600000 #  (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h) * 24L(h -> 하루) * 14(2주))
     header: Authorization_refresh
 
+>>>>>>> cd5e4feb64111f9252e36f68a97a905549467398:project/server/auth/src/main/resources/application-prod.yml
