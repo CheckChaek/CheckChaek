@@ -1,4 +1,4 @@
-const BASE_URI = 'https://j9a606.p.ssafy.io';
+const BASE_URI = '';
 
 const BUSINESS_URI = `${BASE_URI}/business`;
 const AUTH_URI = `${BASE_URI}`;
