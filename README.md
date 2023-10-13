@@ -21,7 +21,7 @@
 
 ## 메인 페이지
 
-<img src="./gifs/MainPage.gif" alt="메인 페이지" style="width: 50%;" />
+<img src="./gifs/MainPage.gif" alt="메인 페이지" style="width: 62%;" />
 
 ## 주요 기능
 
@@ -29,15 +29,15 @@
 
 ### 로그인
 
-<img src="./gifs/Auth.gif" alt="로그인" style="width: 50%;" />
+<img src="./gifs/Auth.gif" alt="로그인" />
 
 ### 예측하기
 
-<img src="./gifs/Predict.gif" alt="예측" style="width: 50%;" />
+<img src="./gifs/predict.gif" alt="예측" />
 
 ### 히스토리
 
-<img src="./gifs/History.gif" alt="히스토리" style="width: 50%;"  />
+<img src="./gifs/History.gif" alt="히스토리"  />
 
 <br/><br/>
 
@@ -254,55 +254,14 @@
 
 ## Flow Chart
 
-<div style="display: flex; text-align: center; justify-content: space-around;">
+<img src="./images/flowChart/total_Flow.png" alt="flow chart" >
 
-<div style="width: 45%;">
-
-### 인증/인가
-
-<br/>
-
-<img src="./images/flowChart/authFlow.png" alt="flow chart" >
-<br/>
-<img src="./images/flowChart/businessFlow.png" alt="auth flow chart">
-
-</div>
-
-<div style="width: 45%;">
-
-### Book Predict
-
-<br/>
-
-<img src="./images/flowChart/FlowChart.png" alt="auth flow chart">
-
-</div>
-
-</div>
 <br/>
 
 ## ML Accuracy Chart
 
-<h3 style="text-align: center;"> 최종 모델 Accuracy </h3>
 <div style="text-align: center;">
-<img src="./images/model/최종.png" alt="최종모델" style="width: 60%;" />
-</div>
-<br/>
-<br/>
-
-<div style="display: flex; justify-content: space-around;">
-<div  style="width: 30%">
-<img src="./images/model/초기모델.png" alt="초기모델"/>
-<p style="text-align: center; font-size: 20px;">초기모델</p>
-</div>
-<div  style="width: 30%">
-<img src="./images/model/1차개선.png" alt="초기모델" />
-<p style="text-align: center; font-size: 20px;">1차 개선모델</p>
-</div>
-<div  style="width: 30%">
-<img src="./images/model/2차개선.png" alt="초기모델" />
-<p style="text-align: center; font-size: 20px;">2차 개선모델</p>
-</div>
+<img src="./images/model/model.png" alt="모델링" />
 </div>
 
 ### 1차 개선 사항 - 이미지 패딩
@@ -319,7 +278,7 @@
 
 <div style="text-align: center;">
 
-<img src="./images/model/2차.PNG" alt="유형 분류" style="width: 40%"/>
+<img src="./images/model/2차.PNG" alt="유형 분류"/>
 </div>
 
 <br/>
