@@ -1,17 +1,17 @@
-# 쳌책 - 중고책 상태 및 가격 판별 서비스
+# :books: 쳌책 - 중고책 상태 및 가격 판별 서비스 :books:
 
 | [Notion 바로가기](https://ambitious-cafe-d87.notion.site/STRAIGHT-179dd48db34c43999fe254dd18504c90?pvs=4) | [Figma 바로가기](https://www.figma.com/file/iPP1uHEsxyASr0WNVjTnoO/%EC%B3%8C%EC%B1%85?type=design&node-id=10%3A4&mode=design&t=ajAazfUhB2n5VW1m-1) |
 
 <br/>
 
-## 기간
+## :clock10: 기간
 
 - 2023.8.28 ~ 2023.10.6 (6주)
 
 <br/>
 <br/>
 
-## 기획 배경
+## :clipboard: 기획 배경
 
 - 환경 보호는 중요한 이슈이며, 많은 사람 및 기업들이 관심을 갖고 있음.
 - 다른 물건은 중고로 많이 거래되지만, 책은 특성 상 중고로 거래를 잘 하지 않고 그냥 폐기 처분해버리는 경우가 많음.
@@ -19,33 +19,33 @@
 
 <br/><br/>
 
-## 메인 페이지
+## :notebook_with_decorative_cover: 메인 페이지
 
 <img src="./gifs/MainPage.gif" alt="메인 페이지" style="width: 62%;" />
 
-## 주요 기능
+## :sparkles: 주요 기능
 
 - 책 표지 이미지를 통한 상태 판별 및 중고가 예측
 
-### 로그인
+### :ok_woman: 로그인
 
 <img src="./gifs/Auth.gif" alt="로그인" />
 
-### 예측하기
+### :dart: 예측하기
 
 <img src="./gifs/predict.gif" alt="예측" />
 
-### 히스토리
+### :pencil: 히스토리
 
 <img src="./gifs/History.gif" alt="히스토리"  />
 
 <br/><br/>
 
-## 기술 스택
+## :wrench: 기술 스택
 
 <img src="./images/Skills/skills.png">
 
-## 서버 번호
+## :door: 서버 번호
 
 <table style="text-align: center;">
 
@@ -126,7 +126,7 @@
 
 <div style="width: 40%; margin: 0 10px;">
 
-## Architecture
+## :trident: Architecture
 
   <img src="./images/architecture/checkchaek.png" alt="architecture"/>
 
@@ -135,13 +135,13 @@
 </div>
 <br/><br/>
 
-## Flow Chart
+## :chart_with_upwards_trend: Flow Chart
 
 <img src="./images/flowChart/total_Flow.png" alt="flow chart" >
 
 <br/>
 
-## ML Accuracy Chart
+## :heavy_check_mark: ML Accuracy Chart
 
 <div style="text-align: center;">
 <img src="./images/model/model.png" alt="모델링" />
@@ -168,7 +168,7 @@
 <br/>
 <br/>
 
-## 역할 분담
+## :two_men_holding_hands: 역할 분담
 
 <table style="margin: 0 auto;">
 <th colspan="6" style="text-align: center; font-size: 40px;">Team Straight</th>
